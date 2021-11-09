@@ -13,6 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
 
 public class SocketHandlerShould {
 
@@ -35,7 +36,7 @@ public class SocketHandlerShould {
 
     @Test
     void open_a_client_socket() throws IOException {
-        Mockito.when(server.accept()).thenReturn(clientSocket);
+        when(server.accept()).thenReturn(clientSocket);
         Socket client = SocketHandler.createClient(server);
         assertNotNull(client);
     }
