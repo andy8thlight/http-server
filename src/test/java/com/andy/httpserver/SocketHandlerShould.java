@@ -11,7 +11,7 @@ public class SocketHandlerShould {
 
     @Test
     void create_a_server_socket() throws IOException {
-        ServerSocket server = SocketHandler.create(8888);
+        ServerSocket server = SocketHandler.createServer(8888);
         assertNotNull(server);
     }
 

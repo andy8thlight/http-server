@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 public class SocketHandler {
-    public static ServerSocket create(int portNumber) throws IOException {
+    public static ServerSocket createServer(int portNumber) throws IOException {
         return new ServerSocket(portNumber);
     }
 }
