@@ -1,8 +1,12 @@
 package com.andy.httpserver;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,23 +16,26 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class SocketHandlerShould {
 
+    @Mock
     private ServerSocket server;
+    @Mock
+    private Socket clientSocket;
 
-    @AfterEach
-    void tearDown() throws IOException {
-        server.close();
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void create_a_server_socket() throws IOException {
-        server = SocketHandler.createServer(8888);
+        ServerSocket server = SocketHandler.createServer(8888);
         assertNotNull(server);
+        server.close();
     }
 
     @Test
-    @Disabled
     void open_a_client_socket() throws IOException {
-        ServerSocket server = SocketHandler.createServer(8888);
+        Mockito.when(server.accept()).thenReturn(clientSocket);
         Socket client = SocketHandler.createClient(server);
         assertNotNull(client);
     }

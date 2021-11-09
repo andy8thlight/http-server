@@ -9,7 +9,7 @@ public class SocketHandler {
         return new ServerSocket(portNumber);
     }
 
-    public static Socket createClient(ServerSocket server) {
-        return null;
+    public static Socket createClient(ServerSocket server) throws IOException {
+        return server.accept();
     }
 }
