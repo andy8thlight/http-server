@@ -30,7 +30,7 @@ public class ExampleHttpServerShould {
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        exampleHttpServer = new ExampleHttpServer(server, socketHandler);
+        exampleHttpServer = new ExampleHttpServer(socketHandler);
     }
 
     @Test
@@ -47,8 +47,8 @@ public class ExampleHttpServerShould {
     }
 
     @Test
-    @Disabled
     void get_output_stream() throws IOException {
+        when(socketHandler.createServerSocket()).thenReturn(server);
         when(server.accept()).thenReturn(clientSocket);
         exampleHttpServer.handle();
         verify(clientSocket).getOutputStream();

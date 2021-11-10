@@ -10,22 +10,23 @@ public class ExampleHttpServer {
     private ServerSocket server;
     private SocketHandler socketHandler;
 
-    public ExampleHttpServer(ServerSocket server, SocketHandler socketHandler) {
-        this.server = server;
+    public ExampleHttpServer(SocketHandler socketHandler) {
         this.socketHandler = socketHandler;
     }
 
     public void handle() throws IOException {
-        socketHandler.createServerSocket();
+        ServerSocket server = socketHandler.createServerSocket();
+        if (server != null) {
+            Socket clientSocket = server.accept();
 
-        Socket clientSocket = server.accept();
+            if (clientSocket != null) {
+                OutputStream outputStream = clientSocket.getOutputStream();
 
-        if (clientSocket != null) {
-            OutputStream outputStream = clientSocket.getOutputStream();
+                if (outputStream != null) {
+                    String text = "hello\n";
+                    outputStream.write(text.getBytes(StandardCharsets.UTF_8));
 
-            if (outputStream != null) {
-                String text = "hello\n";
-                outputStream.write(text.getBytes(StandardCharsets.UTF_8));
+                }
 
             }
 
