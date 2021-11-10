@@ -6,18 +6,19 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class RequestProcessorShould {
 
 
+    private final RequestParser requestParser = new RequestParser();
+
     /*
-    TODO:
-        "GET / HTTP/1.1\n" +
-        "HOST: localhost\n\n";
-     */
+        TODO:
+            "GET / HTTP/1.1\n" +
+            "HOST: localhost\n\n";
+         */
     @Test
     void echo() throws IOException {
         RequestProcessor requestProcessor = new RequestProcessor();
@@ -29,34 +30,4 @@ class RequestProcessorShould {
 
         assertEquals("somefink", outputStream.toString());
     }
-
-    @Test
-    void read_data_into_request() {
-        String requestData = "GET / HTTP/1.1\n\n";
-        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
-
-        TheRequest request = parseRequest(inputStream);
-
-        assertEquals("GET", request.getVerb());
-        assertEquals("/", request.getPath());
-    }
-
-    @Test
-    void read_host_data_into_request() {
-        String requestData = "GET / HTTP/1.1\nHOST: localhost\n\n";
-        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
-
-        TheRequest request = parseRequest(inputStream);
-
-        assertEquals("GET", request.getVerb());
-        assertEquals("/", request.getPath());
-        assertEquals("localhost", request.getHost());
-    }
-
-    private TheRequest parseRequest(ByteArrayInputStream inputStream) {
-        TheRequest request = new TheRequest();
-        return request;
-    }
-
-
 }
