@@ -55,8 +55,8 @@ public class ExampleHttpServerShould {
     }
 
     @Test
-    @Disabled
     void write_data_to_output_stream() throws IOException {
+        when(socketHandler.createServerSocket()).thenReturn(server);
         when(server.accept()).thenReturn(clientSocket);
 
         OutputStream helloStream = new ByteArrayOutputStream();
