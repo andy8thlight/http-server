@@ -25,16 +25,11 @@ public class ResponseGeneratorShould {
 
     @Test
     void send_data() throws IOException {
-        OutputStream out = writeData("data");
+        ResponseGenerator responseGenerator = new ResponseGenerator();
 
-        String actual = out.toString();
-        assertEquals("data", actual);
+        OutputStream out = responseGenerator.writeData("data");
+
+        assertEquals("data", out.toString());
     }
 
-    private OutputStream writeData(String data) throws IOException {
-        byte[] bytes = data.getBytes(StandardCharsets.UTF_8);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        out.write(bytes);
-        return out;
-    }
 }
