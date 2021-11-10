@@ -41,6 +41,18 @@ class RequestProcessorShould {
         assertEquals("/", request.getPath());
     }
 
+    @Test
+    void read_host_data_into_request() {
+        String requestData = "GET / HTTP/1.1\nHOST: localhost\n\n";
+        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
+
+        TheRequest request = parseRequest(inputStream);
+
+        assertEquals("GET", request.getVerb());
+        assertEquals("/", request.getPath());
+        assertEquals("localhost", request.getHost());
+    }
+
     private TheRequest parseRequest(ByteArrayInputStream inputStream) {
         TheRequest request = new TheRequest();
         return request;

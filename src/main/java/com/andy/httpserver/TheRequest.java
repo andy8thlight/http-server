@@ -8,4 +8,8 @@ public class TheRequest {
     public String getPath() {
         return "/";
     }
+
+    public String getHost() {
+        return "localhost";
+    }
 }
