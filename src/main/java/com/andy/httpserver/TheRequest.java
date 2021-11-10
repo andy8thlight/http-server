@@ -4,4 +4,8 @@ public class TheRequest {
     public String getVerb() {
         return "GET";
     }
+
+    public String getPath() {
+        return "/";
+    }
 }

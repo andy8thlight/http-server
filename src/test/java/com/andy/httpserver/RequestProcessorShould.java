@@ -38,6 +38,7 @@ class RequestProcessorShould {
         TheRequest request = parseRequest(inputStream);
 
         assertEquals("GET", request.getVerb());
+        assertEquals("/", request.getPath());
     }
 
     private TheRequest parseRequest(ByteArrayInputStream inputStream) {
