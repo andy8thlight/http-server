@@ -26,7 +26,7 @@ public class ExampleHttpServerShould {
     private ExampleHttpServer exampleHttpServer;
 
     @BeforeEach
-    void setup() {
+    void setup() throws IOException {
         MockitoAnnotations.openMocks(this);
         exampleHttpServer = new ExampleHttpServer(socketHandler, 7777);
         when(socketHandler.createServerSocket(7777)).thenReturn(server);

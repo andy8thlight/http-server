@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
@@ -28,6 +29,8 @@ public class SocketHandlerShould {
     void create_a_server_socket() throws IOException {
         ServerSocket server = SocketHandler.createServer(8888);
         assertNotNull(server);
+        int localPort = server.getLocalPort();
+        assertEquals(8888, localPort);
         server.close();
     }
 

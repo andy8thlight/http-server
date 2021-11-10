@@ -6,18 +6,14 @@ import java.net.Socket;
 
 public class SocketHandler {
     public static ServerSocket createServer(int portNumber) throws IOException {
-        return new ServerSocket(portNumber);
+        return new SocketHandler().createServerSocket(portNumber);
     }
 
     public static Socket createClient(ServerSocket server) throws IOException {
         return server.accept();
     }
 
-    public Socket connectToClient() {
-        return null;
-    }
-
-    public ServerSocket createServerSocket(int portNumber) {
-        return null;
+    public ServerSocket createServerSocket(int portNumber) throws IOException {
+        return new ServerSocket(portNumber);
     }
 }
