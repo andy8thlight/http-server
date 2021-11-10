@@ -16,10 +16,7 @@ public class ExampleHttpServer {
     }
 
     public void handle() throws IOException {
-        server.accept();
-
-
-        Socket clientSocket = socketHandler.connectToClient();
+        Socket clientSocket = server.accept();
 
         if (clientSocket != null) {
             OutputStream outputStream = clientSocket.getOutputStream();
