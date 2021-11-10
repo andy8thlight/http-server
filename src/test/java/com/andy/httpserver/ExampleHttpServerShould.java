@@ -54,12 +54,21 @@ public class ExampleHttpServerShould {
         assertEquals("Failed to create server socket", exception.getMessage());
     }
 
-
-
     @Test
     void open_socket_to_client_with_server_socket() throws IOException {
         exampleHttpServer.handle();
         verify(server).accept();
+    }
+
+    @Test
+    void throw_error_if_cannot_create_client_socket() throws IOException {
+        when(server.accept()).thenThrow(IOException.class);
+
+        HttpSocketCreationException exception = assertThrows(HttpSocketCreationException.class, () -> {
+            exampleHttpServer.handle();
+        });
+
+        assertEquals("Failed to create server socket", exception.getMessage());
     }
 
     @Test
