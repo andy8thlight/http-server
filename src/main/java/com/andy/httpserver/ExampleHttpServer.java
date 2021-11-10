@@ -29,7 +29,6 @@ public class ExampleHttpServer {
 
     private void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException {
         if (inputStream != null) {
-
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
             String text;
@@ -37,5 +36,11 @@ public class ExampleHttpServer {
                 outputStream.write(text.getBytes(StandardCharsets.UTF_8));
             }
         }
+    }
+
+    public static void main(String[] args) {
+        SocketHandler socketHandler = new SocketHandler();
+        ExampleHttpServer server = new ExampleHttpServer(socketHandler, 4444);
+        server.handle();
     }
 }
