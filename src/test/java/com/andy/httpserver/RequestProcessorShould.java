@@ -12,6 +12,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RequestProcessorShould {
 
+
+    /*
+    TODO:
+        "GET / HTTP/1.1\n" +
+        "HOST: localhost\n\n";
+     */
     @Test
     void echo() throws IOException {
         RequestProcessor requestProcessor = new RequestProcessor();
@@ -24,6 +30,20 @@ class RequestProcessorShould {
         assertEquals("somefink", outputStream.toString());
     }
 
+    @Test
+    void read_data_into_request() {
+        String requestData = "GET / HTTP/1.1\n\n";
+        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
+
+        TheRequest request = parseRequest(inputStream);
+
+        assertEquals("GET", request.getVerb());
+    }
+
+    private TheRequest parseRequest(ByteArrayInputStream inputStream) {
+        TheRequest request = new TheRequest();
+        return request;
+    }
 
 
 }

@@ -1,0 +1,7 @@
+package com.andy.httpserver;
+
+public class TheRequest {
+    public String getVerb() {
+        return "GET";
+    }
+}
