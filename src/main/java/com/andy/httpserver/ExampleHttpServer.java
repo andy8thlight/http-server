@@ -29,6 +29,10 @@ public class ExampleHttpServer {
         if (outputStream == null) return;
 
 
+        processRequests(outputStream, inputStream);
+    }
+
+    private void processRequests(OutputStream outputStream, InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
         String text;
