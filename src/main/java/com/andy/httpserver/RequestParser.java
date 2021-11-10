@@ -10,13 +10,18 @@ public class RequestParser {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
         String verb = "GET";
+        String host = null;
         String line = bufferedReader.readLine();
-
         if (line.startsWith("POST")) {
             verb = "POST";
         }
 
-        TheRequest request = new TheRequest(verb);
-        return request;
+        String hostLine = bufferedReader.readLine();
+        if (hostLine.startsWith("HOST: ")) {
+            host = hostLine.substring(6);
+        }
+
+
+        return new TheRequest(verb, host);
     }
 }

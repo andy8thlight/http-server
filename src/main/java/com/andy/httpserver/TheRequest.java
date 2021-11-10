@@ -2,9 +2,11 @@ package com.andy.httpserver;
 
 public class TheRequest {
     private String verb;
+    private String host;
 
-    public TheRequest(String verb) {
+    public TheRequest(String verb, String host) {
         this.verb = verb;
+        this.host = host;
     }
 
     public String getVerb() {
@@ -16,6 +18,6 @@ public class TheRequest {
     }
 
     public String getHost() {
-        return "localhost";
+        return host;
     }
 }

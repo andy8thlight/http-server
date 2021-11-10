@@ -43,6 +43,17 @@ class RequestParserShould {
     }
 
     @Test
+    void read_until_double_newlines() throws IOException {
+        String requestData = "GET / HTTP/1.1\n\nignore me";
+        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
+
+        TheRequest request = requestParser.parseRequest(inputStream);
+
+        assertEquals("GET", request.getVerb());
+        assertEquals("/", request.getPath());
+    }
+
+    @Test
     void read_host_data_into_request() throws IOException {
         String requestData = "GET / HTTP/1.1\nHOST: localhost\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
@@ -52,6 +63,18 @@ class RequestParserShould {
         assertEquals("GET", request.getVerb());
         assertEquals("/", request.getPath());
         assertEquals("localhost", request.getHost());
+    }
+
+    @Test
+    void read_different_host_data_into_request() throws IOException {
+        String requestData = "GET / HTTP/1.1\nHOST: www.google.co.uk\n\n";
+        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
+
+        TheRequest request = requestParser.parseRequest(inputStream);
+
+        assertEquals("GET", request.getVerb());
+        assertEquals("/", request.getPath());
+        assertEquals("www.google.co.uk", request.getHost());
     }
 
     @Test
