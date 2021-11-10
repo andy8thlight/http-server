@@ -29,13 +29,19 @@ public class ExampleHttpServerShould {
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        exampleHttpServer = new ExampleHttpServer(socketHandler);
+        exampleHttpServer = new ExampleHttpServer(socketHandler, server);
     }
 
     @Test
     void open_a_socket_to_client() throws IOException {
         exampleHttpServer.handle();
         verify(socketHandler).connectToClient();
+    }
+
+    @Test
+    void open_socket_to_client_with_server_socket() throws IOException {
+        exampleHttpServer.handle();
+        verify(server).accept();
     }
 
     @Test
