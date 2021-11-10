@@ -26,7 +26,7 @@ public class RequestParser {
             host = hostLine.substring(HOST_HEADER.length());
         }
 
-        if (verb == null && host == null) {
+        if (verb == null || (host == null || host.isBlank())) {
             throw new BadRequestException();
         }
 

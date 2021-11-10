@@ -22,36 +22,23 @@ class RequestParserShould {
     }
 
     @Test
-    void read_get_data_into_request() throws IOException, BadRequestException {
+    void throw_bad_request_when_invalid_request() {
+        String requestData = "some junk\n\n";
+        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
+
+        assertThrows(BadRequestException.class, () -> {
+            requestParser.parseRequest(inputStream);
+        });
+    }
+
+    @Test
+    void throw_bad_request_when_missing_host_header() throws IOException, BadRequestException {
         String requestData = "GET / HTTP/1.1\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
-        TheRequest request = requestParser.parseRequest(inputStream);
-
-        assertEquals("GET", request.getVerb());
-        assertEquals("/", request.getPath());
-    }
-
-    @Test
-    void read_post_data_into_request() throws IOException, BadRequestException {
-        String requestData = "POST / HTTP/1.1\n\n";
-        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
-
-        TheRequest request = requestParser.parseRequest(inputStream);
-
-        assertEquals("POST", request.getVerb());
-        assertEquals("/", request.getPath());
-    }
-
-    @Test
-    void read_until_double_newlines() throws IOException, BadRequestException {
-        String requestData = "GET / HTTP/1.1\n\nignore me";
-        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
-
-        TheRequest request = requestParser.parseRequest(inputStream);
-
-        assertEquals("GET", request.getVerb());
-        assertEquals("/", request.getPath());
+        assertThrows(BadRequestException.class, () -> {
+            requestParser.parseRequest(inputStream);
+        });
     }
 
     @Test
@@ -78,13 +65,4 @@ class RequestParserShould {
         assertEquals("www.google.co.uk", request.getHost());
     }
 
-    @Test
-    void throw_bad_request_when_invalid_request() {
-        String requestData = "some junk\n\n";
-        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
-
-        assertThrows(BadRequestException.class, () -> {
-            requestParser.parseRequest(inputStream);
-        });
-    }
 }
