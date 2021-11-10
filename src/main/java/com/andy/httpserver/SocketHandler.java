@@ -16,4 +16,8 @@ public class SocketHandler {
     public Socket connectToClient() {
         return null;
     }
+
+    public void createServerSocket() {
+
+    }
 }

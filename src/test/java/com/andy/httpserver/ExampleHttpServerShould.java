@@ -29,7 +29,13 @@ public class ExampleHttpServerShould {
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        exampleHttpServer = new ExampleHttpServer(server);
+        exampleHttpServer = new ExampleHttpServer(server, socketHandler);
+    }
+
+    @Test
+    void open_server_socket() throws IOException {
+        exampleHttpServer.handle();
+        verify(socketHandler).createServerSocket();
     }
 
     @Test
