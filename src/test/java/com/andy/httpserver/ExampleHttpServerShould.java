@@ -1,6 +1,7 @@
 package com.andy.httpserver;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -98,6 +99,7 @@ public class ExampleHttpServerShould {
     }
 
     @Test
+    @Disabled
     void write_data_to_when_spoken_to() throws IOException {
         ByteArrayInputStream inputStream = createInputStream("some data\n");
         when(clientSocket.getInputStream()).thenReturn(inputStream);
@@ -110,6 +112,7 @@ public class ExampleHttpServerShould {
     }
 
     @Test
+    @Disabled
     void write_more_data_to_when_spoken_to() throws IOException {
         when(server.accept()).thenReturn(clientSocket);
         ByteArrayInputStream inputStream = createInputStream("some data\nand some more\n");
