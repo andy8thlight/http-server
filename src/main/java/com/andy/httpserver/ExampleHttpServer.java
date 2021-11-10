@@ -7,15 +7,17 @@ import java.nio.charset.StandardCharsets;
 
 public class ExampleHttpServer {
     private SocketHandler socketHandler;
+    private int portNumber;
 
-    public ExampleHttpServer(SocketHandler socketHandler) {
+    public ExampleHttpServer(SocketHandler socketHandler, int portNumber) {
         this.socketHandler = socketHandler;
+        this.portNumber = portNumber;
     }
 
     public void handle() throws IOException {
         OutputStream outputStream = null;
         InputStream inputStream = null;
-        ServerSocket serverSocket = socketHandler.createServerSocket();
+        ServerSocket serverSocket = socketHandler.createServerSocket(portNumber);
         if (serverSocket != null) {
             Socket clientSocket = serverSocket.accept();
             if (clientSocket != null) {

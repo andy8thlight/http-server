@@ -1,7 +1,6 @@
 package com.andy.httpserver;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -29,14 +28,14 @@ public class ExampleHttpServerShould {
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        exampleHttpServer = new ExampleHttpServer(socketHandler);
-        when(socketHandler.createServerSocket()).thenReturn(server);
+        exampleHttpServer = new ExampleHttpServer(socketHandler, 7777);
+        when(socketHandler.createServerSocket(7777)).thenReturn(server);
     }
 
     @Test
     void open_server_socket() throws IOException {
         exampleHttpServer.handle();
-        verify(socketHandler).createServerSocket();
+        verify(socketHandler).createServerSocket(7777);
     }
 
     @Test
