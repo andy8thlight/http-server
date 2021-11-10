@@ -18,22 +18,22 @@ public class ExampleHttpServer {
         try (
                 ServerSocket serverSocket = socketHandler.createServerSocket(portNumber);
                 Socket clientSocket = serverSocket.accept();
-                OutputStream outputStream = clientSocket.getOutputStream()
+                OutputStream outputStream = clientSocket.getOutputStream();
+                InputStream inputStream = clientSocket.getInputStream();
         ) {
-            InputStream inputStream = clientSocket.getInputStream();
-            if (inputStream == null) return;
-            if (outputStream == null) return;
-
-            processRequests(outputStream, inputStream);
+            processRequests(inputStream, outputStream);
         }
     }
 
-    private void processRequests(OutputStream outputStream, InputStream inputStream) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+    private void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException {
+        if (inputStream != null) {
 
-        String text;
-        while ((text = bufferedReader.readLine()) != null) {
-            outputStream.write(text.getBytes(StandardCharsets.UTF_8));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String text;
+            while ((text = bufferedReader.readLine()) != null) {
+                outputStream.write(text.getBytes(StandardCharsets.UTF_8));
+            }
         }
     }
 }
