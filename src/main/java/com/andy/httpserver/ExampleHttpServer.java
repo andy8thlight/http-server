@@ -3,9 +3,9 @@ package com.andy.httpserver;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 public class ExampleHttpServer {
+    private final RequestProcessor requestProcessor = new RequestProcessor();
     private SocketHandler socketHandler;
     private int portNumber;
 
@@ -21,20 +21,9 @@ public class ExampleHttpServer {
                 OutputStream outputStream = clientSocket.getOutputStream();
                 InputStream inputStream = clientSocket.getInputStream()
         ) {
-            processRequests(inputStream, outputStream);
+            requestProcessor.processRequests(inputStream, outputStream);
         } catch (IOException e) {
             throw new HttpSocketCreationException("Failed to create server socket");
-        }
-    }
-
-    private void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException {
-        if (inputStream != null) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String text;
-            while ((text = bufferedReader.readLine()) != null) {
-                outputStream.write(text.getBytes(StandardCharsets.UTF_8));
-            }
         }
     }
 
