@@ -1,7 +1,6 @@
 package com.andy.httpserver;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -30,7 +29,7 @@ public class ExampleHttpServerShould {
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        exampleHttpServer = new ExampleHttpServer(socketHandler, server);
+        exampleHttpServer = new ExampleHttpServer(server);
     }
 
     @Test
@@ -47,9 +46,8 @@ public class ExampleHttpServerShould {
     }
 
     @Test
-    @Disabled
     void write_data_to_output_stream() throws IOException {
-        when(socketHandler.connectToClient()).thenReturn(clientSocket);
+        when(server.accept()).thenReturn(clientSocket);
 
         OutputStream helloStream = new ByteArrayOutputStream();
         when(clientSocket.getOutputStream()).thenReturn(helloStream);

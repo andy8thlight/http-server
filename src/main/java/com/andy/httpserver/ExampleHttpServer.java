@@ -7,11 +7,9 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 public class ExampleHttpServer {
-    private SocketHandler socketHandler;
     private ServerSocket server;
 
-    public ExampleHttpServer(SocketHandler socketHandler, ServerSocket server) {
-        this.socketHandler = socketHandler;
+    public ExampleHttpServer(ServerSocket server) {
         this.server = server;
     }
 
