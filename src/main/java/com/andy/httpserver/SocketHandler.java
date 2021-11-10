@@ -12,4 +12,8 @@ public class SocketHandler {
     public static Socket createClient(ServerSocket server) throws IOException {
         return server.accept();
     }
+
+    public void connectToClient() {
+
+    }
 }
