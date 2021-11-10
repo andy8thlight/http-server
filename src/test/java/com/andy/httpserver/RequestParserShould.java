@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 class RequestParserShould {
 
@@ -21,7 +22,7 @@ class RequestParserShould {
     }
 
     @Test
-    void read_get_data_into_request() throws IOException {
+    void read_get_data_into_request() throws IOException, BadRequestException {
         String requestData = "GET / HTTP/1.1\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
@@ -32,7 +33,7 @@ class RequestParserShould {
     }
 
     @Test
-    void read_post_data_into_request() throws IOException {
+    void read_post_data_into_request() throws IOException, BadRequestException {
         String requestData = "POST / HTTP/1.1\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
@@ -43,7 +44,7 @@ class RequestParserShould {
     }
 
     @Test
-    void read_until_double_newlines() throws IOException {
+    void read_until_double_newlines() throws IOException, BadRequestException {
         String requestData = "GET / HTTP/1.1\n\nignore me";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
@@ -54,7 +55,7 @@ class RequestParserShould {
     }
 
     @Test
-    void read_host_data_into_request() throws IOException {
+    void read_host_data_into_request() throws IOException, BadRequestException {
         String requestData = "GET / HTTP/1.1\nHOST: localhost\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
@@ -66,7 +67,7 @@ class RequestParserShould {
     }
 
     @Test
-    void read_different_host_data_into_request() throws IOException {
+    void read_different_host_data_into_request() throws IOException, BadRequestException {
         String requestData = "GET / HTTP/1.1\nHOST: www.google.co.uk\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
@@ -78,18 +79,12 @@ class RequestParserShould {
     }
 
     @Test
-    @Disabled
-    void get_data_until_double_newline() throws IOException {
-        String requestData = "blah\n\nsomefink";
+    void throw_bad_request_when_invalid_request() {
+        String requestData = "some junk\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
-
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-        assertEquals("blah", bufferedReader.readLine());
-        assertEquals("", bufferedReader.readLine());
-        assertEquals("somefink", bufferedReader.readLine());
+        assertThrows(BadRequestException.class, () -> {
+            requestParser.parseRequest(inputStream);
+        });
     }
-
-
 }
