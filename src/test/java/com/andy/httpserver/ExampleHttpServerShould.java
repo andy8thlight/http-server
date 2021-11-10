@@ -30,6 +30,7 @@ public class ExampleHttpServerShould {
         MockitoAnnotations.openMocks(this);
         exampleHttpServer = new ExampleHttpServer(socketHandler, 7777);
         when(socketHandler.createServerSocket(7777)).thenReturn(server);
+        when(server.accept()).thenReturn(clientSocket);
     }
 
     @Test
@@ -46,14 +47,12 @@ public class ExampleHttpServerShould {
 
     @Test
     void get_output_stream() throws IOException {
-        when(server.accept()).thenReturn(clientSocket);
         exampleHttpServer.handle();
         verify(clientSocket).getOutputStream();
     }
 
     @Test
     void not_write_data_to_output_stream() throws IOException {
-        when(server.accept()).thenReturn(clientSocket);
         OutputStream helloStream = new ByteArrayOutputStream();
         when(clientSocket.getOutputStream()).thenReturn(helloStream);
 
@@ -74,7 +73,6 @@ public class ExampleHttpServerShould {
 
     @Test
     void write_data_to_when_spoken_to() throws IOException {
-        when(server.accept()).thenReturn(clientSocket);
         ByteArrayInputStream inputStream = createInputStream("some data\n");
         when(clientSocket.getInputStream()).thenReturn(inputStream);
         OutputStream helloStream = new ByteArrayOutputStream();

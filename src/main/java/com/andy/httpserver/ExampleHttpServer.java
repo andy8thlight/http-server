@@ -15,17 +15,12 @@ public class ExampleHttpServer {
     }
 
     public void handle() throws IOException {
-        OutputStream outputStream = null;
-        InputStream inputStream = null;
-
         try (
                 ServerSocket serverSocket = socketHandler.createServerSocket(portNumber);
+                Socket clientSocket = serverSocket.accept();
+                OutputStream outputStream = clientSocket.getOutputStream()
         ) {
-            Socket clientSocket = serverSocket.accept();
-            if (clientSocket != null) {
-                outputStream = clientSocket.getOutputStream();
-                inputStream = clientSocket.getInputStream();
-            }
+            InputStream inputStream = clientSocket.getInputStream();
             if (inputStream == null) return;
             if (outputStream == null) return;
 
