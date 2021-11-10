@@ -28,11 +28,10 @@ public class ExampleHttpServer {
 
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String line = bufferedReader.readLine();
 
-        String text = line;
-        outputStream.write(text.getBytes(StandardCharsets.UTF_8));
+        String text;
+        while ((text = bufferedReader.readLine()) != null) {
+            outputStream.write(text.getBytes(StandardCharsets.UTF_8));
+        }
     }
-
-
 }

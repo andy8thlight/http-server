@@ -86,6 +86,19 @@ public class ExampleHttpServerShould {
         assertEquals("some data", helloStream.toString());
     }
 
+    @Test
+    void write_more_data_to_when_spoken_to() throws IOException {
+        when(server.accept()).thenReturn(clientSocket);
+        ByteArrayInputStream inputStream = createInputStream("some data\nand some more\n");
+        when(clientSocket.getInputStream()).thenReturn(inputStream);
+        OutputStream helloStream = new ByteArrayOutputStream();
+        when(clientSocket.getOutputStream()).thenReturn(helloStream);
+
+        exampleHttpServer.handle();
+
+        assertEquals("some dataand some more", helloStream.toString());
+    }
+
     ByteArrayInputStream createInputStream(String data) {
         return new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_8));
     }
