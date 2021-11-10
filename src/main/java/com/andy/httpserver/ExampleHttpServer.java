@@ -17,19 +17,20 @@ public class ExampleHttpServer {
     public void handle() throws IOException {
         OutputStream outputStream = null;
         InputStream inputStream = null;
-        ServerSocket serverSocket = socketHandler.createServerSocket(portNumber);
-        if (serverSocket != null) {
+
+        try (
+                ServerSocket serverSocket = socketHandler.createServerSocket(portNumber);
+        ) {
             Socket clientSocket = serverSocket.accept();
             if (clientSocket != null) {
                 outputStream = clientSocket.getOutputStream();
                 inputStream = clientSocket.getInputStream();
             }
+            if (inputStream == null) return;
+            if (outputStream == null) return;
+
+            processRequests(outputStream, inputStream);
         }
-        if (inputStream == null) return;
-        if (outputStream == null) return;
-
-
-        processRequests(outputStream, inputStream);
     }
 
     private void processRequests(OutputStream outputStream, InputStream inputStream) throws IOException {
