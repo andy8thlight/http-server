@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class RequestParser {
+
+    public static final String HOST_HEADER = "HOST: ";
+
     TheRequest parseRequest(ByteArrayInputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -17,8 +20,8 @@ public class RequestParser {
         }
 
         String hostLine = bufferedReader.readLine();
-        if (hostLine.startsWith("HOST: ")) {
-            host = hostLine.substring(6);
+        if (hostLine.startsWith(HOST_HEADER)) {
+            host = hostLine.substring(HOST_HEADER.length());
         }
 
 
