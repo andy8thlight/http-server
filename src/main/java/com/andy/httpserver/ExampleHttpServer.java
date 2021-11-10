@@ -15,21 +15,22 @@ public class ExampleHttpServer {
     }
 
     public void handle() throws IOException {
+        OutputStream outputStream = createServer();
+        if (outputStream == null) return;
+
+        String text = "hello\n";
+        outputStream.write(text.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private OutputStream createServer() throws IOException {
         ServerSocket server = socketHandler.createServerSocket();
-        if (server != null) {
-            Socket clientSocket = server.accept();
-
-            if (clientSocket != null) {
-                OutputStream outputStream = clientSocket.getOutputStream();
-
-                if (outputStream != null) {
-                    String text = "hello\n";
-                    outputStream.write(text.getBytes(StandardCharsets.UTF_8));
-
-                }
-
-            }
-
+        if (server == null) {
+            return null;
         }
+        Socket clientSocket = server.accept();
+        if (clientSocket == null) {
+            return null;
+        }
+        return clientSocket.getOutputStream();
     }
 }
