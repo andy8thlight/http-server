@@ -10,7 +10,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,6 +42,19 @@ public class ExampleHttpServerShould {
         exampleHttpServer.handle();
         verify(socketHandler).createServerSocket(7777);
     }
+
+    @Test
+    void throw_error_if_cannot_create_server_socket() throws IOException {
+        when(socketHandler.createServerSocket(anyInt())).thenThrow(IOException.class);
+
+        HttpSocketCreationException exception = assertThrows(HttpSocketCreationException.class, () -> {
+            exampleHttpServer.handle();
+        });
+
+        assertEquals("Failed to create server socket", exception.getMessage());
+    }
+
+
 
     @Test
     void open_socket_to_client_with_server_socket() throws IOException {
@@ -95,6 +112,7 @@ public class ExampleHttpServerShould {
 
         assertEquals("some dataand some more", helloStream.toString());
     }
+
 
     ByteArrayInputStream createInputStream(String data) {
         return new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_8));

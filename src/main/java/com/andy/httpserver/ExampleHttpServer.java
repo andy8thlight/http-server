@@ -14,14 +14,16 @@ public class ExampleHttpServer {
         this.portNumber = portNumber;
     }
 
-    public void handle() throws IOException {
+    public void handle() {
         try (
                 ServerSocket serverSocket = socketHandler.createServerSocket(portNumber);
                 Socket clientSocket = serverSocket.accept();
                 OutputStream outputStream = clientSocket.getOutputStream();
-                InputStream inputStream = clientSocket.getInputStream();
+                InputStream inputStream = clientSocket.getInputStream()
         ) {
             processRequests(inputStream, outputStream);
+        } catch (IOException e) {
+            throw new HttpSocketCreationException("Failed to create server socket");
         }
     }
 
