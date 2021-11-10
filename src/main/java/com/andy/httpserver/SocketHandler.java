@@ -17,7 +17,7 @@ public class SocketHandler {
         return null;
     }
 
-    public void createServerSocket() {
-
+    public ServerSocket createServerSocket() {
+        return null;
     }
 }
