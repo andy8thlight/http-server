@@ -1,5 +1,6 @@
 package com.andy.httpserver;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -33,4 +34,9 @@ public class ExampleHttpServer {
         }
         return clientSocket.getOutputStream();
     }
+
+    ByteArrayInputStream createInputStream(String data) {
+        return new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_8));
+    }
+
 }
