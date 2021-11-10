@@ -13,7 +13,7 @@ public class SocketHandler {
         return server.accept();
     }
 
-    public void connectToClient() {
-
+    public Socket connectToClient() {
+        return null;
     }
 }

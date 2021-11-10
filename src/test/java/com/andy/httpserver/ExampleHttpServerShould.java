@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class ExampleHttpServerShould {
 
@@ -20,18 +21,24 @@ public class ExampleHttpServerShould {
     @Mock
     private SocketHandler socketHandler;
 
+    private ExampleHttpServer exampleHttpServer;
+
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
+        exampleHttpServer = new ExampleHttpServer(socketHandler);
     }
 
     @Test
-    void open_a_socket_to_client() {
-        ExampleHttpServer exampleHttpServer = new ExampleHttpServer(socketHandler);
-
+    void open_a_socket_to_client() throws IOException {
         exampleHttpServer.handle();
-
         verify(socketHandler).connectToClient();
     }
 
+    @Test
+    void get_output_stream_to_write_data() throws IOException {
+        when(socketHandler.connectToClient()).thenReturn(clientSocket);
+        exampleHttpServer.handle();
+        verify(clientSocket).getOutputStream();
+    }
 }
