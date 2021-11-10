@@ -5,10 +5,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,9 +39,20 @@ public class ExampleHttpServerShould {
     }
 
     @Test
-    void get_output_stream_to_write_data() throws IOException {
+    void get_output_stream() throws IOException {
         when(socketHandler.connectToClient()).thenReturn(clientSocket);
         exampleHttpServer.handle();
         verify(clientSocket).getOutputStream();
+    }
+
+    @Test
+    void write_data_to_output_stream() throws IOException {
+        when(socketHandler.connectToClient()).thenReturn(clientSocket);
+
+        OutputStream helloStream = new ByteArrayOutputStream();
+        when(clientSocket.getOutputStream()).thenReturn(helloStream);
+        exampleHttpServer.handle();
+
+        assertEquals("hello\n", helloStream.toString());
     }
 }
