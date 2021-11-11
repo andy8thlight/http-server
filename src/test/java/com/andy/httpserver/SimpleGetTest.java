@@ -16,12 +16,13 @@ public class SimpleGetTest {
 
     @BeforeAll
     static void setup() {
-        RestAssured.baseURI = "http://localhost:5555";
+        int portNumber = 5555;
+        RestAssured.baseURI = "http://localhost:" + portNumber;
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             SocketHandler socketHandler = new SocketHandler();
-            ExampleHttpServer httpServer = new ExampleHttpServer(socketHandler, 5555);
+            ExampleHttpServer httpServer = new ExampleHttpServer(socketHandler, portNumber);
             httpServer.handle();
         });
     }
