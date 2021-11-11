@@ -3,11 +3,8 @@ package com.andy.httpserver;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class HttpRequestProcessor {
-    public HttpRequestProcessor() {
-    }
-
-    void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException, BadRequestException {
+public class HttpRequestProcessor implements RequestProcessor {
+    public void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException, BadRequestException {
         if (inputStream != null) {
             RequestParser requestParser = new RequestParser();
 
