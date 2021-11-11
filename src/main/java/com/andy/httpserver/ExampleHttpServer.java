@@ -8,23 +8,28 @@ public class ExampleHttpServer {
     private final HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor();
     private SocketHandler socketHandler;
     private int portNumber;
+    ServerSocket serverSocket = null;
 
     public ExampleHttpServer(SocketHandler socketHandler, int portNumber) {
         this.socketHandler = socketHandler;
         this.portNumber = portNumber;
     }
 
-    public void handle() {
-        try (ServerSocket serverSocket = socketHandler.createServerSocket(portNumber)) {
-            for (;;) {
-                acceptRequest(serverSocket);
-            }
+    void createServer() {
+        try {
+            serverSocket = socketHandler.createServerSocket(portNumber);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new HttpSocketCreationException("Failed to create server socket");
         }
     }
 
-    private void acceptRequest(ServerSocket serverSocket) {
+    public void handle() {
+        for (;;) {
+            acceptRequest(serverSocket);
+        }
+    }
+
+    void acceptRequest(ServerSocket serverSocket) {
         try (
                 Socket clientSocket = serverSocket.accept();
                 OutputStream outputStream = clientSocket.getOutputStream();
@@ -33,13 +38,18 @@ public class ExampleHttpServer {
             httpRequestProcessor.processRequests(inputStream, outputStream);
         } catch (IOException | BadRequestException e) {
             System.out.println("Fatal error" + e);
-            throw new HttpSocketCreationException("Failed to create server socket");
+            throw new HttpSocketCreationException("Failed to establish connection to client");
         }
     }
 
     public static void main(String[] args) {
+        startHttpServer(4444);
+    }
+
+    static void startHttpServer(int portNumber) {
         SocketHandler socketHandler = new SocketHandler();
-        ExampleHttpServer server = new ExampleHttpServer(socketHandler, 4444);
+        ExampleHttpServer server = new ExampleHttpServer(socketHandler, portNumber);
+        server.createServer();
         server.handle();
     }
 }

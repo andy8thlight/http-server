@@ -20,11 +20,7 @@ public class SimpleGetTest {
         RestAssured.baseURI = "http://localhost:" + portNumber;
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(() -> {
-            SocketHandler socketHandler = new SocketHandler();
-            ExampleHttpServer httpServer = new ExampleHttpServer(socketHandler, portNumber);
-            httpServer.handle();
-        });
+        executorService.execute(() -> ExampleHttpServer.startHttpServer(portNumber));
     }
 
     @Test

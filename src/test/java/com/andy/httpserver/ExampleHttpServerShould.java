@@ -40,7 +40,7 @@ public class ExampleHttpServerShould {
 
     @Test
     void open_server_socket() throws IOException {
-        exampleHttpServer.handle();
+        exampleHttpServer.createServer();
         verify(socketHandler).createServerSocket(7777);
     }
 
@@ -48,16 +48,14 @@ public class ExampleHttpServerShould {
     void throw_error_if_cannot_create_server_socket() throws IOException {
         when(socketHandler.createServerSocket(anyInt())).thenThrow(IOException.class);
 
-        HttpSocketCreationException exception = assertThrows(HttpSocketCreationException.class, () -> {
-            exampleHttpServer.handle();
-        });
+        HttpSocketCreationException exception = assertThrows(HttpSocketCreationException.class, () -> exampleHttpServer.createServer());
 
         assertEquals("Failed to create server socket", exception.getMessage());
     }
 
     @Test
     void open_socket_to_client_with_server_socket() throws IOException {
-        exampleHttpServer.handle();
+        exampleHttpServer.acceptRequest(server);
         verify(server).accept();
     }
 
@@ -65,16 +63,15 @@ public class ExampleHttpServerShould {
     void throw_error_if_cannot_create_client_socket() throws IOException {
         when(server.accept()).thenThrow(IOException.class);
 
-        HttpSocketCreationException exception = assertThrows(HttpSocketCreationException.class, () -> {
-            exampleHttpServer.handle();
-        });
+        HttpSocketCreationException exception = assertThrows(HttpSocketCreationException.class, () ->
+                exampleHttpServer.acceptRequest(server));
 
-        assertEquals("Failed to create server socket", exception.getMessage());
+        assertEquals("Failed to establish connection to client", exception.getMessage());
     }
 
     @Test
     void get_output_stream() throws IOException {
-        exampleHttpServer.handle();
+        exampleHttpServer.acceptRequest(server);
         verify(clientSocket).getOutputStream();
     }
 
@@ -83,19 +80,8 @@ public class ExampleHttpServerShould {
         OutputStream helloStream = new ByteArrayOutputStream();
         when(clientSocket.getOutputStream()).thenReturn(helloStream);
 
-        exampleHttpServer.handle();
+        exampleHttpServer.acceptRequest(server);
 
         assertEquals("", helloStream.toString());
     }
-
-    @Test
-    void read_from_input_stream() throws IOException {
-        ByteArrayInputStream inputStream = StreamHelper.createInputStream("some data coming in\n");
-
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String s = bufferedReader.readLine();
-
-        assertEquals("some data coming in", s);
-    }
-
 }
