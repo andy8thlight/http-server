@@ -1,5 +1,6 @@
 package com.andy.httpserver;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -22,7 +23,7 @@ class RequestProcessorShould {
     @Test
     void return_200_ok() throws IOException, BadRequestException {
         RequestProcessor requestProcessor = new RequestProcessor();
-        String requestData = "GET / HTTP/1.1\nHost: localhost\n\n\n";
+        String requestData = validGetRequest();
 
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
         OutputStream outputStream = new ByteArrayOutputStream();
@@ -30,5 +31,23 @@ class RequestProcessorShould {
         requestProcessor.processRequests(inputStream, outputStream);
 
         assertEquals("HTTP/1.1 200 OK\n", outputStream.toString());
+    }
+
+    private String validGetRequest() {
+        return "GET / HTTP/1.1\nHost: localhost\n\n";
+    }
+
+    @Test
+    @Disabled
+    void handle_multiple_requests() throws IOException, BadRequestException {
+        RequestProcessor requestProcessor = new RequestProcessor();
+        String requestData = validGetRequest() + validGetRequest();
+
+        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
+        OutputStream outputStream = new ByteArrayOutputStream();
+
+        requestProcessor.processRequests(inputStream, outputStream);
+
+        assertEquals("HTTP/1.1 200 OK\nHTTP/1.1 200 OK\n", outputStream.toString());
     }
 }

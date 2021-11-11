@@ -6,7 +6,7 @@ public class RequestParser {
 
     public static final String HOST_HEADER = "Host: ";
 
-    TheRequest parseRequest(InputStream inputStream) throws IOException, BadRequestException {
+    TheRequest parse(InputStream inputStream) throws IOException, BadRequestException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
         String verb = null;

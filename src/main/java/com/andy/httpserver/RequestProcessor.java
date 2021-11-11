@@ -9,10 +9,9 @@ public class RequestProcessor {
 
     void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException, BadRequestException {
         if (inputStream != null) {
-//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             RequestParser requestParser = new RequestParser();
 
-            TheRequest theRequest = requestParser.parseRequest(inputStream);
+            requestParser.parse(inputStream);
 
             String response = "HTTP/1.1 200 OK\n";
             outputStream.write(response.getBytes(StandardCharsets.UTF_8));
