@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 public class SimpleGetTest {
 
@@ -25,10 +26,11 @@ public class SimpleGetTest {
     }
 
     @Test
-    void should_get_200_ok() {
+    void should_get_200() {
         given().
             get("/simple_get").
         then().
-            statusCode(200);
+            statusCode(200).
+            body(equalTo(""));
     }
 }
