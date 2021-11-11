@@ -22,7 +22,8 @@ public class ExampleHttpServer {
                 InputStream inputStream = clientSocket.getInputStream()
         ) {
             requestProcessor.processRequests(inputStream, outputStream);
-        } catch (IOException e) {
+        } catch (IOException | BadRequestException e) {
+            System.out.println("Fatal error" + e);
             throw new HttpSocketCreationException("Failed to create server socket");
         }
     }

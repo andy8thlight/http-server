@@ -20,14 +20,15 @@ class RequestProcessorShould {
             "HOST: localhost\n\n";
          */
     @Test
-    void echo() throws IOException {
+    void return_200_ok() throws IOException, BadRequestException {
         RequestProcessor requestProcessor = new RequestProcessor();
+        String requestData = "GET / HTTP/1.1\nHost: localhost\n\n";
 
-        ByteArrayInputStream inputStream = StreamHelper.createInputStream("somefink");
+        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
         OutputStream outputStream = new ByteArrayOutputStream();
 
         requestProcessor.processRequests(inputStream, outputStream);
 
-        assertEquals("somefink", outputStream.toString());
+        assertEquals("HTTP/1.1 200 OK\n", outputStream.toString());
     }
 }

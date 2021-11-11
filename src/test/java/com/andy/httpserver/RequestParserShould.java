@@ -43,7 +43,7 @@ class RequestParserShould {
 
     @Test
     void read_host_data_into_request() throws IOException, BadRequestException {
-        String requestData = "GET / HTTP/1.1\nHOST: localhost\n\n";
+        String requestData = "GET / HTTP/1.1\nHost: localhost\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
         TheRequest request = requestParser.parseRequest(inputStream);
@@ -55,7 +55,7 @@ class RequestParserShould {
 
     @Test
     void read_different_host_data_into_request() throws IOException, BadRequestException {
-        String requestData = "GET / HTTP/1.1\nHOST: www.google.co.uk\n\n";
+        String requestData = "GET / HTTP/1.1\nHost: www.google.co.uk\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
         TheRequest request = requestParser.parseRequest(inputStream);

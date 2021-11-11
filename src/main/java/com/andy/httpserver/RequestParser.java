@@ -1,15 +1,12 @@
 package com.andy.httpserver;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class RequestParser {
 
-    public static final String HOST_HEADER = "HOST: ";
+    public static final String HOST_HEADER = "Host: ";
 
-    TheRequest parseRequest(ByteArrayInputStream inputStream) throws IOException, BadRequestException {
+    TheRequest parseRequest(InputStream inputStream) throws IOException, BadRequestException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
         String verb = null;
