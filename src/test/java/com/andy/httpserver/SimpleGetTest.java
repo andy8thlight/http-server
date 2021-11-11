@@ -37,6 +37,15 @@ public class SimpleGetTest {
     }
 
     @Test
+    void should_get_anoter_200_when_a_different_request() {
+        given().
+            get("/simple_get_2").
+        then().
+            statusCode(200).
+            body(equalTo(""));
+    }
+
+    @Test
     @Disabled
     void should_get_200_with_body() {
         given().

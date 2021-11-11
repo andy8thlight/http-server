@@ -15,8 +15,17 @@ public class ExampleHttpServer {
     }
 
     public void handle() {
+        try (ServerSocket serverSocket = socketHandler.createServerSocket(portNumber)) {
+            for (;;) {
+                acceptRequest(serverSocket);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void acceptRequest(ServerSocket serverSocket) {
         try (
-                ServerSocket serverSocket = socketHandler.createServerSocket(portNumber);
                 Socket clientSocket = serverSocket.accept();
                 OutputStream outputStream = clientSocket.getOutputStream();
                 InputStream inputStream = clientSocket.getInputStream()
