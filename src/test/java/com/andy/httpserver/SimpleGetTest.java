@@ -2,6 +2,7 @@ package com.andy.httpserver;
 
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutorService;
@@ -32,5 +33,15 @@ public class SimpleGetTest {
         then().
             statusCode(200).
             body(equalTo(""));
+    }
+
+    @Test
+    @Disabled
+    void should_get_200_with_body() {
+        given().
+            get("/simple_get_with_body").
+        then().
+            statusCode(200).
+            body(equalTo("Hello world"));
     }
 }
