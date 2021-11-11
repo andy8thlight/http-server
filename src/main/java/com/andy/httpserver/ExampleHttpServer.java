@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ExampleHttpServer {
-    private final RequestProcessor requestProcessor = new RequestProcessor();
+    private final HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor();
     private SocketHandler socketHandler;
     private int portNumber;
 
@@ -21,7 +21,7 @@ public class ExampleHttpServer {
                 OutputStream outputStream = clientSocket.getOutputStream();
                 InputStream inputStream = clientSocket.getInputStream()
         ) {
-            requestProcessor.processRequests(inputStream, outputStream);
+            httpRequestProcessor.processRequests(inputStream, outputStream);
         } catch (IOException | BadRequestException e) {
             System.out.println("Fatal error" + e);
             throw new HttpSocketCreationException("Failed to create server socket");

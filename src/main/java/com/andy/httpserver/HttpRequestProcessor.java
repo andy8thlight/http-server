@@ -3,8 +3,8 @@ package com.andy.httpserver;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class RequestProcessor {
-    public RequestProcessor() {
+public class HttpRequestProcessor {
+    public HttpRequestProcessor() {
     }
 
     void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException, BadRequestException {
@@ -15,13 +15,6 @@ public class RequestProcessor {
 
             String response = "HTTP/1.1 200 OK\n";
             outputStream.write(response.getBytes(StandardCharsets.UTF_8));
-
-//            String text;
-//            while ((text = bufferedReader.readLine()) != null) {
-
-//
-//                outputStream.write(text.getBytes(StandardCharsets.UTF_8));
-//            }
         }
     }
 }

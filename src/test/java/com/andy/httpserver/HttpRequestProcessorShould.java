@@ -10,7 +10,7 @@ import java.io.OutputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RequestProcessorShould {
+class HttpRequestProcessorShould {
 
 
     private final RequestParser requestParser = new RequestParser();
@@ -22,13 +22,13 @@ class RequestProcessorShould {
          */
     @Test
     void return_200_ok() throws IOException, BadRequestException {
-        RequestProcessor requestProcessor = new RequestProcessor();
+        HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor();
         String requestData = validGetRequest();
 
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
         OutputStream outputStream = new ByteArrayOutputStream();
 
-        requestProcessor.processRequests(inputStream, outputStream);
+        httpRequestProcessor.processRequests(inputStream, outputStream);
 
         assertEquals("HTTP/1.1 200 OK\n", outputStream.toString());
     }
@@ -40,13 +40,13 @@ class RequestProcessorShould {
     @Test
     @Disabled
     void handle_multiple_requests() throws IOException, BadRequestException {
-        RequestProcessor requestProcessor = new RequestProcessor();
+        HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor();
         String requestData = validGetRequest() + validGetRequest();
 
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
         OutputStream outputStream = new ByteArrayOutputStream();
 
-        requestProcessor.processRequests(inputStream, outputStream);
+        httpRequestProcessor.processRequests(inputStream, outputStream);
 
         assertEquals("HTTP/1.1 200 OK\nHTTP/1.1 200 OK\n", outputStream.toString());
     }
