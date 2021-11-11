@@ -65,4 +65,16 @@ class RequestParserShould {
         assertEquals("www.google.co.uk", request.getHost());
     }
 
+    @Test
+    void ignore_unknown_headers() throws IOException, BadRequestException {
+        String requestData = "GET / HTTP/1.1\nignore\nignore\nHost: www.google.co.uk\n\n";
+        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
+
+        TheRequest request = requestParser.parseRequest(inputStream);
+
+        assertEquals("GET", request.getVerb());
+        assertEquals("/", request.getPath());
+        assertEquals("www.google.co.uk", request.getHost());
+    }
+
 }

@@ -11,22 +11,24 @@ public class RequestParser {
 
         String verb = null;
         String host = null;
-        String line = bufferedReader.readLine();
-        if (line.startsWith("POST")) {
-            verb = "POST";
-        } else if (line.startsWith("GET")) {
-            verb = "GET";
-        }
 
-        String hostLine = bufferedReader.readLine();
-        if (hostLine.startsWith(HOST_HEADER)) {
-            host = hostLine.substring(HOST_HEADER.length());
+        String line;
+
+        while (!(line = bufferedReader.readLine()).isBlank()) {
+            if (line.startsWith("POST")) {
+                verb = "POST";
+            } else if (line.startsWith("GET")) {
+                verb = "GET";
+            }
+
+            if (line.startsWith(HOST_HEADER)) {
+                host = line.substring(HOST_HEADER.length());
+            }
         }
 
         if (verb == null || (host == null || host.isBlank())) {
             throw new BadRequestException();
         }
-
 
         return new TheRequest(verb, host);
     }
