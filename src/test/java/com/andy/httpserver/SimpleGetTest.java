@@ -42,12 +42,11 @@ public class SimpleGetTest {
     }
 
     @Test
-    @Disabled
     void should_get_200_with_body() {
         given().
             get("/simple_get_with_body").
         then().
             statusCode(200).
-            body(equalTo("Hello world"));
+            body(equalTo("Hello world\n"));
     }
 }
