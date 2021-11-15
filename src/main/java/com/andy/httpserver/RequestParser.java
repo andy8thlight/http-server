@@ -11,14 +11,16 @@ public class RequestParser {
 
         String verb = null;
         String host = null;
+        String path = null;
 
         String line;
 
         while (!(line = bufferedReader.readLine()).isBlank()) {
-            if (line.startsWith("POST")) {
-                verb = "POST";
-            } else if (line.startsWith("GET")) {
-                verb = "GET";
+            if (line.startsWith("POST") || line.startsWith("GET")) {
+
+                String[] split = line.split("\\s+");
+                verb = split[0];
+                path = split[1];
             }
 
             if (line.startsWith(HOST_HEADER)) {
@@ -30,6 +32,6 @@ public class RequestParser {
             throw new BadRequestException();
         }
 
-        return new TheRequest(verb, host);
+        return new TheRequest(verb, host, path);
     }
 }

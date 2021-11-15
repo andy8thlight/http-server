@@ -6,8 +6,8 @@ import java.net.Socket;
 
 public class ExampleHttpServer {
     private final HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor();
-    private SocketHandler socketHandler;
-    private int portNumber;
+    private final SocketHandler socketHandler;
+    private final int portNumber;
     ServerSocket serverSocket = null;
 
     public ExampleHttpServer(SocketHandler socketHandler, int portNumber) {

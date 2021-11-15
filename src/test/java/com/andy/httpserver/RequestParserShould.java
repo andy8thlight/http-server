@@ -1,6 +1,7 @@
 package com.andy.httpserver;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -22,9 +23,7 @@ class RequestParserShould {
         String requestData = "some junk\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
-        assertThrows(BadRequestException.class, () -> {
-            requestParser.parse(inputStream);
-        });
+        assertThrows(BadRequestException.class, () -> requestParser.parse(inputStream));
     }
 
     @Test
@@ -32,9 +31,7 @@ class RequestParserShould {
         String requestData = "GET / HTTP/1.1\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
-        assertThrows(BadRequestException.class, () -> {
-            requestParser.parse(inputStream);
-        });
+        assertThrows(BadRequestException.class, () -> requestParser.parse(inputStream));
     }
 
     @Test
@@ -72,5 +69,18 @@ class RequestParserShould {
         assertEquals("/", request.getPath());
         assertEquals("www.google.co.uk", request.getHost());
     }
+
+    @Test
+    void read_path() throws IOException, BadRequestException {
+        String requestData = "GET /flibble HTTP/1.1\nHost: www.google.co.uk\n\n";
+        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
+
+        TheRequest request = requestParser.parse(inputStream);
+
+        assertEquals("GET", request.getVerb());
+        assertEquals("/flibble", request.getPath());
+        assertEquals("www.google.co.uk", request.getHost());
+    }
+
 
 }
