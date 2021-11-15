@@ -49,4 +49,13 @@ public class SimpleGetTest {
             statusCode(200).
             body(equalTo("Hello world\n"));
     }
+
+    @Test
+    void unconfigured_resources_returns_404() {
+        given().
+            get("/page_that_does_not_exist").
+        then().
+            statusCode(404);
+
+    }
 }

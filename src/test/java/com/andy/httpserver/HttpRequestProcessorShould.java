@@ -45,6 +45,19 @@ class HttpRequestProcessorShould {
         assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF + "Hello world\n", outputStream.toString());
     }
 
+    @Test
+    void return_404_for_non_existant_page() throws BadRequestException, IOException {
+        String requestData = validGetRequest("/non_existant");
+
+        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
+        OutputStream outputStream = new ByteArrayOutputStream();
+
+        httpRequestProcessor.processRequests(inputStream, outputStream);
+
+        assertEquals("HTTP/1.1 404 Not Found" + CRLF + CRLF, outputStream.toString());
+
+    }
+
     private String validGetRequest(final String path) {
         return "GET " + path + " HTTP/1.1\nHost: localhost\n\n";
     }
