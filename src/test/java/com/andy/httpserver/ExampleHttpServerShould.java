@@ -1,24 +1,23 @@
 package com.andy.httpserver;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class ExampleHttpServerShould {
 
     @Mock
@@ -32,10 +31,9 @@ public class ExampleHttpServerShould {
 
     @BeforeEach
     void setup() throws IOException {
-        MockitoAnnotations.openMocks(this);
         exampleHttpServer = new ExampleHttpServer(socketHandler, 7777);
-        when(socketHandler.createServerSocket(7777)).thenReturn(server);
-        when(server.accept()).thenReturn(clientSocket);
+        lenient().when(socketHandler.createServerSocket(7777)).thenReturn(server);
+        lenient().when(server.accept()).thenReturn(clientSocket);
     }
 
     @Test
