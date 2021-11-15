@@ -29,11 +29,10 @@ class HttpRequestProcessorShould {
 
         httpRequestProcessor.processRequests(inputStream, outputStream);
 
-        assertEquals("HTTP/1.1 200 OK\n", outputStream.toString());
+        assertEquals("HTTP/1.1 200 OK\r\n\r\n", outputStream.toString());
     }
 
     @Test
-    @Disabled
     void return_200_ok_with_body() throws IOException, BadRequestException {
         String requestData = validGetRequest("/with_body");
 
@@ -42,7 +41,7 @@ class HttpRequestProcessorShould {
 
         httpRequestProcessor.processRequests(inputStream, outputStream);
 
-        assertEquals("HTTP/1.1 200 OK\nSome text body\n", outputStream.toString());
+        assertEquals("HTTP/1.1 200 OK\r\n\r\nSome text body\n", outputStream.toString());
     }
 
     private String validGetRequest(final String path) {

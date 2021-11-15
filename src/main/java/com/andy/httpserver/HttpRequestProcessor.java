@@ -8,9 +8,14 @@ public class HttpRequestProcessor implements RequestProcessor {
         if (inputStream != null) {
             RequestParser requestParser = new RequestParser();
 
-            requestParser.parse(inputStream);
+            TheRequest request = requestParser.parse(inputStream);
 
-            String response = "HTTP/1.1 200 OK\n";
+            String body = "";
+            if (request.getPath().equals("/with_body")) {
+                body = "Some text body\n";
+            }
+
+            String response = "HTTP/1.1 200 OK\r\n\r\n" + body;
             outputStream.write(response.getBytes(StandardCharsets.UTF_8));
         }
     }
