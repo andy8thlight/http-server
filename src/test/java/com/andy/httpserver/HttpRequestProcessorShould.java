@@ -35,14 +35,14 @@ class HttpRequestProcessorShould {
 
     @Test
     void return_200_ok_with_body() throws IOException, BadRequestException {
-        String requestData = validGetRequest("/with_body");
+        String requestData = validGetRequest("/simple_get_with_body");
 
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
         OutputStream outputStream = new ByteArrayOutputStream();
 
         httpRequestProcessor.processRequests(inputStream, outputStream);
 
-        assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF + "Some text body\n", outputStream.toString());
+        assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF + "Hello world\n", outputStream.toString());
     }
 
     private String validGetRequest(final String path) {
