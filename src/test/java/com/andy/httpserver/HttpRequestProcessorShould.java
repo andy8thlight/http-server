@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HttpRequestProcessorShould {
 
+    public static final String CRLF = "\r\n";
     private HttpRequestProcessor httpRequestProcessor;
 
     @BeforeEach
@@ -29,7 +30,7 @@ class HttpRequestProcessorShould {
 
         httpRequestProcessor.processRequests(inputStream, outputStream);
 
-        assertEquals("HTTP/1.1 200 OK\r\n\r\n", outputStream.toString());
+        assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF, outputStream.toString());
     }
 
     @Test
@@ -41,7 +42,7 @@ class HttpRequestProcessorShould {
 
         httpRequestProcessor.processRequests(inputStream, outputStream);
 
-        assertEquals("HTTP/1.1 200 OK\r\n\r\nSome text body\n", outputStream.toString());
+        assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF + "Some text body\n", outputStream.toString());
     }
 
     private String validGetRequest(final String path) {

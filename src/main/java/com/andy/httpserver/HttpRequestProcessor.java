@@ -4,6 +4,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class HttpRequestProcessor implements RequestProcessor {
+    public static final String CRLF = "\r\n";
+
     public void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException, BadRequestException {
         if (inputStream != null) {
             RequestParser requestParser = new RequestParser();
@@ -15,8 +17,11 @@ public class HttpRequestProcessor implements RequestProcessor {
                 body = "Some text body\n";
             }
 
-            String response = "HTTP/1.1 200 OK\r\n\r\n" + body;
-            outputStream.write(response.getBytes(StandardCharsets.UTF_8));
+            outputStream.write(generateResponse(body).getBytes(StandardCharsets.UTF_8));
         }
+    }
+
+    private String generateResponse(String body) {
+        return "HTTP/1.1 200 OK" + CRLF + CRLF + body;
     }
 }
