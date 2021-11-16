@@ -16,8 +16,7 @@ public class RequestParser {
         String line;
 
         while (!(line = bufferedReader.readLine()).isBlank()) {
-            if (line.startsWith("POST") || line.startsWith("GET")) {
-
+            if (line.startsWith("POST") || line.startsWith("GET") || line.startsWith("HEAD")) {
                 String[] split = line.split("\\s+");
                 verb = split[0];
                 path = split[1];

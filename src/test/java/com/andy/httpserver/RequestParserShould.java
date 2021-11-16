@@ -82,5 +82,17 @@ class RequestParserShould {
         assertEquals("www.google.co.uk", request.getHost());
     }
 
+    @Test
+    void handle_head_request() throws BadRequestException, IOException {
+        String requestData = "HEAD /flibble HTTP/1.1\nHost: www.google.co.uk\n\n";
+        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
+
+        TheRequest request = requestParser.parse(inputStream);
+
+        assertEquals("HEAD", request.getVerb());
+        assertEquals("/flibble", request.getPath());
+        assertEquals("www.google.co.uk", request.getHost());
+
+    }
 
 }
