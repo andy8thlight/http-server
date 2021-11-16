@@ -12,7 +12,7 @@ import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-public class SimpleGetTest {
+public class GettingStartedTest {
 
     @BeforeAll
     static void setup() {
@@ -56,6 +56,23 @@ public class SimpleGetTest {
             get("/page_that_does_not_exist").
         then().
             statusCode(404);
+    }
 
+    @Test
+    void executing_head_request_to_simple_get() {
+        given().
+            head("/simple_get").
+        then().
+            statusCode(200).
+            body(equalTo(""));
+    }
+
+    @Test
+    void head_does_not_include_body() {
+        given().
+            head("/simple_get_with_body").
+        then().
+            statusCode(200).
+            body(equalTo(""));
     }
 }

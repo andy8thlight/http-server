@@ -23,17 +23,18 @@ public class HttpRequestProcessor implements RequestProcessor {
     public void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException, BadRequestException {
         if (inputStream != null) {
             TheRequest request = requestParser.parse(inputStream);
-            String response = lookupRequest(request);
+            String response;
+            String body = routes.get(request.getPath());
+            if (body != null) {
+                if (request.getVerb().equals("HEAD")) {
+                    body = "";
+                }
+                response = generateOkResponse(body);
+            } else {
+                response = generateNotFoundResponse();
+            }
             outputStream.write(response.getBytes(StandardCharsets.UTF_8));
         }
-    }
-
-    private String lookupRequest(TheRequest request) {
-        String body = routes.get(request.getPath());
-        if (body != null) {
-            return generateOkResponse(body);
-        }
-        return generateNotFoundResponse();
     }
 
     private String generateOkResponse(String body) {

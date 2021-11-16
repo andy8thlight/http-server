@@ -43,8 +43,19 @@ class HttpRequestProcessorShould {
         assertEquals("HTTP/1.1 404 Not Found" + CRLF + CRLF, outputStream.toString());
     }
 
+    @Test
+    void handle_head_request() throws BadRequestException, IOException {
+        String requestData = validHeadRequest("/simple_get_with_body");
+        OutputStream outputStream = processRequests(requestData);
+        assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF, outputStream.toString());
+    }
+
     private String validGetRequest(final String path) {
         return "GET " + path + " HTTP/1.1\nHost: localhost\n\n";
+    }
+
+    private String validHeadRequest(final String path) {
+        return "HEAD " + path + " HTTP/1.1\nHost: localhost\n\n";
     }
 
     private OutputStream processRequests(String requestData) throws IOException, BadRequestException {
