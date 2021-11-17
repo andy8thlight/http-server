@@ -5,14 +5,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ExampleHttpServer {
-    private final HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor();
+    private HttpRequestProcessor httpRequestProcessor;
     private final SocketHandler socketHandler;
     private final int portNumber;
     ServerSocket serverSocket = null;
 
-    public ExampleHttpServer(SocketHandler socketHandler, int portNumber) {
+    public ExampleHttpServer(SocketHandler socketHandler, int portNumber, HttpRequestProcessor httpRequestProcessor) {
         this.socketHandler = socketHandler;
         this.portNumber = portNumber;
+        this.httpRequestProcessor = httpRequestProcessor;
     }
 
     void createServer() {
@@ -48,7 +49,9 @@ public class ExampleHttpServer {
 
     static void startHttpServer(int portNumber) {
         SocketHandler socketHandler = new SocketHandler();
-        ExampleHttpServer server = new ExampleHttpServer(socketHandler, portNumber);
+        Routes routes = new Routes();
+        HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor(routes);
+        ExampleHttpServer server = new ExampleHttpServer(socketHandler, portNumber, httpRequestProcessor);
         server.createServer();
         server.handle();
     }

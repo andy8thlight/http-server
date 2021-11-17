@@ -8,7 +8,11 @@ public class HttpRequestProcessor implements RequestProcessor {
     public static final String CRLF = "\r\n";
     public static final String HTTP_1_1 = "HTTP/1.1";
     private final RequestParser requestParser = new RequestParser();
-    private final Routes routes = new Routes();
+    private final Routes routes;
+
+    public HttpRequestProcessor(Routes routes) {
+        this.routes = routes;
+    }
 
     public void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException, BadRequestException {
         if (inputStream != null) {

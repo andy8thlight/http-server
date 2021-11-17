@@ -31,7 +31,9 @@ public class ExampleHttpServerShould {
 
     @BeforeEach
     void setup() throws IOException {
-        exampleHttpServer = new ExampleHttpServer(socketHandler, 7777);
+        Routes routes = new Routes();
+        HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor(routes);
+        exampleHttpServer = new ExampleHttpServer(socketHandler, 7777, httpRequestProcessor);
         lenient().when(socketHandler.createServerSocket(7777)).thenReturn(server);
         lenient().when(server.accept()).thenReturn(clientSocket);
     }

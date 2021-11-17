@@ -19,7 +19,7 @@ class HttpRequestProcessorShould {
 
     @BeforeEach
     void setup() {
-        httpRequestProcessor = new HttpRequestProcessor();
+        httpRequestProcessor = new HttpRequestProcessor(new Routes());
     }
 
     @Test
