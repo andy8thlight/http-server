@@ -19,7 +19,14 @@ class HttpRequestProcessorShould {
 
     @BeforeEach
     void setup() {
-        httpRequestProcessor = new HttpRequestProcessor(new Routes());
+        httpRequestProcessor = new HttpRequestProcessor(createTestRoutes());
+    }
+
+    private static Routes createTestRoutes() {
+        Routes routes = new Routes();
+        routes.addRoute("/simple_get_with_body", "Hello world\n");
+        routes.addRoute("/", "");
+        return routes;
     }
 
     @Test
@@ -48,6 +55,11 @@ class HttpRequestProcessorShould {
         String requestData = validHeadRequest("/simple_get_with_body");
         OutputStream outputStream = processRequests(requestData);
         assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF, outputStream.toString());
+    }
+
+    @Test
+    void handle_post_request() {
+
     }
 
     private String validGetRequest(final String path) {

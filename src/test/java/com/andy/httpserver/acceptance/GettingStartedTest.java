@@ -1,5 +1,7 @@
-package com.andy.httpserver;
+package com.andy.httpserver.acceptance;
 
+import com.andy.httpserver.ExampleHttpServer;
+import com.andy.httpserver.Routes;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -13,14 +15,21 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 public class GettingStartedTest {
-
     @BeforeAll
     static void setup() {
         int portNumber = 5555;
         RestAssured.baseURI = "http://localhost:" + portNumber;
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(() -> ExampleHttpServer.startHttpServer(portNumber));
+        executorService.execute(() -> ExampleHttpServer.startHttpServer(portNumber, createTestRoutes()));
+    }
+
+    private static Routes createTestRoutes() {
+        Routes routes = new Routes();
+        routes.addRoute("/simple_get_with_body", "Hello world\n");
+        routes.addRoute("/simple_get", "");
+        routes.addRoute("/simple_get_2", "");
+        return routes;
     }
 
     @Test
@@ -74,5 +83,17 @@ public class GettingStartedTest {
         then().
             statusCode(200).
             body(equalTo(""));
+    }
+
+    @Test
+    @Disabled
+    void posting_echos_the_body() {
+        given().
+            body("some text").
+        when().
+            post("/echo_body").
+        then().
+            statusCode(200).
+            body(equalTo("some text"));
     }
 }

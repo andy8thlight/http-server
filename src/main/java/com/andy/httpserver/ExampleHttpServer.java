@@ -44,12 +44,11 @@ public class ExampleHttpServer {
     }
 
     public static void main(String[] args) {
-        startHttpServer(4444);
+        startHttpServer(4444, new Routes());
     }
 
-    static void startHttpServer(int portNumber) {
+    public static void startHttpServer(int portNumber, Routes routes) {
         SocketHandler socketHandler = new SocketHandler();
-        Routes routes = new Routes();
         HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor(routes);
         ExampleHttpServer server = new ExampleHttpServer(socketHandler, portNumber, httpRequestProcessor);
         server.createServer();
