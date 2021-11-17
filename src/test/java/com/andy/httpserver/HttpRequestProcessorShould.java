@@ -58,7 +58,10 @@ class HttpRequestProcessorShould {
     }
 
     @Test
-    void handle_post_request() {
+    void return_method_not_allowed() throws BadRequestException, IOException {
+        String requestData = validPostRequest("/simple_get_with_body");
+        OutputStream outputStream = processRequests(requestData);
+        assertEquals("HTTP/1.1 405 Not Allowed" + CRLF + CRLF, outputStream.toString());
 
     }
 
@@ -68,6 +71,10 @@ class HttpRequestProcessorShould {
 
     private String validHeadRequest(final String path) {
         return "HEAD " + path + " HTTP/1.1\nHost: localhost\n\n";
+    }
+
+    private String validPostRequest(final String path) {
+        return "POST " + path + " HTTP/1.1\nHost: localhost\n\n";
     }
 
     private OutputStream processRequests(String requestData) throws IOException, BadRequestException {

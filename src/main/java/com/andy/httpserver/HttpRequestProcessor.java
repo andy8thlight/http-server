@@ -17,13 +17,17 @@ public class HttpRequestProcessor implements RequestProcessor {
     public void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException, BadRequestException {
         if (inputStream != null) {
             TheRequest request = requestParser.parse(inputStream);
-            String response;
+            String response = "";
             String body = routes.lookup(request.getPath());
             if (body != null) {
                 if (request.getVerb().equals("HEAD")) {
                     body = "";
+                    response = generateOkResponse(body);
+                } else if (request.getVerb().equals("POST") && request.getPath().equals("/simple_get_with_body")) {
+                    response = generateMethodNotAllowResponse();
+                } else {
+                    response = generateOkResponse(body);
                 }
-                response = generateOkResponse(body);
             } else {
                 response = generateNotFoundResponse();
             }
@@ -37,5 +41,9 @@ public class HttpRequestProcessor implements RequestProcessor {
 
     private String generateNotFoundResponse() {
         return HTTP_1_1 + " 404 Not Found" + CRLF + CRLF;
+    }
+
+    private String generateMethodNotAllowResponse() {
+        return HTTP_1_1 + " 405 Not Allowed" + CRLF + CRLF;
     }
 }
