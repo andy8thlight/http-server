@@ -19,14 +19,23 @@ public class HttpRequestProcessor implements RequestProcessor {
             TheRequest request = requestParser.parse(inputStream);
             String response = "";
             String body = routes.lookup(request.getPath());
+
+            int statusCode = 200;
             if (body == null) {
-                response = generateNotFoundResponse();
-            } else if (request.getVerb().equals("HEAD")) {
-                body = "";
-                response = generateOkResponse(body);
+                statusCode = 404;
             } else if (request.getVerb().equals("POST") && request.getPath().equals("/simple_get_with_body")) {
+                statusCode = 405;
+            }
+
+            if (statusCode == 404) {
+                response = generateNotFoundResponse();
+            } else if (statusCode == 405) {
                 response = generateMethodNotAllowResponse();
             } else {
+                if (request.getVerb().equals("HEAD")) {
+                    body = "";
+                }
+
                 response = generateOkResponse(body);
             }
             outputStream.write(response.getBytes(StandardCharsets.UTF_8));
