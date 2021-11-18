@@ -13,20 +13,17 @@ public class Routes {
     TheResponse lookup(TheRequest request) {
         Route route = routes.get(request.getPath());
 
-        int statusCode = 200;
-        String body = "";
         if (route == null) {
             return new TheResponse(404, "");
         }
 
         if (request.getMethod() != HttpMethod.HEAD) {
             if (request.getMethod() != route.getHttpMethod()) {
-                return new TheResponse(405, body);
+                return new TheResponse(405, "");
             }
         }
 
-        body = route.getBody();
-        return new TheResponse(statusCode, body);
+        return new TheResponse(200, route.getBody());
     }
 
 }
