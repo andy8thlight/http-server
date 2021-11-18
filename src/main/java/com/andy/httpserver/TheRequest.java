@@ -4,15 +4,13 @@ public class TheRequest {
     private String verb;
     private String host;
     private String path;
+    private HttpMethod method;
 
-    public TheRequest(String verb, String host, String path) {
+    public TheRequest(String verb, String host, String path, HttpMethod method) {
         this.verb = verb;
         this.host = host;
         this.path = path;
-    }
-
-    public String getVerb() {
-        return verb;
+        this.method = method;
     }
 
     public String getPath() {
@@ -21,5 +19,9 @@ public class TheRequest {
 
     public String getHost() {
         return host;
+    }
+
+    public HttpMethod getMethod() {
+        return method;
     }
 }

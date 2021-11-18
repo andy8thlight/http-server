@@ -14,12 +14,21 @@ public class RequestParser {
         String path = null;
 
         String line;
+        HttpMethod method = null;
 
         while (!(line = bufferedReader.readLine()).isBlank()) {
             if (line.startsWith("POST") || line.startsWith("GET") || line.startsWith("HEAD")) {
                 String[] split = line.split("\\s+");
                 verb = split[0];
                 path = split[1];
+
+                if (verb.equals("POST")) {
+                    method = HttpMethod.POST;
+                } else if (verb.equals("GET")) {
+                    method = HttpMethod.GET;
+                } else if (verb.equals("HEAD")) {
+                    method = HttpMethod.HEAD;
+                }
             }
 
             if (line.startsWith(HOST_HEADER)) {
@@ -31,6 +40,6 @@ public class RequestParser {
             throw new BadRequestException();
         }
 
-        return new TheRequest(verb, host, path);
+        return new TheRequest(verb, host, path, method);
     }
 }

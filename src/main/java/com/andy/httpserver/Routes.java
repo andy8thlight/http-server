@@ -16,7 +16,7 @@ public class Routes {
         int statusCode = 200;
         if (body == null) {
             statusCode = 404;
-        } else if (request.getVerb().equals("POST") && request.getPath().equals("/simple_get_with_body")) {
+        } else if (request.getMethod() == HttpMethod.POST && request.getPath().equals("/simple_get_with_body")) {
             statusCode = 405;
         }
 

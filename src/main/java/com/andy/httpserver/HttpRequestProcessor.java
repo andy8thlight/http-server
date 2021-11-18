@@ -16,7 +16,7 @@ public class HttpRequestProcessor implements RequestProcessor {
     public void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException, BadRequestException {
         if (inputStream != null) {
             TheRequest request = requestParser.parse(inputStream);
-            String response = "";
+            String response;
             TheResponse theResponse = routes.lookup(request);
 
             String body;
@@ -26,7 +26,7 @@ public class HttpRequestProcessor implements RequestProcessor {
             } else if (theStatusCode == 405) {
                 response = generateMethodNotAllowResponse();
             } else {
-                if (request.getVerb().equals("HEAD")) {
+                if (request.getMethod() == HttpMethod.HEAD) {
                     body = "";
                 } else {
                     body = theResponse.getBody();

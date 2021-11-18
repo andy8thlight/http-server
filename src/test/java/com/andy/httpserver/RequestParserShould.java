@@ -41,7 +41,7 @@ class RequestParserShould {
 
         TheRequest request = requestParser.parse(inputStream);
 
-        assertEquals("GET", request.getVerb());
+        assertEquals(HttpMethod.GET, request.getMethod());
         assertEquals("/", request.getPath());
         assertEquals("localhost", request.getHost());
     }
@@ -53,7 +53,7 @@ class RequestParserShould {
 
         TheRequest request = requestParser.parse(inputStream);
 
-        assertEquals("GET", request.getVerb());
+        assertEquals(HttpMethod.GET, request.getMethod());
         assertEquals("/", request.getPath());
         assertEquals("www.google.co.uk", request.getHost());
     }
@@ -65,7 +65,7 @@ class RequestParserShould {
 
         TheRequest request = requestParser.parse(inputStream);
 
-        assertEquals("GET", request.getVerb());
+        assertEquals(HttpMethod.GET, request.getMethod());
         assertEquals("/", request.getPath());
         assertEquals("www.google.co.uk", request.getHost());
     }
@@ -77,7 +77,7 @@ class RequestParserShould {
 
         TheRequest request = requestParser.parse(inputStream);
 
-        assertEquals("GET", request.getVerb());
+        assertEquals(HttpMethod.GET, request.getMethod());
         assertEquals("/flibble", request.getPath());
         assertEquals("www.google.co.uk", request.getHost());
     }
@@ -89,7 +89,7 @@ class RequestParserShould {
 
         TheRequest request = requestParser.parse(inputStream);
 
-        assertEquals("HEAD", request.getVerb());
+        assertEquals(HttpMethod.HEAD, request.getMethod());
         assertEquals("/flibble", request.getPath());
         assertEquals("www.google.co.uk", request.getHost());
 
