@@ -4,22 +4,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Routes {
-    final Map<Route, String> routes = new HashMap<>();
+    final Map<String, Route> routes = new HashMap<>();
 
-    public void addRoute(String uri, Route route, String content) {
-        this.routes.put(route, content);
+    public void addRoute(String uri, Route route) {
+        this.routes.put(uri, route);
     }
 
     TheResponse lookup(TheRequest request) {
-        String body = routes.get(new Route(request.getPath(), HttpMethod.GET, "Hello world\n"));
+        Route route = routes.get(request.getPath());
 
         int statusCode = 200;
-        if (body == null) {
-            statusCode = 404;
-        } else if (request.getMethod() == HttpMethod.POST && request.getPath().equals("/simple_get_with_body")) {
-            statusCode = 405;
+        String body = "";
+        if (route == null) {
+            return new TheResponse(404, "");
         }
 
+        if (request.getMethod() == HttpMethod.POST && request.getPath().equals("/simple_get_with_body")) {
+            return new TheResponse(405, body);
+        }
+
+        body = route.getBody();
         return new TheResponse(statusCode, body);
     }
 

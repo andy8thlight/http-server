@@ -25,4 +25,8 @@ public class Route {
     public int hashCode() {
         return Objects.hash(uri, httpMethod);
     }
+
+    public String getBody() {
+        return body;
+    }
 }
