@@ -5,10 +5,12 @@ import java.util.Objects;
 public class Route {
     private String uri;
     private HttpMethod httpMethod;
+    private String body;
 
-    public Route(String uri, HttpMethod httpMethod) {
+    public Route(String uri, HttpMethod httpMethod, String body) {
         this.uri = uri;
         this.httpMethod = httpMethod;
+        this.body = body;
     }
 
     @Override
