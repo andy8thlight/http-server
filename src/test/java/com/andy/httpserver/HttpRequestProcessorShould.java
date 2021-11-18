@@ -25,6 +25,7 @@ class HttpRequestProcessorShould {
 
         routes.addRoute("/simple_get_with_body", new Route("/simple_get_with_body", HttpMethod.GET, "Hello world\n"));
         routes.addRoute("/", new Route("/", HttpMethod.GET, ""));
+        routes.addRoute("/hello", new Route("/", HttpMethod.GET, ""));
         return routes;
     }
 
@@ -61,7 +62,13 @@ class HttpRequestProcessorShould {
         String requestData = validPostRequest("/simple_get_with_body");
         OutputStream outputStream = processRequests(requestData);
         assertEquals("HTTP/1.1 405 Not Allowed" + CRLF + CRLF, outputStream.toString());
+    }
 
+    @Test
+    void return_another_method_not_allowed() throws BadRequestException, IOException {
+        String requestData = validPostRequest("/hello");
+        OutputStream outputStream = processRequests(requestData);
+        assertEquals("HTTP/1.1 405 Not Allowed" + CRLF + CRLF, outputStream.toString());
     }
 
     private String validGetRequest(final String path) {

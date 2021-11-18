@@ -29,4 +29,8 @@ public class Route {
     public String getBody() {
         return body;
     }
+
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
+    }
 }

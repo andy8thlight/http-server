@@ -19,8 +19,10 @@ public class Routes {
             return new TheResponse(404, "");
         }
 
-        if (request.getMethod() == HttpMethod.POST && request.getPath().equals("/simple_get_with_body")) {
-            return new TheResponse(405, body);
+        if (request.getMethod() != HttpMethod.HEAD) {
+            if (request.getMethod() != route.getHttpMethod()) {
+                return new TheResponse(405, body);
+            }
         }
 
         body = route.getBody();
