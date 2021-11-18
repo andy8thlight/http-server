@@ -23,9 +23,9 @@ class HttpRequestProcessorShould {
     private static Routes createTestRoutes() {
         Routes routes = new Routes();
 
-        routes.addRoute("/simple_get_with_body", new Route("/simple_get_with_body", HttpMethod.GET, "Hello world\n"));
-        routes.addRoute("/", new Route("/", HttpMethod.GET, ""));
-        routes.addRoute("/hello", new Route("/", HttpMethod.GET, ""));
+        routes.addRoute("/simple_get_with_body", new Route(HttpMethod.GET, "Hello world\n"));
+        routes.addRoute("/", new Route(HttpMethod.GET, ""));
+        routes.addRoute("/hello", new Route(HttpMethod.GET, ""));
         return routes;
     }
 

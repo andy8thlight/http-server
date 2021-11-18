@@ -28,9 +28,9 @@ public class GettingStartedTest {
 
     private static Routes createTestRoutes() {
         Routes routes = new Routes();
-        routes.addRoute("/simple_get_with_body", new Route("/simple_get_with_body", GET, "Hello world\n"));
-        routes.addRoute("/simple_get", new Route("/simple_get", GET, ""));
-        routes.addRoute("/simple_get_2", new Route("/simple_get_2", GET, ""));
+        routes.addRoute("/simple_get_with_body", new Route(GET, "Hello world\n"));
+        routes.addRoute("/simple_get", new Route(GET, ""));
+        routes.addRoute("/simple_get_2", new Route(GET, ""));
         return routes;
     }
 
