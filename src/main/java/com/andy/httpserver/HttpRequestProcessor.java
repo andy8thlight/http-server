@@ -18,17 +18,9 @@ public class HttpRequestProcessor implements RequestProcessor {
         if (inputStream != null) {
             TheRequest request = requestParser.parse(inputStream);
             String response = "";
-            String body = routes.lookup(request.getPath());
+            TheResponse theResponse = lookup(request);
 
-            int statusCode = 200;
-            if (body == null) {
-                statusCode = 404;
-            } else if (request.getVerb().equals("POST") && request.getPath().equals("/simple_get_with_body")) {
-                statusCode = 405;
-            }
-
-            TheResponse theResponse = new TheResponse(statusCode, body);
-
+            String body;
             int theStatusCode = theResponse.getStatusCode();
             if (theStatusCode == 404) {
                 response = generateNotFoundResponse();
@@ -45,6 +37,19 @@ public class HttpRequestProcessor implements RequestProcessor {
             }
             outputStream.write(response.getBytes(StandardCharsets.UTF_8));
         }
+    }
+
+    private TheResponse lookup(TheRequest request) {
+        String body = routes.lookup(request.getPath());
+
+        int statusCode = 200;
+        if (body == null) {
+            statusCode = 404;
+        } else if (request.getVerb().equals("POST") && request.getPath().equals("/simple_get_with_body")) {
+            statusCode = 405;
+        }
+
+        return new TheResponse(statusCode, body);
     }
 
     private String generateOkResponse(String body) {
