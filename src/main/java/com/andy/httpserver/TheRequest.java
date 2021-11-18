@@ -4,11 +4,13 @@ public class TheRequest {
     private String host;
     private String path;
     private HttpMethod method;
+    private String body;
 
-    public TheRequest(String host, String path, HttpMethod method) {
+    public TheRequest(String host, String path, HttpMethod method, String body) {
         this.host = host;
         this.path = path;
         this.method = method;
+        this.body = body;
     }
 
     public String getPath() {
@@ -21,5 +23,9 @@ public class TheRequest {
 
     public HttpMethod getMethod() {
         return method;
+    }
+
+    public String getBody() {
+        return body;
     }
 }

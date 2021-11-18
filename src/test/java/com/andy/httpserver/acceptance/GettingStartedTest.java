@@ -89,6 +89,7 @@ public class GettingStartedTest {
             body(equalTo(""));
     }
 
+    //TODO: This causes an infinite loop
     @Test
     @Disabled
     void posting_echos_the_body() {

@@ -38,7 +38,8 @@ public class HttpRequestProcessor implements RequestProcessor {
 
             // TODO: Special handling here
             if (request.getMethod() == HttpMethod.POST) {
-
+                String requestBody = request.getBody();
+                body = requestBody;
             }
 
 

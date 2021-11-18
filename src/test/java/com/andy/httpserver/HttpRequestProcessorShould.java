@@ -74,7 +74,6 @@ class HttpRequestProcessorShould {
     }
 
     @Test
-    @Disabled
     void handle_post_request() throws BadRequestException, IOException {
         String requestData = validPostRequest("/echo", "echo me back");
         OutputStream outputStream = processRequests(requestData);

@@ -29,11 +29,16 @@ public class RequestParser {
             }
         }
 
+        String body = null;
+        if (method == HttpMethod.POST) {
+            body = bufferedReader.readLine();
+        }
+
         if (method == null || (host == null || host.isBlank())) {
             throw new BadRequestException();
         }
 
-        return new TheRequest(host, path, method);
+        return new TheRequest(host, path, method, body);
     }
 
     private boolean isHttpVerb(String line) {

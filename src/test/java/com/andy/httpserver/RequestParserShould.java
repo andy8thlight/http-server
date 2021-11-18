@@ -92,7 +92,20 @@ class RequestParserShould {
         assertEquals(HttpMethod.HEAD, request.getMethod());
         assertEquals("/flibble", request.getPath());
         assertEquals("www.google.co.uk", request.getHost());
-
     }
+
+    @Test
+    void handle_post_request() throws BadRequestException, IOException {
+        String requestData = "POST /echo HTTP/1.1\nHost: www.google.co.uk\n\necho me";
+        ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
+
+        TheRequest request = requestParser.parse(inputStream);
+
+        assertEquals(HttpMethod.POST, request.getMethod());
+        assertEquals("/echo", request.getPath());
+        assertEquals("www.google.co.uk", request.getHost());
+        assertEquals("echo me", request.getBody());
+    }
+
 
 }
