@@ -27,13 +27,18 @@ public class HttpRequestProcessor implements RequestProcessor {
                 statusCode = 405;
             }
 
-            if (statusCode == 404) {
+            TheResponse theResponse = new TheResponse(statusCode, body);
+
+            int theStatusCode = theResponse.getStatusCode();
+            if (theStatusCode == 404) {
                 response = generateNotFoundResponse();
-            } else if (statusCode == 405) {
+            } else if (theStatusCode == 405) {
                 response = generateMethodNotAllowResponse();
             } else {
                 if (request.getVerb().equals("HEAD")) {
                     body = "";
+                } else {
+                    body = theResponse.getBody();
                 }
 
                 response = generateOkResponse(body);
