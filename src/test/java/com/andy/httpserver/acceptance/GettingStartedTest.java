@@ -1,6 +1,7 @@
 package com.andy.httpserver.acceptance;
 
 import com.andy.httpserver.ExampleHttpServer;
+import com.andy.httpserver.Route;
 import com.andy.httpserver.Routes;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.andy.httpserver.HttpMethod.GET;
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -26,9 +28,9 @@ public class GettingStartedTest {
 
     private static Routes createTestRoutes() {
         Routes routes = new Routes();
-        routes.addRoute("/simple_get_with_body", "Hello world\n");
-        routes.addRoute("/simple_get", "");
-        routes.addRoute("/simple_get_2", "");
+        routes.addRoute(new Route("/simple_get_with_body", GET), "Hello world\n");
+        routes.addRoute(new Route("/simple_get", GET), "");
+        routes.addRoute(new Route("/simple_get_2", GET), "");
         return routes;
     }
 

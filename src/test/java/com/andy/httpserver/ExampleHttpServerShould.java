@@ -20,6 +20,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class ExampleHttpServerShould {
 
+    public static final int PORT_NUMBER = 7777;
     @Mock
     private ServerSocket server;
     @Mock
@@ -33,15 +34,15 @@ public class ExampleHttpServerShould {
     void setup() throws IOException {
         Routes routes = new Routes();
         HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor(routes);
-        exampleHttpServer = new ExampleHttpServer(socketHandler, 7777, httpRequestProcessor);
-        lenient().when(socketHandler.createServerSocket(7777)).thenReturn(server);
+        exampleHttpServer = new ExampleHttpServer(socketHandler, PORT_NUMBER, httpRequestProcessor);
+        lenient().when(socketHandler.createServerSocket(PORT_NUMBER)).thenReturn(server);
         lenient().when(server.accept()).thenReturn(clientSocket);
     }
 
     @Test
     void open_server_socket() throws IOException {
         exampleHttpServer.createServer();
-        verify(socketHandler).createServerSocket(7777);
+        verify(socketHandler).createServerSocket(PORT_NUMBER);
     }
 
     @Test

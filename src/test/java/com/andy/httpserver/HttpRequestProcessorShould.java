@@ -1,8 +1,6 @@
 package com.andy.httpserver;
 
-import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -24,8 +22,9 @@ class HttpRequestProcessorShould {
 
     private static Routes createTestRoutes() {
         Routes routes = new Routes();
-        routes.addRoute("/simple_get_with_body", "Hello world\n");
-        routes.addRoute("/", "");
+
+        routes.addRoute(new Route("/simple_get_with_body", HttpMethod.GET), "Hello world\n");
+        routes.addRoute(new Route("/", HttpMethod.GET), "");
         return routes;
     }
 

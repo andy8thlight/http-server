@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Routes {
-    final Map<String, String> routes = new HashMap<>();
+    final Map<Route, String> routes = new HashMap<>();
 
-    public void addRoute(String uri, String content) {
-        this.routes.put(uri, content);
+    public void addRoute(Route route, String content) {
+        this.routes.put(route, content);
     }
 
     TheResponse lookup(TheRequest request) {
-        String body = lookup(request.getPath());
+        String body = routes.get(new Route(request.getPath(), HttpMethod.GET));
 
         int statusCode = 200;
         if (body == null) {
@@ -23,7 +23,4 @@ public class Routes {
         return new TheResponse(statusCode, body);
     }
 
-    private String lookup(String route) {
-        return routes.get(route);
-    }
 }
