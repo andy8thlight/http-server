@@ -9,17 +9,16 @@ public class RequestParser {
     TheRequest parse(InputStream inputStream) throws IOException, BadRequestException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-        String verb = null;
+        HttpMethod method = null;
         String host = null;
         String path = null;
 
         String line;
-        HttpMethod method = null;
 
         while (!(line = bufferedReader.readLine()).isBlank()) {
             if (isHttpVerb(line)) {
                 String[] split = line.split("\\s+");
-                verb = split[0];
+                String verb = split[0];
                 path = split[1];
 
                 method = convertVerbToMethod(verb);
@@ -30,11 +29,11 @@ public class RequestParser {
             }
         }
 
-        if (verb == null || (host == null || host.isBlank())) {
+        if (method == null || (host == null || host.isBlank())) {
             throw new BadRequestException();
         }
 
-        return new TheRequest(verb, host, path, method);
+        return new TheRequest(host, path, method);
     }
 
     private boolean isHttpVerb(String line) {
