@@ -10,7 +10,20 @@ public class Routes {
         this.routes.put(uri, content);
     }
 
-    public String lookup(String route) {
+    TheResponse lookup(TheRequest request) {
+        String body = lookup(request.getPath());
+
+        int statusCode = 200;
+        if (body == null) {
+            statusCode = 404;
+        } else if (request.getVerb().equals("POST") && request.getPath().equals("/simple_get_with_body")) {
+            statusCode = 405;
+        }
+
+        return new TheResponse(statusCode, body);
+    }
+
+    private String lookup(String route) {
         return routes.get(route);
     }
 }

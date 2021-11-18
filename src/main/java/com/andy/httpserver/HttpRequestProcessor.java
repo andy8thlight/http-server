@@ -2,7 +2,6 @@ package com.andy.httpserver;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 public class HttpRequestProcessor implements RequestProcessor {
     public static final String CRLF = "\r\n";
@@ -18,7 +17,7 @@ public class HttpRequestProcessor implements RequestProcessor {
         if (inputStream != null) {
             TheRequest request = requestParser.parse(inputStream);
             String response = "";
-            TheResponse theResponse = lookup(request);
+            TheResponse theResponse = routes.lookup(request);
 
             String body;
             int theStatusCode = theResponse.getStatusCode();
@@ -37,19 +36,6 @@ public class HttpRequestProcessor implements RequestProcessor {
             }
             outputStream.write(response.getBytes(StandardCharsets.UTF_8));
         }
-    }
-
-    private TheResponse lookup(TheRequest request) {
-        String body = routes.lookup(request.getPath());
-
-        int statusCode = 200;
-        if (body == null) {
-            statusCode = 404;
-        } else if (request.getVerb().equals("POST") && request.getPath().equals("/simple_get_with_body")) {
-            statusCode = 405;
-        }
-
-        return new TheResponse(statusCode, body);
     }
 
     private String generateOkResponse(String body) {
