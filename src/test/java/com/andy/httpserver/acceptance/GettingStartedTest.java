@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static com.andy.httpserver.HttpMethod.GET;
+import static com.andy.httpserver.HttpMethod.POST;
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -31,6 +32,7 @@ public class GettingStartedTest {
         routes.addRoute("/simple_get_with_body", new Route(GET, "Hello world\n"));
         routes.addRoute("/simple_get", new Route(GET, ""));
         routes.addRoute("/simple_get_2", new Route(GET, ""));
+        routes.addRoute("/echo_body", new Route(POST, ""));
         return routes;
     }
 

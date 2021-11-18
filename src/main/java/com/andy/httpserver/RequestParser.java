@@ -17,18 +17,12 @@ public class RequestParser {
         HttpMethod method = null;
 
         while (!(line = bufferedReader.readLine()).isBlank()) {
-            if (line.startsWith("POST") || line.startsWith("GET") || line.startsWith("HEAD")) {
+            if (isHttpVerb(line)) {
                 String[] split = line.split("\\s+");
                 verb = split[0];
                 path = split[1];
 
-                if (verb.equals("POST")) {
-                    method = HttpMethod.POST;
-                } else if (verb.equals("GET")) {
-                    method = HttpMethod.GET;
-                } else if (verb.equals("HEAD")) {
-                    method = HttpMethod.HEAD;
-                }
+                method = convertVerbToMethod(verb);
             }
 
             if (line.startsWith(HOST_HEADER)) {
@@ -41,5 +35,13 @@ public class RequestParser {
         }
 
         return new TheRequest(verb, host, path, method);
+    }
+
+    private boolean isHttpVerb(String line) {
+        return line.startsWith("POST") || line.startsWith("GET") || line.startsWith("HEAD");
+    }
+
+    private HttpMethod convertVerbToMethod(String verb) {
+        return HttpMethod.valueOf(verb);
     }
 }

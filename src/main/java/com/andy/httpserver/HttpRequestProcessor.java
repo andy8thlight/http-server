@@ -16,33 +16,41 @@ public class HttpRequestProcessor implements RequestProcessor {
     public void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException, BadRequestException {
         if (inputStream != null) {
             TheRequest request = requestParser.parse(inputStream);
-            String response;
             TheResponse theResponse = routes.lookup(request);
 
             String body;
             int theStatusCode = theResponse.getStatusCode();
             if (theStatusCode == 404) {
-                response = generateNotFoundResponse();
-            } else if (theStatusCode == 405) {
-                response = generateMethodNotAllowResponse();
-            } else {
-                if (request.getMethod() == HttpMethod.HEAD) {
-                    body = "";
-                } else {
-                    body = theResponse.getBody();
-                }
-
-                response = generateOkResponse(body);
+                outputStream.write(notFoundResponse().getBytes(StandardCharsets.UTF_8));
+                return;
             }
-            outputStream.write(response.getBytes(StandardCharsets.UTF_8));
+
+            if (theStatusCode == 405) {
+                outputStream.write(generateMethodNotAllowResponse().getBytes(StandardCharsets.UTF_8));
+                return;
+            }
+
+            if (request.getMethod() == HttpMethod.HEAD) {
+                body = "";
+            } else {
+                body = theResponse.getBody();
+            }
+
+            // TODO: Special handling here
+            if (request.getMethod() == HttpMethod.POST) {
+
+            }
+
+
+            outputStream.write(okResponse(body).getBytes(StandardCharsets.UTF_8));
         }
     }
 
-    private String generateOkResponse(String body) {
+    private String okResponse(String body) {
         return HTTP_1_1 + " 200 OK" + CRLF + CRLF + body;
     }
 
-    private String generateNotFoundResponse() {
+    private String notFoundResponse() {
         return HTTP_1_1 + " 404 Not Found" + CRLF + CRLF;
     }
 

@@ -1,6 +1,7 @@
 package com.andy.httpserver;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -26,6 +27,7 @@ class HttpRequestProcessorShould {
         routes.addRoute("/simple_get_with_body", new Route(HttpMethod.GET, "Hello world\n"));
         routes.addRoute("/", new Route(HttpMethod.GET, ""));
         routes.addRoute("/hello", new Route(HttpMethod.GET, ""));
+        routes.addRoute("/echo", new Route(HttpMethod.POST, ""));
         return routes;
     }
 
@@ -59,16 +61,24 @@ class HttpRequestProcessorShould {
 
     @Test
     void return_method_not_allowed() throws BadRequestException, IOException {
-        String requestData = validPostRequest("/simple_get_with_body");
+        String requestData = validPostRequest("/simple_get_with_body", "");
         OutputStream outputStream = processRequests(requestData);
         assertEquals("HTTP/1.1 405 Not Allowed" + CRLF + CRLF, outputStream.toString());
     }
 
     @Test
     void return_another_method_not_allowed() throws BadRequestException, IOException {
-        String requestData = validPostRequest("/hello");
+        String requestData = validPostRequest("/hello", "");
         OutputStream outputStream = processRequests(requestData);
         assertEquals("HTTP/1.1 405 Not Allowed" + CRLF + CRLF, outputStream.toString());
+    }
+
+    @Test
+    @Disabled
+    void handle_post_request() throws BadRequestException, IOException {
+        String requestData = validPostRequest("/echo", "echo me back");
+        OutputStream outputStream = processRequests(requestData);
+        assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF + "echo me back", outputStream.toString());
     }
 
     private String validGetRequest(final String path) {
@@ -79,8 +89,8 @@ class HttpRequestProcessorShould {
         return "HEAD " + path + " HTTP/1.1\nHost: localhost\n\n";
     }
 
-    private String validPostRequest(final String path) {
-        return "POST " + path + " HTTP/1.1\nHost: localhost\n\n";
+    private String validPostRequest(final String path, String body) {
+        return "POST " + path + " HTTP/1.1\nHost: localhost\n\n" + body;
     }
 
     private OutputStream processRequests(String requestData) throws IOException, BadRequestException {
