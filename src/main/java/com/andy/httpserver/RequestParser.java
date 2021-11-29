@@ -1,7 +1,6 @@
 package com.andy.httpserver;
 
 import java.io.*;
-import java.util.Arrays;
 
 import static java.util.Arrays.*;
 
@@ -14,34 +13,34 @@ public class RequestParser {
 
         HttpMethod method = null;
         String host = null;
-        String path = null;
 
         String line;
 
+        RequestBuilder requestBuilder = new RequestBuilder();
         while (!(line = bufferedReader.readLine()).isBlank()) {
             if (isHttpVerb(line)) {
                 String[] split = line.split("\\s+");
-                String verb = split[0];
-                path = split[1];
 
-                method = convertVerbToMethod(verb);
+                method = convertVerbToMethod(split[0]);
+                requestBuilder.setMethod(method).setPath(split[1]);
             }
 
             if (line.startsWith(HOST_HEADER)) {
                 host = line.substring(HOST_HEADER.length());
+                requestBuilder.setHost(host);
             }
         }
 
-        String body = null;
         if (method == HttpMethod.POST) {
-            body = bufferedReader.readLine();
+            String body = bufferedReader.readLine();
+            requestBuilder.setBody(body);
         }
 
         if (method == null || (host == null || host.isBlank())) {
             throw new BadRequestException();
         }
 
-        return new TheRequest(host, path, method, body);
+        return requestBuilder.createTheRequest();
     }
 
     private boolean isHttpVerb(String line) {
