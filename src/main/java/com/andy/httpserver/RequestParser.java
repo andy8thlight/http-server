@@ -12,7 +12,6 @@ public class RequestParser {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
         HttpMethod method = null;
-        String host = null;
 
         String line;
 
@@ -26,7 +25,7 @@ public class RequestParser {
             }
 
             if (line.startsWith(HOST_HEADER)) {
-                host = line.substring(HOST_HEADER.length());
+                String host = line.substring(HOST_HEADER.length());
                 requestBuilder.setHost(host);
             }
         }
@@ -36,11 +35,12 @@ public class RequestParser {
             requestBuilder.setBody(body);
         }
 
-        if (method == null || (host == null || host.isBlank())) {
+        TheRequest theRequest = requestBuilder.createTheRequest();
+        if (theRequest.getMethod() == null || (theRequest.getHost() == null || theRequest.getHost().isBlank())) {
             throw new BadRequestException();
         }
 
-        return requestBuilder.createTheRequest();
+        return theRequest;
     }
 
     private boolean isHttpVerb(String line) {
