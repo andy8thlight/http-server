@@ -11,36 +11,40 @@ public class RequestParser {
     TheRequest parse(InputStream inputStream) throws IOException, BadRequestException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-        HttpMethod method = null;
-
         String line;
 
         RequestBuilder requestBuilder = new RequestBuilder();
         while (!(line = bufferedReader.readLine()).isBlank()) {
             if (isHttpVerb(line)) {
-                String[] split = line.split("\\s+");
-
-                method = convertVerbToMethod(split[0]);
-                requestBuilder.setMethod(method).setPath(split[1]);
+                String[] components = line.split("\\s+");
+                HttpMethod method = convertVerbToMethod(components[0]);
+                requestBuilder.setMethod(method).setPath(components[1]);
             }
 
             if (line.startsWith(HOST_HEADER)) {
-                String host = line.substring(HOST_HEADER.length());
-                requestBuilder.setHost(host);
+                requestBuilder.setHost(extractHost(line));
             }
         }
 
-        if (method == HttpMethod.POST) {
-            String body = bufferedReader.readLine();
-            requestBuilder.setBody(body);
+        if (requestBuilder.getMethod() == HttpMethod.POST) {
+            requestBuilder.setBody(bufferedReader.readLine());
         }
 
         TheRequest theRequest = requestBuilder.createTheRequest();
+        validateRequest(theRequest);
+
+        return theRequest;
+    }
+
+    private String extractHost(String line) {
+        String host = line.substring(HOST_HEADER.length());
+        return host;
+    }
+
+    private void validateRequest(TheRequest theRequest) throws BadRequestException {
         if (theRequest.getMethod() == null || (theRequest.getHost() == null || theRequest.getHost().isBlank())) {
             throw new BadRequestException();
         }
-
-        return theRequest;
     }
 
     private boolean isHttpVerb(String line) {

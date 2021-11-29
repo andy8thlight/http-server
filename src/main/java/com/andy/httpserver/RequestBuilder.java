@@ -21,6 +21,10 @@ public class RequestBuilder {
         return this;
     }
 
+    public HttpMethod getMethod() {
+        return method;
+    }
+
     public RequestBuilder setBody(String body) {
         this.body = body;
         return this;
