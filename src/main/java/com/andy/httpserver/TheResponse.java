@@ -3,10 +3,12 @@ package com.andy.httpserver;
 public class TheResponse {
     private int statusCode;
     private String body;
+    private HttpStatus httpStatus;
 
-    public TheResponse(int statusCode, String body) {
+    public TheResponse(int statusCode, String body, HttpStatus httpStatus) {
         this.statusCode = statusCode;
         this.body = body;
+        this.httpStatus = httpStatus;
     }
 
     public int getStatusCode() {
@@ -19,5 +21,9 @@ public class TheResponse {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
     }
 }

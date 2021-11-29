@@ -20,12 +20,12 @@ public class HttpRequestProcessor implements RequestProcessor {
 
             int theStatusCode = theResponse.getStatusCode();
             if (theStatusCode == 404) {
-                outputStream.write(notFoundResponse().getBytes(StandardCharsets.UTF_8));
+                outputStream.write(notFoundResponse(theResponse).getBytes(StandardCharsets.UTF_8));
                 return;
             }
 
             if (theStatusCode == 405) {
-                outputStream.write(generateMethodNotAllowResponse().getBytes(StandardCharsets.UTF_8));
+                outputStream.write(generateMethodNotAllowResponse(theResponse).getBytes(StandardCharsets.UTF_8));
                 return;
             }
 
@@ -43,20 +43,20 @@ public class HttpRequestProcessor implements RequestProcessor {
             }
 
 
-            String okResponse = okResponse(theResponse.getBody());
+            String okResponse = okResponse(theResponse);
             outputStream.write(okResponse.getBytes(StandardCharsets.UTF_8));
         }
     }
 
-    private String okResponse(String body) {
-        return HTTP_1_1 + " 200 OK" + CRLF + CRLF + body;
+    private String okResponse(TheResponse theResponse) {
+        return HTTP_1_1 + " " + theResponse.getStatusCode() + " " + theResponse.getHttpStatus().getDescription() + CRLF + CRLF + theResponse.getBody();
     }
 
-    private String notFoundResponse() {
-        return HTTP_1_1 + " 404 Not Found" + CRLF + CRLF;
+    private String notFoundResponse(TheResponse theResponse) {
+        return HTTP_1_1 + " " + theResponse.getStatusCode() + " " + theResponse.getHttpStatus().getDescription() + CRLF + CRLF;
     }
 
-    private String generateMethodNotAllowResponse() {
-        return HTTP_1_1 + " 405 Not Allowed" + CRLF + CRLF;
+    private String generateMethodNotAllowResponse(TheResponse theResponse) {
+        return HTTP_1_1 + " " + theResponse.getStatusCode() + " " + theResponse.getHttpStatus().getDescription() + CRLF + CRLF;
     }
 }
