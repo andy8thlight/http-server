@@ -1,6 +1,9 @@
 package com.andy.httpserver;
 
 import java.io.*;
+import java.util.Arrays;
+
+import static java.util.Arrays.*;
 
 public class RequestParser {
 
@@ -42,7 +45,8 @@ public class RequestParser {
     }
 
     private boolean isHttpVerb(String line) {
-        return line.startsWith("POST") || line.startsWith("GET") || line.startsWith("HEAD");
+        String[] verbs = new String[]{"POST", "GET", "HEAD"};
+        return stream(verbs).anyMatch(line::startsWith);
     }
 
     private HttpMethod convertVerbToMethod(String verb) {
