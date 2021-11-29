@@ -49,14 +49,14 @@ public class HttpRequestProcessor implements RequestProcessor {
     }
 
     private String okResponse(TheResponse theResponse) {
-        return HTTP_1_1 + " " + theResponse.getStatusCode() + " " + theResponse.getHttpStatus().getDescription() + CRLF + CRLF + theResponse.getBody();
+        return HTTP_1_1 + " " + theResponse + CRLF + CRLF + theResponse.getBody();
     }
 
     private String notFoundResponse(TheResponse theResponse) {
-        return HTTP_1_1 + " " + theResponse.getStatusCode() + " " + theResponse.getHttpStatus().getDescription() + CRLF + CRLF;
+        return HTTP_1_1 + " " + theResponse + CRLF + CRLF;
     }
 
     private String generateMethodNotAllowResponse(TheResponse theResponse) {
-        return HTTP_1_1 + " " + theResponse.getStatusCode() + " " + theResponse.getHttpStatus().getDescription() + CRLF + CRLF;
+        return HTTP_1_1 + " " + theResponse + CRLF + CRLF;
     }
 }

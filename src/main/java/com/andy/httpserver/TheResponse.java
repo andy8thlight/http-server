@@ -26,4 +26,9 @@ public class TheResponse {
     public HttpStatus getHttpStatus() {
         return httpStatus;
     }
+
+    @Override
+    public String toString() {
+        return statusCode + " " + httpStatus.getDescription();
+    }
 }
