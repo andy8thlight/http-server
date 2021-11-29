@@ -18,7 +18,6 @@ public class HttpRequestProcessor implements RequestProcessor {
             TheRequest request = requestParser.parse(inputStream);
             TheResponse theResponse = routes.lookup(request);
 
-            String body;
             int theStatusCode = theResponse.getStatusCode();
             if (theStatusCode == 404) {
                 outputStream.write(notFoundResponse().getBytes(StandardCharsets.UTF_8));
@@ -31,19 +30,21 @@ public class HttpRequestProcessor implements RequestProcessor {
             }
 
             if (request.getMethod() == HttpMethod.HEAD) {
-                body = "";
+                theResponse.setBody("");
             } else {
-                body = theResponse.getBody();
+                theResponse.setBody(theResponse.getBody());
             }
 
             // TODO: Special handling here
             if (request.getMethod() == HttpMethod.POST) {
                 String requestBody = request.getBody();
-                body = requestBody;
+
+                theResponse.setBody(requestBody);
             }
 
 
-            outputStream.write(okResponse(body).getBytes(StandardCharsets.UTF_8));
+            String okResponse = okResponse(theResponse.getBody());
+            outputStream.write(okResponse.getBytes(StandardCharsets.UTF_8));
         }
     }
 
