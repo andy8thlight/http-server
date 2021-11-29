@@ -44,7 +44,10 @@ public class ExampleHttpServer {
     }
 
     public static void main(String[] args) {
-        startHttpServer(4444, new Routes());
+        Routes routes = new Routes();
+        routes.addRoute("/simple_get", new Route(HttpMethod.GET, "Howdee"));
+        routes.addRoute("/simple_post", new Route(HttpMethod.POST, "Howdee"));
+        startHttpServer(4444, routes);
     }
 
     public static void startHttpServer(int portNumber, Routes routes) {
