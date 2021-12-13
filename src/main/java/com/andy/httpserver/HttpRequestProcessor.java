@@ -20,12 +20,12 @@ public class HttpRequestProcessor implements RequestProcessor {
 
             int theStatusCode = theResponse.getStatusCode();
             if (theStatusCode == 404) {
-                outputStream.write(theResponse.createResponse().getBytes(StandardCharsets.UTF_8));
+                outputStream.write(theResponse.toString().getBytes(StandardCharsets.UTF_8));
                 return;
             }
 
             if (theStatusCode == 405) {
-                outputStream.write(theResponse.createResponse().getBytes(StandardCharsets.UTF_8));
+                outputStream.write(theResponse.toString().getBytes(StandardCharsets.UTF_8));
                 return;
             }
 
@@ -43,7 +43,7 @@ public class HttpRequestProcessor implements RequestProcessor {
             }
 
 
-            String okResponse = theResponse.createResponse();
+            String okResponse = theResponse.toString();
             outputStream.write(okResponse.getBytes(StandardCharsets.UTF_8));
         }
     }

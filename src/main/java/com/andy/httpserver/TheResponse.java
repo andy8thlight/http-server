@@ -1,9 +1,9 @@
 package com.andy.httpserver;
 
 public class TheResponse {
-    private int statusCode;
+    private final int statusCode;
     private String body;
-    private HttpStatus httpStatus;
+    private final HttpStatus httpStatus;
     public static final String CRLF = "\r\n";
     public static final String HTTP_1_1 = "HTTP/1.1";
 
@@ -25,16 +25,9 @@ public class TheResponse {
         this.body = body;
     }
 
-    public HttpStatus getHttpStatus() {
-        return httpStatus;
-    }
-
-    String createResponse() {
-        return HTTP_1_1 + " " + this + CRLF + CRLF + getBody();
-    }
-
     @Override
     public String toString() {
-        return statusCode + " " + httpStatus.getDescription();
+        return HTTP_1_1 + " " + (statusCode + " " + httpStatus.getDescription()) + CRLF + CRLF + getBody();
     }
+
 }
