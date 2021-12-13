@@ -4,6 +4,8 @@ public class TheResponse {
     private int statusCode;
     private String body;
     private HttpStatus httpStatus;
+    public static final String CRLF = "\r\n";
+    public static final String HTTP_1_1 = "HTTP/1.1";
 
     public TheResponse(int statusCode, String body, HttpStatus httpStatus) {
         this.statusCode = statusCode;
@@ -25,6 +27,10 @@ public class TheResponse {
 
     public HttpStatus getHttpStatus() {
         return httpStatus;
+    }
+
+    String createResponse() {
+        return HTTP_1_1 + " " + this + CRLF + CRLF + getBody();
     }
 
     @Override

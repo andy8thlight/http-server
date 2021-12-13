@@ -99,4 +99,13 @@ public class GettingStartedTest {
             statusCode(200).
             body(equalTo("some text"));
     }
+
+    @Test
+    @Disabled
+    void method_not_allowed() {
+        given().
+            delete("/simple_get").
+        then().
+            statusCode(405);
+    }
 }
