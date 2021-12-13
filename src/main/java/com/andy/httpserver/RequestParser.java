@@ -37,8 +37,7 @@ public class RequestParser {
     }
 
     private String extractHost(String line) {
-        String host = line.substring(HOST_HEADER.length());
-        return host;
+        return line.substring(HOST_HEADER.length());
     }
 
     private void validateRequest(TheRequest theRequest) throws BadRequestException {
