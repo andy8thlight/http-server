@@ -10,23 +10,8 @@ public class Routes {
         this.routes.put(uri, route);
     }
 
-    TheResponse lookup(TheRequest request) {
-        Route route = routes.get(request.getPath());
-        if (route == null) {
-            return new TheResponse(404, "", HttpStatus.NOT_FOUND);
-        }
-
-        if (request.getMethod() == HttpMethod.OPTIONS) {
-            return new TheResponse(200, route.getBody(), HttpStatus.OK);
-        }
-
-        if (request.getMethod() != HttpMethod.HEAD) {
-            if (request.getMethod() != route.getHttpMethod()) {
-                return new TheResponse(405, "", HttpStatus.NOT_ALLOWED);
-            }
-        }
-
-        return new TheResponse(200, route.getBody(), HttpStatus.OK);
+    public Route getRoute(TheRequest request) {
+        return routes.get(request.getPath());
     }
 
 }

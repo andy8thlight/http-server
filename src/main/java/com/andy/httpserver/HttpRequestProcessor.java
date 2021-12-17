@@ -17,42 +17,51 @@ public class HttpRequestProcessor implements RequestProcessor {
         if (inputStream != null) {
             TheRequest request = requestParser.parse(inputStream);
 
-            TheResponse theResponse = routes.lookup(request);
-
-            int theStatusCode = theResponse.getStatusCode();
-            if (theStatusCode == 404) {
+            Route route = routes.getRoute(request);
+            TheResponse theResponse;
+            if (route == null) {
+                theResponse = new TheResponse(404, "", HttpStatus.NOT_FOUND);
                 sendResponse(outputStream, theResponse);
                 return;
             }
 
             if (request.getMethod() == HttpMethod.OPTIONS) {
+                theResponse = new TheResponse(200, route.getBody(), HttpStatus.OK);
                 theResponse.setHeader("Allow", "GET, HEAD, OPTIONS");
                 sendResponse(outputStream, theResponse);
                 return;
             }
-
-            if (theStatusCode == 405) {
-                theResponse.setHeader("Allow", "GET, HEAD, OPTIONS");
-                sendResponse(outputStream, theResponse);
-                return;
-            }
-
 
             if (request.getMethod() == HttpMethod.HEAD) {
+                theResponse = new TheResponse(200, route.getBody(), HttpStatus.OK);
                 theResponse.setBody("");
-            } else {
-                theResponse.setBody(theResponse.getBody());
+                sendResponse(outputStream, theResponse);
+                return;
             }
 
-            // TODO: Special handling here
+            if (request.getMethod() != route.getHttpMethod()) {
+                theResponse = new TheResponse(405, "", HttpStatus.NOT_ALLOWED);
+                theResponse.setHeader("Allow", "GET, HEAD, OPTIONS");
+                sendResponse(outputStream, theResponse);
+                return;
+            }
+
             if (request.getMethod() == HttpMethod.POST) {
+                // TODO: Special handling here
+                theResponse = new TheResponse(200, "", HttpStatus.OK);
                 String requestBody = request.getBody();
-
                 theResponse.setBody(requestBody);
+                sendResponse(outputStream, theResponse);
+                return;
             }
 
+            if (request.getMethod() == HttpMethod.GET) {
+                theResponse = new TheResponse(200, route.getBody(), HttpStatus.OK);
+                theResponse.setBody(theResponse.getBody());
+                sendResponse(outputStream, theResponse);
+                return;
+            }
 
-            sendResponse(outputStream, theResponse);
         }
 
     }
