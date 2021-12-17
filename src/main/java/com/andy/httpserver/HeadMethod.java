@@ -11,8 +11,7 @@ public class HeadMethod {
     }
 
     void handle(OutputStream outputStream, Route route) throws IOException {
-        TheResponse theResponse = new TheResponse(200, route.getBody(), HttpStatus.OK);
-        theResponse.setBody("");
+        TheResponse theResponse = new TheResponse(200, "", HttpStatus.OK);
         httpRequestProcessor.sendResponse(outputStream, theResponse);
     }
 }

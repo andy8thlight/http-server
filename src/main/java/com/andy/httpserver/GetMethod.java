@@ -12,7 +12,6 @@ public class GetMethod {
 
     public void handle(OutputStream outputStream, Route route) throws IOException {
         TheResponse theResponse = new TheResponse(200, route.getBody(), HttpStatus.OK);
-        theResponse.setBody(theResponse.getBody());
         httpRequestProcessor.sendResponse(outputStream, theResponse);
     }
 }
