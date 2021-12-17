@@ -32,6 +32,7 @@ public class HttpRequestProcessor implements RequestProcessor {
             }
 
             if (theStatusCode == 405) {
+                theResponse.setHeader("Allow", "GET, HEAD, OPTIONS");
                 sendResponse(outputStream, theResponse);
                 return;
             }

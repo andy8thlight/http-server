@@ -28,6 +28,7 @@ class HttpRequestProcessorShould {
         routes.addRoute("/", new Route(HttpMethod.GET, ""));
         routes.addRoute("/hello", new Route(HttpMethod.GET, ""));
         routes.addRoute("/echo", new Route(HttpMethod.POST, ""));
+        routes.addRoute("/head-only", new Route(HttpMethod.HEAD, ""));
         return routes;
     }
 
@@ -63,15 +64,27 @@ class HttpRequestProcessorShould {
     void return_method_not_allowed() throws BadRequestException, IOException {
         String requestData = validPostRequest("/simple_get_with_body", "");
         OutputStream outputStream = processRequests(requestData);
-        assertEquals("HTTP/1.1 405 Not Allowed" + CRLF + CRLF, outputStream.toString());
+        assertEquals("HTTP/1.1 405 Not Allowed" + CRLF +
+                "Allow: GET, HEAD, OPTIONS" + CRLF + CRLF, outputStream.toString());
     }
 
     @Test
     void return_another_method_not_allowed() throws BadRequestException, IOException {
         String requestData = validPostRequest("/hello", "");
         OutputStream outputStream = processRequests(requestData);
-        assertEquals("HTTP/1.1 405 Not Allowed" + CRLF + CRLF, outputStream.toString());
+        assertEquals("HTTP/1.1 405 Not Allowed" + CRLF +
+                "Allow: GET, HEAD, OPTIONS" + CRLF + CRLF, outputStream.toString());
     }
+
+    @Test
+    @Disabled
+    void return_405_when_get_to_head_only_request() throws BadRequestException, IOException {
+        String requestData = validGetRequest("/head-only");
+        OutputStream outputStream = processRequests(requestData);
+        assertEquals("HTTP/1.1 405 Not Allowed" + CRLF +
+                "Allow: HEAD, OPTIONS" + CRLF + CRLF, outputStream.toString());
+    }
+
 
     @Test
     void handle_post_request() throws BadRequestException, IOException {
@@ -87,12 +100,14 @@ class HttpRequestProcessorShould {
         assertEquals("HTTP/1.1 200 OK" + CRLF +
                 "Allow: GET, HEAD, OPTIONS" + CRLF + CRLF, outputStream.toString());
     }
+
     @Test
     void should_return_not_found_for_options() throws BadRequestException, IOException {
         String requestData = validOptionsRequest("/non-existant");
         OutputStream outputStream = processRequests(requestData);
         assertEquals("HTTP/1.1 404 Not Found" + CRLF + CRLF, outputStream.toString());
     }
+
 
 
 

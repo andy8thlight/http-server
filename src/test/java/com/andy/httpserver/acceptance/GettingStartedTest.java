@@ -111,7 +111,6 @@ public class GettingStartedTest {
             header("Allow", equalTo("GET, HEAD, OPTIONS"));
     }
 
-    //TODO: Have to do options first
     @Test
     @Disabled
     void method_not_allowed() {
