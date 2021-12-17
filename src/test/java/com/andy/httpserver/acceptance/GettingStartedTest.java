@@ -107,7 +107,8 @@ public class GettingStartedTest {
             options("/method_options").
         then().
             statusCode(200).
-            header("Allow", equalTo("GET, HEAD, OPTIONS"));
+            header("Allow", equalTo("GET, HEAD, OPTIONS")).
+            body(emptyString());
     }
 
     @Test

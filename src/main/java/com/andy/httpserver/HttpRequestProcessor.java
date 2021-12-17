@@ -8,12 +8,17 @@ public class HttpRequestProcessor implements RequestProcessor {
     public static final String HTTP_1_1 = "HTTP/1.1";
     private final RequestParser requestParser = new RequestParser();
     private final Routes routes;
+    private final HeadMethod headMethod = new HeadMethod(this);
+    private final PostMethod postMethod = new PostMethod(this);
+    private final OptionsMethod optionsMethod = new OptionsMethod(this);
+    private final GetMethod getMethod = new GetMethod(this);
 
     public HttpRequestProcessor(Routes routes) {
         this.routes = routes;
     }
 
     public void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException, BadRequestException {
+
         if (inputStream != null) {
             TheRequest request = requestParser.parse(inputStream);
 
@@ -35,40 +40,27 @@ public class HttpRequestProcessor implements RequestProcessor {
             }
 
             if (request.getMethod() == HttpMethod.GET) {
-                theResponse = new TheResponse(200, route.getBody(), HttpStatus.OK);
-                theResponse.setBody(theResponse.getBody());
-                sendResponse(outputStream, theResponse);
-                return;
+                getMethod.handle(outputStream, route);
             }
 
             if (request.getMethod() == HttpMethod.OPTIONS) {
-                theResponse = new TheResponse(200, route.getBody(), HttpStatus.OK);
-                theResponse.setHeader("Allow", route.getAllowHeader());
-                sendResponse(outputStream, theResponse);
-                return;
+                optionsMethod.handle(outputStream, route);
             }
 
             if (request.getMethod() == HttpMethod.HEAD) {
-                theResponse = new TheResponse(200, route.getBody(), HttpStatus.OK);
-                theResponse.setBody("");
-                sendResponse(outputStream, theResponse);
-                return;
+                headMethod.handle(outputStream, route);
             }
 
             if (request.getMethod() == HttpMethod.POST) {
                 // TODO: Special handling here
-                theResponse = new TheResponse(200, "", HttpStatus.OK);
-                String requestBody = request.getBody();
-                theResponse.setBody(requestBody);
-                sendResponse(outputStream, theResponse);
-                return;
+                postMethod.handle(outputStream, request);
             }
         }
     }
 
-    private void sendResponse(OutputStream outputStream, TheResponse theResponse) throws IOException {
+
+    void sendResponse(OutputStream outputStream, TheResponse theResponse) throws IOException {
         outputStream.write(theResponse.toString().getBytes(StandardCharsets.UTF_8));
     }
-
 
 }
