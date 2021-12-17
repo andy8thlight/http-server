@@ -16,49 +16,46 @@ public class HttpRequestProcessor implements RequestProcessor {
     public void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException, BadRequestException {
         if (inputStream != null) {
             TheRequest request = requestParser.parse(inputStream);
-
             Route route = routes.getRoute(request);
-            if (route == null) {
-                sendResponse(outputStream, new TheResponse(404, "", HttpStatus.NOT_FOUND));
-                return;
-            }
-
-            if (request.getMethod() != HttpMethod.OPTIONS && request.getMethod() != HttpMethod.HEAD) {
-                if (request.getMethod() != route.getHttpMethod()) {
-                    TheResponse response = new TheResponse(405, "", HttpStatus.NOT_ALLOWED);
-                    response.setHeader("Allow", route.getAllowHeader());
-                    sendResponse(outputStream, response);
-                    return;
-                }
-            }
-
-            if (request.getMethod() == HttpMethod.GET) {
-                sendResponse(outputStream, new TheResponse(200, route.getBody(), HttpStatus.OK));
-            }
-
-            if (request.getMethod() == HttpMethod.OPTIONS) {
-                TheResponse response = new TheResponse(200, route.getBody(), HttpStatus.OK);
-                response.setHeader("Allow", route.getAllowHeader());
-                sendResponse(outputStream, response);
-            }
-
-            if (request.getMethod() == HttpMethod.HEAD) {
-                sendResponse(outputStream, new TheResponse(200, "", HttpStatus.OK));
-            }
-
-            if (request.getMethod() == HttpMethod.POST) {
-                // TODO: Special handling here
-                TheResponse response = new TheResponse(200, "", HttpStatus.OK);
-                String requestBody = request.getBody();
-                response.setBody(requestBody);
-                sendResponse(outputStream, response);
-            }
+            TheResponse response = generateResponse(request, route);
+            sendResponse(outputStream, response);
         }
     }
 
+    private TheResponse generateResponse(TheRequest request, Route route) {
+        if (route == null) {
+            return new TheResponse(404, "", HttpStatus.NOT_FOUND);
+        }
+
+        if (request.getMethod() != HttpMethod.OPTIONS && request.getMethod() != HttpMethod.HEAD) {
+            if (request.getMethod() != route.getHttpMethod()) {
+                TheResponse response = new TheResponse(405, "", HttpStatus.NOT_ALLOWED);
+                response.setHeader("Allow", route.getAllowHeader());
+                return response;
+            }
+        }
+
+        if (request.getMethod() == HttpMethod.OPTIONS) {
+            TheResponse response = new TheResponse(200, route.getBody(), HttpStatus.OK);
+            response.setHeader("Allow", route.getAllowHeader());
+            return response;
+        }
+
+        if (request.getMethod() == HttpMethod.HEAD) {
+            return new TheResponse(200, "", HttpStatus.OK);
+        }
+
+        if (request.getMethod() == HttpMethod.POST) {
+            // TODO: Special handling here
+            TheResponse response = new TheResponse(200, "", HttpStatus.OK);
+            String requestBody = request.getBody();
+            response.setBody(requestBody);
+            return response;
+        }
+        return new TheResponse(200, route.getBody(), HttpStatus.OK);
+    }
 
     void sendResponse(OutputStream outputStream, TheResponse theResponse) throws IOException {
         outputStream.write(theResponse.toString().getBytes(StandardCharsets.UTF_8));
     }
-
 }

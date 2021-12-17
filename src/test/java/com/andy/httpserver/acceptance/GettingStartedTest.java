@@ -5,6 +5,7 @@ import com.andy.httpserver.Route;
 import com.andy.httpserver.Routes;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutorService;
@@ -33,6 +34,9 @@ public class GettingStartedTest {
         routes.addRoute("/echo_body", new Route(POST, ""));
         routes.addRoute("/head_request", new Route(HEAD, ""));
         routes.addRoute("/method_options", new Route(GET, ""));
+        routes.addRoute("/method_options2", new Route(GET, ""));
+        routes.addRoute("/method_options2", new Route(PUT, ""));
+        routes.addRoute("/method_options2", new Route(POST, ""));
         return routes;
     }
 
@@ -107,6 +111,17 @@ public class GettingStartedTest {
         then().
             statusCode(200).
             header("Allow", equalTo("GET, HEAD, OPTIONS")).
+            body(emptyString());
+    }
+
+    @Test
+    @Disabled
+    void method_options_for_mutliple_verbs() {
+        given().
+            options("/method_options2").
+        then().
+            statusCode(200).
+            header("Allow", equalTo("GET, HEAD, OPTIONS, PUT, POST")).
             body(emptyString());
     }
 
