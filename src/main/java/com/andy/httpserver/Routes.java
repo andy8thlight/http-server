@@ -12,9 +12,12 @@ public class Routes {
 
     TheResponse lookup(TheRequest request) {
         Route route = routes.get(request.getPath());
-
         if (route == null) {
             return new TheResponse(404, "", HttpStatus.NOT_FOUND);
+        }
+
+        if (request.getMethod() == HttpMethod.OPTIONS) {
+            return new TheResponse(200, route.getBody(), HttpStatus.OK);
         }
 
         if (request.getMethod() != HttpMethod.HEAD) {

@@ -11,8 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.andy.httpserver.HttpMethod.GET;
-import static com.andy.httpserver.HttpMethod.POST;
+import static com.andy.httpserver.HttpMethod.*;
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -33,6 +32,8 @@ public class GettingStartedTest {
         routes.addRoute("/simple_get", new Route(GET, ""));
         routes.addRoute("/simple_get_2", new Route(GET, ""));
         routes.addRoute("/echo_body", new Route(POST, ""));
+        routes.addRoute("/head_request", new Route(HEAD, ""));
+        routes.addRoute("/method_options", new Route(GET, ""));
         return routes;
     }
 
@@ -100,12 +101,24 @@ public class GettingStartedTest {
             body(equalTo("some text"));
     }
 
+
+    @Test
+    void method_options() {
+        given().
+            options("/method_options").
+        then().
+            statusCode(200).
+            header("Allow", equalTo("GET, HEAD, OPTIONS"));
+    }
+
+    //TODO: Have to do options first
     @Test
     @Disabled
     void method_not_allowed() {
         given().
-            delete("/simple_get").
+            get("/head_request").
         then().
-            statusCode(405);
+            statusCode(405).
+            header("Allow", equalTo("HEAD, OPTIONS"));
     }
 }

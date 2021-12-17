@@ -80,8 +80,22 @@ class HttpRequestProcessorShould {
         assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF + "echo me back", outputStream.toString());
     }
 
+    @Test
+    void return_options() throws BadRequestException, IOException {
+        String requestData = validOptionsRequest("/");
+        OutputStream outputStream = processRequests(requestData);
+        assertEquals("HTTP/1.1 200 OK" + CRLF +
+                "Allow: GET, HEAD, OPTIONS" + CRLF + CRLF, outputStream.toString());
+    }
+
+
+
     private String validGetRequest(final String path) {
         return "GET " + path + " HTTP/1.1\nHost: localhost\n\n";
+    }
+
+    private String validOptionsRequest(final String path) {
+        return "OPTIONS " + path + " HTTP/1.1\nHost: localhost\n\n";
     }
 
     private String validHeadRequest(final String path) {

@@ -1,7 +1,7 @@
 package com.andy.httpserver;
 
 public enum HttpMethod {
-    POST("POST"), HEAD("HEAD"), GET("GET");
+    POST("POST"), HEAD("HEAD"), GET("GET"), OPTIONS("OPTIONS");
 
     private String method;
 

@@ -47,7 +47,7 @@ public class RequestParser {
     }
 
     private boolean isHttpVerb(String line) {
-        String[] verbs = new String[]{"POST", "GET", "HEAD"};
+        String[] verbs = new String[]{"POST", "GET", "HEAD", "OPTIONS"};
         return stream(verbs).anyMatch(line::startsWith);
     }
 

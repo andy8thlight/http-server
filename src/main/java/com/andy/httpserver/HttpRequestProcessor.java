@@ -16,7 +16,13 @@ public class HttpRequestProcessor implements RequestProcessor {
     public void processRequests(InputStream inputStream, OutputStream outputStream) throws IOException, BadRequestException {
         if (inputStream != null) {
             TheRequest request = requestParser.parse(inputStream);
+
             TheResponse theResponse = routes.lookup(request);
+            if (request.getMethod() == HttpMethod.OPTIONS) {
+                theResponse.setHeader("Allow", "GET, HEAD, OPTIONS");
+                sendResponse(outputStream, theResponse);
+                return;
+            }
 
             int theStatusCode = theResponse.getStatusCode();
             if (theStatusCode == 404) {
@@ -28,6 +34,7 @@ public class HttpRequestProcessor implements RequestProcessor {
                 sendResponse(outputStream, theResponse);
                 return;
             }
+
 
             if (request.getMethod() == HttpMethod.HEAD) {
                 theResponse.setBody("");
