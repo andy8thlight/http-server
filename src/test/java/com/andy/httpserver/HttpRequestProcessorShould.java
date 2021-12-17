@@ -85,7 +85,6 @@ class HttpRequestProcessorShould {
                 "Allow: HEAD, OPTIONS" + CRLF + CRLF, outputStream.toString());
     }
 
-
     @Test
     void handle_post_request() throws BadRequestException, IOException {
         String requestData = validPostRequest("/echo", "echo me back");

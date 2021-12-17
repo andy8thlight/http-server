@@ -25,6 +25,22 @@ public class HttpRequestProcessor implements RequestProcessor {
                 return;
             }
 
+            if (request.getMethod() != HttpMethod.OPTIONS && request.getMethod() != HttpMethod.HEAD) {
+                if (request.getMethod() != route.getHttpMethod()) {
+                    theResponse = new TheResponse(405, "", HttpStatus.NOT_ALLOWED);
+                    theResponse.setHeader("Allow", "GET, HEAD, OPTIONS");
+                    sendResponse(outputStream, theResponse);
+                    return;
+                }
+            }
+
+            if (request.getMethod() == HttpMethod.GET) {
+                theResponse = new TheResponse(200, route.getBody(), HttpStatus.OK);
+                theResponse.setBody(theResponse.getBody());
+                sendResponse(outputStream, theResponse);
+                return;
+            }
+
             if (request.getMethod() == HttpMethod.OPTIONS) {
                 theResponse = new TheResponse(200, route.getBody(), HttpStatus.OK);
                 theResponse.setHeader("Allow", "GET, HEAD, OPTIONS");
@@ -39,13 +55,6 @@ public class HttpRequestProcessor implements RequestProcessor {
                 return;
             }
 
-            if (request.getMethod() != route.getHttpMethod()) {
-                theResponse = new TheResponse(405, "", HttpStatus.NOT_ALLOWED);
-                theResponse.setHeader("Allow", "GET, HEAD, OPTIONS");
-                sendResponse(outputStream, theResponse);
-                return;
-            }
-
             if (request.getMethod() == HttpMethod.POST) {
                 // TODO: Special handling here
                 theResponse = new TheResponse(200, "", HttpStatus.OK);
@@ -54,16 +63,7 @@ public class HttpRequestProcessor implements RequestProcessor {
                 sendResponse(outputStream, theResponse);
                 return;
             }
-
-            if (request.getMethod() == HttpMethod.GET) {
-                theResponse = new TheResponse(200, route.getBody(), HttpStatus.OK);
-                theResponse.setBody(theResponse.getBody());
-                sendResponse(outputStream, theResponse);
-                return;
-            }
-
         }
-
     }
 
     private void sendResponse(OutputStream outputStream, TheResponse theResponse) throws IOException {
