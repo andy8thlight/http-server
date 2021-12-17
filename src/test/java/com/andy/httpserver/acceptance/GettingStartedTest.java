@@ -5,15 +5,14 @@ import com.andy.httpserver.Route;
 import com.andy.httpserver.Routes;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static com.andy.httpserver.HttpMethod.*;
-import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 
 public class GettingStartedTest {
@@ -117,6 +116,7 @@ public class GettingStartedTest {
             get("/head_request").
         then().
             statusCode(405).
-            header("Allow", equalTo("HEAD, OPTIONS"));
+            header("Allow", equalTo("HEAD, OPTIONS")).
+            body(emptyString());
     }
 }
