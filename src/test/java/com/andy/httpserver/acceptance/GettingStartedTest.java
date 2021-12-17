@@ -100,7 +100,6 @@ public class GettingStartedTest {
             body(equalTo("some text"));
     }
 
-
     @Test
     void method_options() {
         given().
