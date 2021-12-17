@@ -112,7 +112,6 @@ public class GettingStartedTest {
     }
 
     @Test
-    @Disabled
     void method_not_allowed() {
         given().
             get("/head_request").
