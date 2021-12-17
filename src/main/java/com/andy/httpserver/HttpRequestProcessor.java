@@ -18,14 +18,15 @@ public class HttpRequestProcessor implements RequestProcessor {
             TheRequest request = requestParser.parse(inputStream);
 
             TheResponse theResponse = routes.lookup(request);
-            if (request.getMethod() == HttpMethod.OPTIONS) {
-                theResponse.setHeader("Allow", "GET, HEAD, OPTIONS");
+
+            int theStatusCode = theResponse.getStatusCode();
+            if (theStatusCode == 404) {
                 sendResponse(outputStream, theResponse);
                 return;
             }
 
-            int theStatusCode = theResponse.getStatusCode();
-            if (theStatusCode == 404) {
+            if (request.getMethod() == HttpMethod.OPTIONS) {
+                theResponse.setHeader("Allow", "GET, HEAD, OPTIONS");
                 sendResponse(outputStream, theResponse);
                 return;
             }
@@ -52,6 +53,7 @@ public class HttpRequestProcessor implements RequestProcessor {
 
             sendResponse(outputStream, theResponse);
         }
+
     }
 
     private void sendResponse(OutputStream outputStream, TheResponse theResponse) throws IOException {

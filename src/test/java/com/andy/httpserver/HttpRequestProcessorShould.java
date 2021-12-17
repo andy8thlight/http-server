@@ -87,6 +87,12 @@ class HttpRequestProcessorShould {
         assertEquals("HTTP/1.1 200 OK" + CRLF +
                 "Allow: GET, HEAD, OPTIONS" + CRLF + CRLF, outputStream.toString());
     }
+    @Test
+    void should_return_not_found_for_options() throws BadRequestException, IOException {
+        String requestData = validOptionsRequest("/non-existant");
+        OutputStream outputStream = processRequests(requestData);
+        assertEquals("HTTP/1.1 404 Not Found" + CRLF + CRLF, outputStream.toString());
+    }
 
 
 
@@ -105,7 +111,6 @@ class HttpRequestProcessorShould {
     private String validPostRequest(final String path, String body) {
         return "POST " + path + " HTTP/1.1\nHost: localhost\n\n" + body;
     }
-
     private OutputStream processRequests(String requestData) throws IOException, BadRequestException {
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
         OutputStream outputStream = new ByteArrayOutputStream();
