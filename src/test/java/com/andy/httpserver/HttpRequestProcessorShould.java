@@ -77,7 +77,6 @@ class HttpRequestProcessorShould {
     }
 
     @Test
-    @Disabled
     void return_405_when_get_to_head_only_request() throws BadRequestException, IOException {
         String requestData = validGetRequest("/head-only");
         OutputStream outputStream = processRequests(requestData);

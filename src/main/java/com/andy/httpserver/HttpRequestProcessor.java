@@ -28,7 +28,7 @@ public class HttpRequestProcessor implements RequestProcessor {
             if (request.getMethod() != HttpMethod.OPTIONS && request.getMethod() != HttpMethod.HEAD) {
                 if (request.getMethod() != route.getHttpMethod()) {
                     theResponse = new TheResponse(405, "", HttpStatus.NOT_ALLOWED);
-                    theResponse.setHeader("Allow", "GET, HEAD, OPTIONS");
+                    theResponse.setHeader("Allow", route.getAllowHeader());
                     sendResponse(outputStream, theResponse);
                     return;
                 }
@@ -43,7 +43,7 @@ public class HttpRequestProcessor implements RequestProcessor {
 
             if (request.getMethod() == HttpMethod.OPTIONS) {
                 theResponse = new TheResponse(200, route.getBody(), HttpStatus.OK);
-                theResponse.setHeader("Allow", "GET, HEAD, OPTIONS");
+                theResponse.setHeader("Allow", route.getAllowHeader());
                 sendResponse(outputStream, theResponse);
                 return;
             }
