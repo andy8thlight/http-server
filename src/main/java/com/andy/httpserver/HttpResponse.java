@@ -36,7 +36,7 @@ public class HttpResponse {
         return "";
     }
 
-    public void setHeader(String key, String value) {
+    public void addHeader(String key, String value) {
         this.key = key;
         this.value = value;
     }

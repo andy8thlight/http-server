@@ -31,7 +31,9 @@ public class Routes {
 
         if (request.getMethod() == HttpMethod.OPTIONS) {
             HttpResponse response = new HttpResponse(HttpStatus.OK, "");
-            response.setHeader("Allow", verbsToHeader(verbs));
+            List<HttpMethod> httpMethods = verbs.stream().map(verb -> verb.getHttpMethod()).collect(Collectors.toList());
+
+            response.addHeader("Allow", verbsToHeader(httpMethods));
             return response;
         }
 
@@ -39,7 +41,8 @@ public class Routes {
         List<Route> availableVerbs = verbs.stream().filter(verb -> verb.getHttpMethod() == request.getMethod()).collect(Collectors.toList());
         if (availableVerbs.isEmpty()) {
             HttpResponse response = new HttpResponse(HttpStatus.NOT_ALLOWED, "");
-            response.setHeader("Allow", verbsToHeader(verbs));
+            List<HttpMethod> httpMethods = verbs.stream().map(verb -> verb.getHttpMethod()).collect(Collectors.toList());
+            response.addHeader("Allow", verbsToHeader(httpMethods));
             return response;
         }
 
@@ -58,14 +61,13 @@ public class Routes {
         return new HttpResponse(HttpStatus.OK, route.getBody());
     }
 
-    private String verbsToHeader(List<Route> verbs) {
+    private String verbsToHeader(List<HttpMethod> httpMethods) {
         String output = "";
-        for (Route route : verbs) {
-            output += (route.getHttpMethod().name() + ", ");
-
+        for (HttpMethod method : httpMethods) {
+            output += (method.name() + ", ");
         }
 
-        Optional<Route> first = verbs.stream().filter(verb -> verb.getHttpMethod() == HttpMethod.HEAD).findFirst();
+        Optional<HttpMethod> first = httpMethods.stream().filter(method -> method == HttpMethod.HEAD).findFirst();
         if (first.isEmpty()) {
             output += "HEAD, ";
         }
