@@ -11,31 +11,37 @@ public class Routes {
     }
 
     public HttpResponse process(HttpRequest request) {
-        Route route = getRoute(request);
-        HttpResponse httpResponse;
+        Route route = routes.get(request.getPath());
+
         if (route == null) {
-            httpResponse = new HttpResponse(HttpStatus.NOT_FOUND, "");
-        } else if (request.getMethod() == HttpMethod.OPTIONS) {
+            return new HttpResponse(HttpStatus.NOT_FOUND, "");
+        }
+
+        if (request.getMethod() == HttpMethod.OPTIONS) {
             HttpResponse response = new HttpResponse(HttpStatus.OK, route.getBody());
             response.setHeader("Allow", route.getAllowHeader());
-            httpResponse = response;
-        } else if (request.getMethod() == HttpMethod.HEAD) {
-            httpResponse = new HttpResponse(HttpStatus.OK, "");
-        } else if (request.getMethod() != route.getHttpMethod()) {
+            return response;
+        }
+
+        if (request.getMethod() == HttpMethod.HEAD) {
+            return new HttpResponse(HttpStatus.OK, "");
+        }
+
+        if (request.getMethod() != route.getHttpMethod()) {
             HttpResponse response = new HttpResponse(HttpStatus.NOT_ALLOWED, "");
             response.setHeader("Allow", route.getAllowHeader());
-            httpResponse = response;
-        } else if (request.getMethod() == HttpMethod.POST) {
+            return response;
+        }
+
+        if (request.getMethod() == HttpMethod.POST) {
             // TODO: Special handling here
             HttpResponse response = new HttpResponse(HttpStatus.OK, "");
             String requestBody = request.getBody();
             response.setBody(requestBody);
-            httpResponse = response;
-        } else {
-            httpResponse = new HttpResponse(HttpStatus.OK, route.getBody());
+            return response;
         }
 
-        return httpResponse;
+        return new HttpResponse(HttpStatus.OK, route.getBody());
     }
 
     public Route getRoute(HttpRequest request) {
