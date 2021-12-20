@@ -40,4 +40,8 @@ public class HttpResponse {
         this.key = key;
         this.value = value;
     }
+
+    public HttpStatus getStatus() {
+        return httpStatus;
+    }
 }
