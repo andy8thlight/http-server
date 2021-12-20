@@ -6,7 +6,7 @@ public class HttpRequest {
     private HttpMethod method;
     private String body;
 
-    public HttpRequest(String host, String path, HttpMethod method, String body) {
+    public HttpRequest(HttpMethod method, String host, String path, String body) {
         this.host = host;
         this.path = path;
         this.method = method;

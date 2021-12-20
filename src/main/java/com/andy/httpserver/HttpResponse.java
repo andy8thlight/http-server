@@ -8,7 +8,7 @@ public class HttpResponse {
     private String key;
     private String value;
 
-    public HttpResponse(String body, HttpStatus httpStatus) {
+    public HttpResponse(HttpStatus httpStatus, String body) {
         this.body = body;
         this.httpStatus = httpStatus;
     }

@@ -12,7 +12,7 @@ public class RoutesShould {
     void find_route() {
         Routes routes = new Routes();
         routes.addRoute("/route1", new Route(HttpMethod.GET, "somefink here"));
-        Route route = routes.getRoute(new HttpRequest("localhost", "/route1", HttpMethod.GET, ""));
+        Route route = routes.getRoute(new HttpRequest(HttpMethod.GET, "localhost", "/route1", ""));
         assertEquals("somefink here", route.getBody());
     }
 
@@ -20,7 +20,7 @@ public class RoutesShould {
     void not_find_route() {
         Routes routes = new Routes();
         routes.addRoute("/route1", new Route(HttpMethod.GET, "somefink here"));
-        Route route = routes.getRoute(new HttpRequest("localhost", "/route1", HttpMethod.POST, ""));
+        Route route = routes.getRoute(new HttpRequest(HttpMethod.POST, "localhost", "/route1", ""));
         assertEquals("somefink here", route.getBody());
     }
 

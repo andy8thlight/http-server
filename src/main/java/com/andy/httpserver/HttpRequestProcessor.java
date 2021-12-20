@@ -22,35 +22,35 @@ public class HttpRequestProcessor implements RequestProcessor {
 
     private HttpResponse generateResponse(HttpRequest request, Route route) {
         if (route == null) {
-            return new HttpResponse("", HttpStatus.NOT_FOUND);
+            return new HttpResponse(HttpStatus.NOT_FOUND, "");
         }
 
         if (request.getMethod() != HttpMethod.OPTIONS && request.getMethod() != HttpMethod.HEAD) {
             if (request.getMethod() != route.getHttpMethod()) {
-                HttpResponse response = new HttpResponse("", HttpStatus.NOT_ALLOWED);
+                HttpResponse response = new HttpResponse(HttpStatus.NOT_ALLOWED, "");
                 response.setHeader("Allow", route.getAllowHeader());
                 return response;
             }
         }
 
         if (request.getMethod() == HttpMethod.OPTIONS) {
-            HttpResponse response = new HttpResponse(route.getBody(), HttpStatus.OK);
+            HttpResponse response = new HttpResponse(HttpStatus.OK, route.getBody());
             response.setHeader("Allow", route.getAllowHeader());
             return response;
         }
 
         if (request.getMethod() == HttpMethod.HEAD) {
-            return new HttpResponse("", HttpStatus.OK);
+            return new HttpResponse(HttpStatus.OK, "");
         }
 
         if (request.getMethod() == HttpMethod.POST) {
             // TODO: Special handling here
-            HttpResponse response = new HttpResponse("", HttpStatus.OK);
+            HttpResponse response = new HttpResponse(HttpStatus.OK, "");
             String requestBody = request.getBody();
             response.setBody(requestBody);
             return response;
         }
-        return new HttpResponse(route.getBody(), HttpStatus.OK);
+        return new HttpResponse(HttpStatus.OK, route.getBody());
     }
 
     void sendResponse(OutputStream outputStream, HttpResponse httpResponse) throws IOException {

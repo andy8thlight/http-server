@@ -31,6 +31,6 @@ public class RequestBuilder {
     }
 
     public HttpRequest createTheRequest() {
-        return new HttpRequest(host, path, method, body);
+        return new HttpRequest(method, host, path, body);
     }
 }
