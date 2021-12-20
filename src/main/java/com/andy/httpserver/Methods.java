@@ -36,10 +36,15 @@ public class Methods {
     }
 
     List<HttpMethod> getHttpMethods() {
-        return routeList.stream().map(verb -> verb.getHttpMethod()).collect(Collectors.toList());
+        return routeList.stream().map(Route::getHttpMethod).collect(Collectors.toList());
     }
 
     List<Route> getRoutes() {
         return routeList;
+    }
+
+    Route findRoute(HttpRequest request) {
+        Optional<Route> first = getRoutes().stream().filter(verb -> verb.getHttpMethod() == request.getMethod()).findFirst();
+        return first.get();
     }
 }

@@ -50,10 +50,7 @@ public class Routes {
             return response;
         }
 
-
-        Optional<Route> first = verbs.getRoutes().stream().filter(verb -> verb.getHttpMethod() == request.getMethod()).findFirst();
-        Route route = first.get();
-
+        Route route = verbs.findRoute(request);
         return new HttpResponse(HttpStatus.OK, route.getBody());
     }
 
