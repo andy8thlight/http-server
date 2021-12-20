@@ -10,7 +10,7 @@ public class Routes {
         this.routes.put(uri, route);
     }
 
-    public Route getRoute(TheRequest request) {
+    public Route getRoute(HttpRequest request) {
         return routes.get(request.getPath());
     }
 

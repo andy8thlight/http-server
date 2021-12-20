@@ -1,12 +1,12 @@
 package com.andy.httpserver;
 
-public class TheRequest {
+public class HttpRequest {
     private String host;
     private String path;
     private HttpMethod method;
     private String body;
 
-    public TheRequest(String host, String path, HttpMethod method, String body) {
+    public HttpRequest(String host, String path, HttpMethod method, String body) {
         this.host = host;
         this.path = path;
         this.method = method;

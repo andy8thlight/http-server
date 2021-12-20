@@ -1,7 +1,6 @@
 package com.andy.httpserver;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -39,7 +38,7 @@ class RequestParserShould {
         String requestData = "GET / HTTP/1.1\nHost: localhost\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
-        TheRequest request = requestParser.parse(inputStream);
+        HttpRequest request = requestParser.parse(inputStream);
 
         assertEquals(HttpMethod.GET, request.getMethod());
         assertEquals("/", request.getPath());
@@ -51,7 +50,7 @@ class RequestParserShould {
         String requestData = "GET / HTTP/1.1\nHost: www.google.co.uk\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
-        TheRequest request = requestParser.parse(inputStream);
+        HttpRequest request = requestParser.parse(inputStream);
 
         assertEquals(HttpMethod.GET, request.getMethod());
         assertEquals("/", request.getPath());
@@ -63,7 +62,7 @@ class RequestParserShould {
         String requestData = "GET / HTTP/1.1\nignore\nignore\nHost: www.google.co.uk\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
-        TheRequest request = requestParser.parse(inputStream);
+        HttpRequest request = requestParser.parse(inputStream);
 
         assertEquals(HttpMethod.GET, request.getMethod());
         assertEquals("/", request.getPath());
@@ -75,7 +74,7 @@ class RequestParserShould {
         String requestData = "GET /flibble HTTP/1.1\nHost: www.google.co.uk\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
-        TheRequest request = requestParser.parse(inputStream);
+        HttpRequest request = requestParser.parse(inputStream);
 
         assertEquals(HttpMethod.GET, request.getMethod());
         assertEquals("/flibble", request.getPath());
@@ -87,7 +86,7 @@ class RequestParserShould {
         String requestData = "HEAD /flibble HTTP/1.1\nHost: www.google.co.uk\n\n";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
-        TheRequest request = requestParser.parse(inputStream);
+        HttpRequest request = requestParser.parse(inputStream);
 
         assertEquals(HttpMethod.HEAD, request.getMethod());
         assertEquals("/flibble", request.getPath());
@@ -99,7 +98,7 @@ class RequestParserShould {
         String requestData = "POST /echo HTTP/1.1\nHost: www.google.co.uk\n\necho me";
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
 
-        TheRequest request = requestParser.parse(inputStream);
+        HttpRequest request = requestParser.parse(inputStream);
 
         assertEquals(HttpMethod.POST, request.getMethod());
         assertEquals("/echo", request.getPath());

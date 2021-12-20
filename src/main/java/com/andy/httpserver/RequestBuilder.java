@@ -30,7 +30,7 @@ public class RequestBuilder {
         return this;
     }
 
-    public TheRequest createTheRequest() {
-        return new TheRequest(host, path, method, body);
+    public HttpRequest createTheRequest() {
+        return new HttpRequest(host, path, method, body);
     }
 }

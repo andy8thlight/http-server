@@ -8,7 +8,7 @@ public class RequestParser {
 
     public static final String HOST_HEADER = "Host: ";
 
-    TheRequest parse(InputStream inputStream) throws IOException, BadRequestException {
+    HttpRequest parse(InputStream inputStream) throws IOException, BadRequestException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
         String line;
@@ -30,18 +30,18 @@ public class RequestParser {
             requestBuilder.setBody(bufferedReader.readLine());
         }
 
-        TheRequest theRequest = requestBuilder.createTheRequest();
-        validateRequest(theRequest);
+        HttpRequest httpRequest = requestBuilder.createTheRequest();
+        validateRequest(httpRequest);
 
-        return theRequest;
+        return httpRequest;
     }
 
     private String extractHost(String line) {
         return line.substring(HOST_HEADER.length());
     }
 
-    private void validateRequest(TheRequest theRequest) throws BadRequestException {
-        if (theRequest.getMethod() == null || (theRequest.getHost() == null || theRequest.getHost().isBlank())) {
+    private void validateRequest(HttpRequest httpRequest) throws BadRequestException {
+        if (httpRequest.getMethod() == null || (httpRequest.getHost() == null || httpRequest.getHost().isBlank())) {
             throw new BadRequestException();
         }
     }
