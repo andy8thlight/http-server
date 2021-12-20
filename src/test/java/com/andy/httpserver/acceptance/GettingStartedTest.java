@@ -115,13 +115,12 @@ public class GettingStartedTest {
     }
 
     @Test
-    @Disabled
     void method_options_for_mutliple_verbs() {
         given().
             options("/method_options2").
         then().
             statusCode(200).
-            header("Allow", equalTo("GET, HEAD, OPTIONS, PUT, POST")).
+            header("Allow", equalTo("GET, PUT, POST, HEAD, OPTIONS")).
             body(emptyString());
     }
 

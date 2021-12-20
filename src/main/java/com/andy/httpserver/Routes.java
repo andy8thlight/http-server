@@ -43,9 +43,6 @@ public class Routes {
             return response;
         }
 
-        Optional<Route> first = verbs.stream().filter(verb -> verb.getHttpMethod() == request.getMethod()).findFirst();
-
-        Route route = first.get();
 
         if (request.getMethod() == HttpMethod.POST) {
             // TODO: Special handling here
@@ -54,6 +51,9 @@ public class Routes {
             response.setBody(requestBody);
             return response;
         }
+
+        Optional<Route> first = verbs.stream().filter(verb -> verb.getHttpMethod() == request.getMethod()).findFirst();
+        Route route = first.get();
 
         return new HttpResponse(HttpStatus.OK, route.getBody());
     }
