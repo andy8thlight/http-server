@@ -1,9 +1,7 @@
 package com.andy.httpserver;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Routes {
     final Map<String, List<Route>> routes = new HashMap<>();
@@ -27,22 +25,27 @@ public class Routes {
             return new HttpResponse(HttpStatus.NOT_FOUND, "");
         }
 
-        Route route = verbs.get(0);
-        if (request.getMethod() == HttpMethod.OPTIONS) {
-            HttpResponse response = new HttpResponse(HttpStatus.OK, route.getBody());
-            response.setHeader("Allow", route.getAllowHeader());
-            return response;
-        }
-
         if (request.getMethod() == HttpMethod.HEAD) {
             return new HttpResponse(HttpStatus.OK, "");
         }
 
-        if (request.getMethod() != route.getHttpMethod()) {
-            HttpResponse response = new HttpResponse(HttpStatus.NOT_ALLOWED, "");
-            response.setHeader("Allow", route.getAllowHeader());
+        if (request.getMethod() == HttpMethod.OPTIONS) {
+            HttpResponse response = new HttpResponse(HttpStatus.OK, "");
+            response.setHeader("Allow", verbsToHeader(verbs));
             return response;
         }
+
+
+        List<Route> availableVerbs = verbs.stream().filter(verb -> verb.getHttpMethod() == request.getMethod()).collect(Collectors.toList());
+        if (availableVerbs.isEmpty()) {
+            HttpResponse response = new HttpResponse(HttpStatus.NOT_ALLOWED, "");
+            response.setHeader("Allow", verbsToHeader(verbs));
+            return response;
+        }
+
+        Optional<Route> first = verbs.stream().filter(verb -> verb.getHttpMethod() == request.getMethod()).findFirst();
+
+        Route route = first.get();
 
         if (request.getMethod() == HttpMethod.POST) {
             // TODO: Special handling here
@@ -53,6 +56,22 @@ public class Routes {
         }
 
         return new HttpResponse(HttpStatus.OK, route.getBody());
+    }
+
+    private String verbsToHeader(List<Route> verbs) {
+        String output = "";
+        for (Route route : verbs) {
+            output += (route.getHttpMethod().name() + ", ");
+
+        }
+
+        Optional<Route> first = verbs.stream().filter(verb -> verb.getHttpMethod() == HttpMethod.HEAD).findFirst();
+        if (first.isEmpty()) {
+            output += "HEAD, ";
+        }
+
+        output += "OPTIONS";
+        return output;
     }
 
 }

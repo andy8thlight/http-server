@@ -1,6 +1,6 @@
-import com.andy.httpserver.*;
+package com.andy.httpserver;
+
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,6 +42,14 @@ public class RoutesShould {
         HttpResponse httpResponse = routes.process(new HttpRequest(HttpMethod.GET, "localhost", "/route1", ""));
         assertEquals(HttpStatus.OK, httpResponse.getStatus());
         assertEquals("body1", httpResponse.getBody());
+    }
+
+    @Test
+    void select_post_route_when_multiple_methods() {
+        routes.addRoute("/route1", new Route(HttpMethod.GET, "body1"));
+        routes.addRoute("/route1", new Route(HttpMethod.POST, "body2"));
+        HttpResponse httpResponse = routes.process(new HttpRequest(HttpMethod.POST, "localhost", "/route1", ""));
+        assertEquals(HttpStatus.OK, httpResponse.getStatus());
     }
 
 

@@ -16,11 +16,4 @@ public class Route {
     public HttpMethod getHttpMethod() {
         return httpMethod;
     }
-
-    public String getAllowHeader() {
-        if (httpMethod == HttpMethod.HEAD) {
-            return "HEAD, OPTIONS";
-        }
-        return httpMethod.name() + ", HEAD, OPTIONS";
-    }
 }
