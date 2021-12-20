@@ -1,7 +1,6 @@
 package com.andy.httpserver;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Routes {
     final Map<String, Methods> routes = new HashMap<>();
@@ -31,17 +30,14 @@ public class Routes {
 
         if (request.getMethod() == HttpMethod.OPTIONS) {
             HttpResponse response = new HttpResponse(HttpStatus.OK, "");
-            List<HttpMethod> httpMethods = verbs.getHttpMethods();
-            response.addHeader("Allow", verbsToHeader(httpMethods));
+            response.addHeader("Allow", verbs.verbsToHeader());
             return response;
         }
 
 
-        List<HttpMethod> methods = verbs.getHttpMethods();
-        List<HttpMethod> availableVerbs = methods.stream().filter(verb -> verb == request.getMethod()).collect(Collectors.toList());
-        if (availableVerbs.isEmpty()) {
+        if (verbs.hasMethods(request.getMethod())) {
             HttpResponse response = new HttpResponse(HttpStatus.NOT_ALLOWED, "");
-            response.addHeader("Allow", verbsToHeader(methods));
+            response.addHeader("Allow", verbs.verbsToHeader());
             return response;
         }
 
@@ -61,20 +57,5 @@ public class Routes {
         return new HttpResponse(HttpStatus.OK, route.getBody());
     }
 
-
-    private String verbsToHeader(List<HttpMethod> httpMethods) {
-        String output = "";
-        for (HttpMethod method : httpMethods) {
-            output += (method.name() + ", ");
-        }
-
-        Optional<HttpMethod> first = httpMethods.stream().filter(method -> method == HttpMethod.HEAD).findFirst();
-        if (first.isEmpty()) {
-            output += "HEAD, ";
-        }
-
-        output += "OPTIONS";
-        return output;
-    }
 
 }
