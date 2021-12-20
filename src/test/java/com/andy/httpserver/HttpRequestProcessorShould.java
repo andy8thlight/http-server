@@ -106,9 +106,6 @@ class HttpRequestProcessorShould {
         assertEquals("HTTP/1.1 404 Not Found" + CRLF + CRLF, outputStream.toString());
     }
 
-
-
-
     private String validGetRequest(final String path) {
         return "GET " + path + " HTTP/1.1\nHost: localhost\n\n";
     }

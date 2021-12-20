@@ -4,8 +4,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class HttpRequestProcessor implements RequestProcessor {
-    public static final String CRLF = "\r\n";
-    public static final String HTTP_1_1 = "HTTP/1.1";
     private final RequestParser requestParser = new RequestParser();
     private final Routes routes;
 
