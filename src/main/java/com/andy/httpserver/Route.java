@@ -2,15 +2,19 @@ package com.andy.httpserver;
 
 public class Route {
     private final HttpMethod httpMethod;
-    private final String body;
+    private final Action action;
 
-    public Route(HttpMethod httpMethod, String body) {
+    public Route(HttpMethod httpMethod, Action action) {
         this.httpMethod = httpMethod;
-        this.body = body;
+        this.action = action;
     }
 
     public String getBody() {
-        return body;
+        if (action instanceof SimpleBodyAction) {
+            SimpleBodyAction bodyAction = (SimpleBodyAction) action;
+            return bodyAction.getBody();
+        }
+        return null;
     }
 
     public HttpMethod getHttpMethod() {

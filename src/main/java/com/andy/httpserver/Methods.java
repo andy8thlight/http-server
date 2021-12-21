@@ -1,7 +1,6 @@
 package com.andy.httpserver;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -13,20 +12,21 @@ public class Methods {
         routeList.add(route);
     }
 
-    String verbsToHeader() {
+    @Override
+    public String toString() {
         List<HttpMethod> httpMethods = getHttpMethods();
-        String output = "";
+        StringBuilder output = new StringBuilder();
         for (HttpMethod method : httpMethods) {
-            output += (method.name() + ", ");
+            output.append(method.name()).append(", ");
         }
 
         Optional<HttpMethod> first = httpMethods.stream().filter(method -> method == HttpMethod.HEAD).findFirst();
         if (first.isEmpty()) {
-            output += "HEAD, ";
+            output.append("HEAD, ");
         }
 
-        output += "OPTIONS";
-        return output;
+        output.append("OPTIONS");
+        return output.toString();
     }
 
     boolean hasMethods(HttpMethod method) {

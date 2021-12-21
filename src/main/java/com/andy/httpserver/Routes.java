@@ -30,14 +30,14 @@ public class Routes {
 
         if (request.getMethod() == HttpMethod.OPTIONS) {
             HttpResponse response = new HttpResponse(HttpStatus.OK, "");
-            response.addHeader("Allow", verbs.verbsToHeader());
+            response.addHeader("Allow", verbs.toString());
             return response;
         }
 
 
         if (verbs.hasMethods(request.getMethod())) {
             HttpResponse response = new HttpResponse(HttpStatus.NOT_ALLOWED, "");
-            response.addHeader("Allow", verbs.verbsToHeader());
+            response.addHeader("Allow", verbs.toString());
             return response;
         }
 

@@ -1,17 +1,10 @@
 package com.andy.httpserver.acceptance;
 
-import com.andy.httpserver.ExampleHttpServer;
-import com.andy.httpserver.Route;
-import com.andy.httpserver.Routes;
-import io.restassured.RestAssured;
+import com.andy.httpserver.ServerTestHelper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import static com.andy.httpserver.HttpMethod.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
@@ -19,25 +12,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class GettingStartedTest {
     @BeforeAll
     static void setup() {
-        int portNumber = 5555;
-        RestAssured.baseURI = "http://localhost:" + portNumber;
-
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(() -> ExampleHttpServer.startHttpServer(portNumber, createTestRoutes()));
-    }
-
-    private static Routes createTestRoutes() {
-        Routes routes = new Routes();
-        routes.addRoute("/simple_get_with_body", new Route(GET, "Hello world\n"));
-        routes.addRoute("/simple_get", new Route(GET, ""));
-        routes.addRoute("/simple_get_2", new Route(GET, ""));
-        routes.addRoute("/echo_body", new Route(POST, ""));
-        routes.addRoute("/head_request", new Route(HEAD, ""));
-        routes.addRoute("/method_options", new Route(GET, ""));
-        routes.addRoute("/method_options2", new Route(GET, ""));
-        routes.addRoute("/method_options2", new Route(PUT, ""));
-        routes.addRoute("/method_options2", new Route(POST, ""));
-        return routes;
+        ServerTestHelper.createServer(5555);
     }
 
     @Test
@@ -131,6 +106,17 @@ public class GettingStartedTest {
         then().
             statusCode(405).
             header("Allow", equalTo("HEAD, OPTIONS")).
+            body(emptyString());
+    }
+
+    @Test
+    @Disabled
+    void resource_moved() {
+        given().
+            get("/redirect").
+        then().
+            statusCode(301).
+            header("Location", equalTo("http://0.0.0.0:5000/simple_get")).
             body(emptyString());
     }
 }

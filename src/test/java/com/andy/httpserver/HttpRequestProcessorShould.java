@@ -1,7 +1,6 @@
 package com.andy.httpserver;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -24,11 +23,11 @@ class HttpRequestProcessorShould {
     private static Routes createTestRoutes() {
         Routes routes = new Routes();
 
-        routes.addRoute("/simple_get_with_body", new Route(HttpMethod.GET, "Hello world\n"));
-        routes.addRoute("/", new Route(HttpMethod.GET, ""));
-        routes.addRoute("/hello", new Route(HttpMethod.GET, ""));
-        routes.addRoute("/echo", new Route(HttpMethod.POST, ""));
-        routes.addRoute("/head-only", new Route(HttpMethod.HEAD, ""));
+        routes.addRoute("/simple_get_with_body", new Route(HttpMethod.GET, new SimpleBodyAction("Hello world\n")));
+        routes.addRoute("/", new Route(HttpMethod.GET, new SimpleBodyAction("")));
+        routes.addRoute("/hello", new Route(HttpMethod.GET, new SimpleBodyAction("")));
+        routes.addRoute("/echo", new Route(HttpMethod.POST, new SimpleBodyAction("")));
+        routes.addRoute("/head-only", new Route(HttpMethod.HEAD, new SimpleBodyAction("")));
         return routes;
     }
 

@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ExampleHttpServer {
-    private HttpRequestProcessor httpRequestProcessor;
+    private final HttpRequestProcessor httpRequestProcessor;
     private final SocketHandler socketHandler;
     private final int portNumber;
     ServerSocket serverSocket = null;
@@ -45,8 +45,8 @@ public class ExampleHttpServer {
 
     public static void main(String[] args) {
         Routes routes = new Routes();
-        routes.addRoute("/simple_get", new Route(HttpMethod.GET, "Howdee"));
-        routes.addRoute("/simple_post", new Route(HttpMethod.POST, "Howdee"));
+        routes.addRoute("/simple_get", new Route(HttpMethod.GET, new SimpleBodyAction("Howdee")));
+        routes.addRoute("/simple_post", new Route(HttpMethod.POST, new SimpleBodyAction("Howdee")));
         startHttpServer(4444, routes);
     }
 
