@@ -3,11 +3,11 @@ package com.andy.httpserver;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class HttpRequestProcessor implements RequestProcessor {
+class HttpRequestProcessor implements RequestProcessor {
     private final RequestParser requestParser = new RequestParser();
     private final Routes routes;
 
-    public HttpRequestProcessor(Routes routes) {
+    HttpRequestProcessor(Routes routes) {
         this.routes = routes;
     }
 

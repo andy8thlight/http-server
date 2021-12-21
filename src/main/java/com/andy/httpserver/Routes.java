@@ -2,14 +2,14 @@ package com.andy.httpserver;
 
 import java.util.*;
 
-public class Routes {
+class Routes {
     final Map<String, Methods> routes = new HashMap<>();
 
-    public void addRoute(String uri, Route route) {
+    void addRoute(String uri, Route route) {
         routes.computeIfAbsent(uri, ignore -> new Methods()).add(route);
     }
 
-    public HttpResponse process(HttpRequest request) {
+    HttpResponse process(HttpRequest request) {
         Methods verbs = routes.get(request.getPath());
 
         if (verbs == null) {

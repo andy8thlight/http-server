@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class Methods {
+class Methods {
     List<Route> routeList = new ArrayList<>();
 
     public void add(Route route) {

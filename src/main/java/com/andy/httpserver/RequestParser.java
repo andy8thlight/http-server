@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class RequestParser {
+class RequestParser {
 
     private static final String HOST_HEADER = "Host: ";
 

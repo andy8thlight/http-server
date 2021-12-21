@@ -14,11 +14,11 @@ class RequestLine {
         return HttpMethod.valueOf(verb);
     }
 
-    public HttpMethod getMethod() {
+    HttpMethod getMethod() {
         return method;
     }
 
-    public String getUri() {
+    String getUri() {
         return uri;
     }
 }
