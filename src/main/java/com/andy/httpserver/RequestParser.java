@@ -6,7 +6,7 @@ import static java.util.Arrays.*;
 
 public class RequestParser {
 
-    public static final String HOST_HEADER = "Host: ";
+    private static final String HOST_HEADER = "Host: ";
 
     HttpRequest parse(InputStream inputStream) throws IOException, BadRequestException {
         RequestBuilder requestBuilder = buildRequest(inputStream);
@@ -15,20 +15,10 @@ public class RequestParser {
 
     private RequestBuilder buildRequest(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-        String line;
-
         RequestBuilder requestBuilder = new RequestBuilder();
+        String line;
         while (!(line = bufferedReader.readLine()).isBlank()) {
-            if (isHttpVerb(line)) {
-                String[] components = line.split("\\s+");
-                HttpMethod method = convertVerbToMethod(components[0]);
-                requestBuilder.setMethod(method).setPath(components[1]);
-            }
-
-            if (line.startsWith(HOST_HEADER)) {
-                requestBuilder.setHost(extractHost(line));
-            }
+            processLine(line, requestBuilder);
         }
 
         if (requestBuilder.getMethod() == HttpMethod.POST) {
@@ -37,13 +27,24 @@ public class RequestParser {
         return requestBuilder;
     }
 
+    private void processLine(String line, RequestBuilder requestBuilder) {
+        if (isHttpVerb(line)) {
+            String[] components = line.split("\\s+");
+            HttpMethod method = convertVerbToMethod(components[0]);
+            requestBuilder.setMethod(method).setPath(components[1]);
+        }
+
+        if (line.startsWith(HOST_HEADER)) {
+            requestBuilder.setHost(extractHost(line));
+        }
+    }
+
     private String extractHost(String line) {
         return line.substring(HOST_HEADER.length());
     }
 
     private boolean isHttpVerb(String line) {
-        String[] verbs = new String[]{"POST", "GET", "HEAD", "OPTIONS"};
-        return stream(verbs).anyMatch(line::startsWith);
+        return stream(HttpMethod.values()).anyMatch(value -> line.startsWith(value.name()));
     }
 
     private HttpMethod convertVerbToMethod(String verb) {
