@@ -6,15 +6,7 @@ public class Routes {
     final Map<String, Methods> routes = new HashMap<>();
 
     public void addRoute(String uri, Route route) {
-        Methods verbs;
-        if (!routes.containsKey(uri)) {
-            verbs = new Methods();
-        } else {
-            verbs = this.routes.get(uri);
-        }
-
-        verbs.add(route);
-        routes.put(uri, verbs);
+        routes.computeIfAbsent(uri, ignore -> new Methods()).add(route);
     }
 
     public HttpResponse process(HttpRequest request) {
@@ -34,15 +26,11 @@ public class Routes {
             return response;
         }
 
-
         if (verbs.hasMethods(request.getMethod())) {
             HttpResponse response = new HttpResponse(HttpStatus.NOT_ALLOWED, "");
             response.addHeader("Allow", verbs.toString());
             return response;
         }
-
-
-
 
         if (request.getMethod() == HttpMethod.POST) {
             // TODO: Special handling here
@@ -54,6 +42,7 @@ public class Routes {
 
         Route route = verbs.findRoute(request);
 
+        // TODO: Maybe some ploymorphism here.....
         Action action = route.getAction();
         if (action instanceof RediectAction) {
             RediectAction rediectAction = (RediectAction) action;
@@ -62,9 +51,12 @@ public class Routes {
             return httpResponse;
         }
 
+        if (action instanceof SimpleBodyAction) {
+            SimpleBodyAction bodyAction = (SimpleBodyAction) action;
+            String body = bodyAction.getBody();
+            return new HttpResponse(HttpStatus.OK, body);
+        }
 
-        return new HttpResponse(HttpStatus.OK, route.getBody());
+        return new HttpResponse(HttpStatus.OK, "");
     }
-
-
 }

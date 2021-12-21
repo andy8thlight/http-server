@@ -9,14 +9,6 @@ public class Route {
         this.action = action;
     }
 
-    public String getBody() {
-        if (action instanceof SimpleBodyAction) {
-            SimpleBodyAction bodyAction = (SimpleBodyAction) action;
-            return bodyAction.getBody();
-        }
-        return null;
-    }
-
     public HttpMethod getHttpMethod() {
         return httpMethod;
     }
