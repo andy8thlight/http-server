@@ -2,6 +2,7 @@ package com.andy.httpserver;
 
 public enum HttpStatus {
     OK(200, "OK"),
+    MOVED_PERMANENTLY(301, "Moved Permanently"),
     NOT_FOUND(404, "Not Found"),
     NOT_ALLOWED(405, "Not Allowed");
 

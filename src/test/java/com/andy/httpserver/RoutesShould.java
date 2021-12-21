@@ -1,6 +1,7 @@
 package com.andy.httpserver;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +16,8 @@ public class RoutesShould {
         routes.addRoute("/route1", new Route(HttpMethod.GET, new SimpleBodyAction("body1")));
         routes.addRoute("/route1", new Route(HttpMethod.POST, new SimpleBodyAction("body2")));
         routes.addRoute("/head_request", new Route(HttpMethod.HEAD, new SimpleBodyAction("")));
-        routes.addRoute("/redirect", new Route(HttpMethod.HEAD, new RediectAction("http://0.0.0.0:5000/simple_get")));
+        routes.addRoute("/redirect", new Route(HttpMethod.GET, new RediectAction("http://0.0.0.0:5000/simple_get")));
+        routes.addRoute("/redirect2", new Route(HttpMethod.GET, new RediectAction("http://0.0.0.0:5000/somewhere_else")));
 
     }
 
@@ -56,5 +58,18 @@ public class RoutesShould {
         assertEquals(HttpStatus.OK, httpResponse.getStatus());
     }
 
+    @Test
+    void send_redirect() {
+        HttpResponse httpResponse = routes.process(new HttpRequest(HttpMethod.GET, "localhost", "/redirect", ""));
+        assertEquals(HttpStatus.MOVED_PERMANENTLY, httpResponse.getStatus());
+        assertEquals("http://0.0.0.0:5000/simple_get", httpResponse.getHeader("Location"));
+    }
+
+    @Test
+    void send_another_redirect() {
+        HttpResponse httpResponse = routes.process(new HttpRequest(HttpMethod.GET, "localhost", "/redirect2", ""));
+        assertEquals(HttpStatus.MOVED_PERMANENTLY, httpResponse.getStatus());
+        assertEquals("http://0.0.0.0:5000/somewhere_else", httpResponse.getHeader("Location"));
+    }
 
 }

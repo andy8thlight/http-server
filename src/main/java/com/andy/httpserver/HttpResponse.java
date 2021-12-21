@@ -1,12 +1,14 @@
 package com.andy.httpserver;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class HttpResponse {
-    private String body = "";
+    private String body;
     private final HttpStatus httpStatus;
     public static final String CRLF = "\r\n";
     public static final String HTTP_1_1 = "HTTP/1.1";
-    private String key;
-    private String value;
+    private final Map<String, String> headers = new HashMap<>();
 
     public HttpResponse(HttpStatus httpStatus, String body) {
         this.body = body;
@@ -30,18 +32,18 @@ public class HttpResponse {
     }
 
     private String getHeaders() {
-        if (key != null && value != null) {
-            return CRLF + key + ": " + value;
-        }
-        return "";
+        return headers.keySet().stream().reduce("", (acc, element) -> CRLF + acc + element + ": " + headers.get(element));
     }
 
     public void addHeader(String key, String value) {
-        this.key = key;
-        this.value = value;
+        headers.put(key, value);
     }
 
     public HttpStatus getStatus() {
         return httpStatus;
+    }
+
+    public String getHeader(String name) {
+        return headers.get(name);
     }
 }

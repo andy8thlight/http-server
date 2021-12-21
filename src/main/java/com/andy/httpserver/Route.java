@@ -20,4 +20,8 @@ public class Route {
     public HttpMethod getHttpMethod() {
         return httpMethod;
     }
+
+    public Action getAction() {
+        return action;
+    }
 }

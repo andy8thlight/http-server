@@ -42,6 +42,8 @@ public class Routes {
         }
 
 
+
+
         if (request.getMethod() == HttpMethod.POST) {
             // TODO: Special handling here
             HttpResponse response = new HttpResponse(HttpStatus.OK, "");
@@ -51,6 +53,16 @@ public class Routes {
         }
 
         Route route = verbs.findRoute(request);
+
+        Action action = route.getAction();
+        if (action instanceof RediectAction) {
+            RediectAction rediectAction = (RediectAction) action;
+            HttpResponse httpResponse = new HttpResponse(HttpStatus.MOVED_PERMANENTLY, "");
+            httpResponse.addHeader("Location", rediectAction.getLocation());
+            return httpResponse;
+        }
+
+
         return new HttpResponse(HttpStatus.OK, route.getBody());
     }
 
