@@ -16,18 +16,15 @@ public class RequestParser {
     private RequestBuilder buildRequest(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         RequestBuilder requestBuilder = new RequestBuilder();
-        String line;
-        while (!(line = bufferedReader.readLine()).isBlank()) {
-            processLine(line, requestBuilder);
-        }
-
-        getRequestBody(bufferedReader, requestBuilder);
+        processHeaders(bufferedReader, requestBuilder);
+        processBody(bufferedReader, requestBuilder);
         return requestBuilder;
     }
 
-    private void getRequestBody(BufferedReader bufferedReader, RequestBuilder requestBuilder) throws IOException {
-        if (requestBuilder.getMethod() == HttpMethod.POST) {
-            requestBuilder.setBody(bufferedReader.readLine());
+    private void processHeaders(BufferedReader bufferedReader, RequestBuilder requestBuilder) throws IOException {
+        String line;
+        while (!(line = bufferedReader.readLine()).isBlank()) {
+            processLine(line, requestBuilder);
         }
     }
 
@@ -43,15 +40,21 @@ public class RequestParser {
         }
     }
 
-    private String extractHost(String line) {
-        return line.substring(HOST_HEADER.length());
-    }
-
     private boolean isHttpVerb(String line) {
         return stream(HttpMethod.values()).anyMatch(value -> line.startsWith(value.name()));
     }
 
+    private String extractHost(String line) {
+        return line.substring(HOST_HEADER.length());
+    }
+
     private HttpMethod convertVerbToMethod(String verb) {
         return HttpMethod.valueOf(verb);
+    }
+
+    private void processBody(BufferedReader bufferedReader, RequestBuilder requestBuilder) throws IOException {
+        if (requestBuilder.getMethod() == HttpMethod.POST) {
+            requestBuilder.setBody(bufferedReader.readLine());
+        }
     }
 }
