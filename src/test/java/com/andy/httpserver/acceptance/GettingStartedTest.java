@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -110,9 +111,10 @@ public class GettingStartedTest {
     }
 
     @Test
-    @Disabled
     void resource_moved() {
         given().
+        when().
+            redirects().follow(false).
             get("/redirect").
         then().
             statusCode(301).
