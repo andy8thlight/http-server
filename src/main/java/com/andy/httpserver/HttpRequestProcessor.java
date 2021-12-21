@@ -19,7 +19,6 @@ public class HttpRequestProcessor implements RequestProcessor {
         }
     }
 
-
     void sendResponse(OutputStream outputStream, HttpResponse httpResponse) throws IOException {
         outputStream.write(httpResponse.toString().getBytes(StandardCharsets.UTF_8));
     }

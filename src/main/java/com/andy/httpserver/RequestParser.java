@@ -9,6 +9,11 @@ public class RequestParser {
     public static final String HOST_HEADER = "Host: ";
 
     HttpRequest parse(InputStream inputStream) throws IOException, BadRequestException {
+        RequestBuilder requestBuilder = buildRequest(inputStream);
+        return requestBuilder.createTheRequest();
+    }
+
+    private RequestBuilder buildRequest(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
         String line;
@@ -29,21 +34,11 @@ public class RequestParser {
         if (requestBuilder.getMethod() == HttpMethod.POST) {
             requestBuilder.setBody(bufferedReader.readLine());
         }
-
-        HttpRequest httpRequest = requestBuilder.createTheRequest();
-        validateRequest(httpRequest);
-
-        return httpRequest;
+        return requestBuilder;
     }
 
     private String extractHost(String line) {
         return line.substring(HOST_HEADER.length());
-    }
-
-    private void validateRequest(HttpRequest httpRequest) throws BadRequestException {
-        if (httpRequest.getMethod() == null || (httpRequest.getHost() == null || httpRequest.getHost().isBlank())) {
-            throw new BadRequestException();
-        }
     }
 
     private boolean isHttpVerb(String line) {

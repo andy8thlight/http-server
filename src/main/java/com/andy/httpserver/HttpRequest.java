@@ -1,10 +1,10 @@
 package com.andy.httpserver;
 
 public class HttpRequest {
-    private String host;
-    private String path;
-    private HttpMethod method;
-    private String body;
+    private final String host;
+    private final String path;
+    private final HttpMethod method;
+    private final String body;
 
     public HttpRequest(HttpMethod method, String host, String path, String body) {
         this.host = host;
@@ -27,5 +27,11 @@ public class HttpRequest {
 
     public String getBody() {
         return body;
+    }
+
+    void validateRequest() throws BadRequestException {
+        if (getMethod() == null || (getHost() == null || getHost().isBlank())) {
+            throw new BadRequestException();
+        }
     }
 }

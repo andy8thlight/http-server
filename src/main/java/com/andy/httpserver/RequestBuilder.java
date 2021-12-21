@@ -30,7 +30,9 @@ public class RequestBuilder {
         return this;
     }
 
-    public HttpRequest createTheRequest() {
-        return new HttpRequest(method, host, path, body);
+    public HttpRequest createTheRequest() throws BadRequestException {
+        HttpRequest httpRequest = new HttpRequest(method, host, path, body);
+        httpRequest.validateRequest();
+        return httpRequest;
     }
 }
