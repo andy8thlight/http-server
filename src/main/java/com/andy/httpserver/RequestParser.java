@@ -21,10 +21,14 @@ public class RequestParser {
             processLine(line, requestBuilder);
         }
 
+        echoRequestBody(bufferedReader, requestBuilder);
+        return requestBuilder;
+    }
+
+    private void echoRequestBody(BufferedReader bufferedReader, RequestBuilder requestBuilder) throws IOException {
         if (requestBuilder.getMethod() == HttpMethod.POST) {
             requestBuilder.setBody(bufferedReader.readLine());
         }
-        return requestBuilder;
     }
 
     private void processLine(String line, RequestBuilder requestBuilder) {
