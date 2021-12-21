@@ -1,8 +1,9 @@
 package com.andy.httpserver;
 
-import java.io.*;
-
-import static java.util.Arrays.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class RequestParser {
 
@@ -29,10 +30,9 @@ public class RequestParser {
     }
 
     private void processLine(String line, RequestBuilder requestBuilder) {
-        if (isHttpVerb(line)) {
-            String[] components = line.split("\\s+");
-            HttpMethod method = convertVerbToMethod(components[0]);
-            requestBuilder.setMethod(method).setPath(components[1]);
+        if (HttpMethod.isHttpVerb(line)) {
+            RequestLine requestLine = new RequestLine(line);
+            requestBuilder.setMethod(requestLine.getMethod()).setPath(requestLine.getUri());
         }
 
         if (line.startsWith(HOST_HEADER)) {
@@ -40,16 +40,8 @@ public class RequestParser {
         }
     }
 
-    private boolean isHttpVerb(String line) {
-        return stream(HttpMethod.values()).anyMatch(value -> line.startsWith(value.name()));
-    }
-
     private String extractHost(String line) {
         return line.substring(HOST_HEADER.length());
-    }
-
-    private HttpMethod convertVerbToMethod(String verb) {
-        return HttpMethod.valueOf(verb);
     }
 
     private void processBody(BufferedReader bufferedReader, RequestBuilder requestBuilder) throws IOException {

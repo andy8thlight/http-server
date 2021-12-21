@@ -1,11 +1,12 @@
 package com.andy.httpserver;
 
+import static java.util.Arrays.stream;
+
 public enum HttpMethod {
-    POST("POST"), HEAD("HEAD"), GET("GET"), OPTIONS("OPTIONS"), PUT("PUT");
+    POST(), HEAD(), GET(), OPTIONS(), PUT();
 
-    private String method;
-
-    HttpMethod(String method) {
-        this.method = method;
+    static boolean isHttpVerb(String line) {
+        return stream(values()).anyMatch(value -> line.startsWith(value.name()));
     }
+
 }
