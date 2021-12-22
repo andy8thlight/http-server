@@ -32,31 +32,33 @@ class Routes {
             return response;
         }
 
+
+
+
         if (request.getMethod() == HttpMethod.POST) {
             // TODO: Special handling here
-            HttpResponse response = new HttpResponse(HttpStatus.OK, "");
-            String requestBody = request.getBody();
-            response.setBody(requestBody);
-            return response;
+            return postActionDo(request.getBody());
         }
 
         Route route = verbs.findRoute(request);
-
-        // TODO: Maybe some ploymorphism here.....
         Action action = route.getAction();
+
         if (action instanceof RediectAction) {
-            RediectAction rediectAction = (RediectAction) action;
-            HttpResponse httpResponse = new HttpResponse(HttpStatus.MOVED_PERMANENTLY, "");
-            httpResponse.addHeader("Location", rediectAction.getLocation());
-            return httpResponse;
+            return action.perform();
         }
 
         if (action instanceof SimpleBodyAction) {
-            SimpleBodyAction bodyAction = (SimpleBodyAction) action;
-            String body = bodyAction.getBody();
-            return new HttpResponse(HttpStatus.OK, body);
+            return action.perform();
         }
 
         return new HttpResponse(HttpStatus.OK, "");
     }
+
+    private HttpResponse postActionDo(String body) {
+        HttpResponse response = new HttpResponse(HttpStatus.OK, "");
+        String requestBody = body;
+        response.setBody(requestBody);
+        return response;
+    }
+
 }

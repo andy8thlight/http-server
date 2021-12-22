@@ -10,4 +10,10 @@ public class RediectAction implements Action {
     public String getLocation() {
         return url;
     }
+
+    public HttpResponse perform() {
+        HttpResponse httpResponse = new HttpResponse(HttpStatus.MOVED_PERMANENTLY, "");
+        httpResponse.addHeader("Location", getLocation());
+        return httpResponse;
+    }
 }

@@ -10,4 +10,9 @@ public class SimpleBodyAction implements Action {
     public String getBody() {
         return body;
     }
+
+    public HttpResponse perform() {
+        String body = getBody();
+        return new HttpResponse(HttpStatus.OK, body);
+    }
 }
