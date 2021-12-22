@@ -1,19 +1,15 @@
 package com.andy.httpserver;
 
-public class RediectAction implements Action {
+public class RedirectAction implements Action {
     private final String url;
 
-    public RediectAction(String url) {
+    public RedirectAction(String url) {
         this.url = url;
-    }
-
-    public String getLocation() {
-        return url;
     }
 
     public HttpResponse perform() {
         HttpResponse httpResponse = new HttpResponse(HttpStatus.MOVED_PERMANENTLY, "");
-        httpResponse.addHeader("Location", getLocation());
+        httpResponse.addHeader("Location", url);
         return httpResponse;
     }
 }
