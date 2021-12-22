@@ -45,8 +45,8 @@ public class ExampleHttpServer {
 
     public static void main(String[] args) {
         Routes routes = new Routes();
-        routes.addRoute("/simple_get", new Route(HttpMethod.GET, new SimpleBodyAction("Howdee")));
-        routes.addRoute("/simple_post", new Route(HttpMethod.POST, new SimpleBodyAction("Howdee")));
+        routes.addRoute("/simple_get", new Route(HttpMethod.GET, new GetAction("Howdee")));
+        routes.addRoute("/simple_post", new Route(HttpMethod.POST, new GetAction("Howdee")));
         routes.addRoute("/redirect", new Route(HttpMethod.GET, new RedirectAction("http://localhost:4444/simple_get")));
         startHttpServer(4444, routes);
     }

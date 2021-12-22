@@ -2,5 +2,5 @@ package com.andy.httpserver;
 
 public interface Action {
 
-    HttpResponse perform();
+    HttpResponse perform(HttpRequest request);
 }

@@ -23,11 +23,11 @@ class HttpRequestProcessorShould {
     private static Routes createTestRoutes() {
         Routes routes = new Routes();
 
-        routes.addRoute("/simple_get_with_body", new Route(HttpMethod.GET, new SimpleBodyAction("Hello world\n")));
-        routes.addRoute("/", new Route(HttpMethod.GET, new SimpleBodyAction("")));
-        routes.addRoute("/hello", new Route(HttpMethod.GET, new SimpleBodyAction("")));
-        routes.addRoute("/echo", new Route(HttpMethod.POST, new SimpleBodyAction("")));
-        routes.addRoute("/head-only", new Route(HttpMethod.HEAD, new SimpleBodyAction("")));
+        routes.addRoute("/simple_get_with_body", new Route(HttpMethod.GET, new GetAction("Hello world\n")));
+        routes.addRoute("/", new Route(HttpMethod.GET, new GetAction("")));
+        routes.addRoute("/hello", new Route(HttpMethod.GET, new GetAction("")));
+        routes.addRoute("/echo", new Route(HttpMethod.POST, new PostAction()));
+        routes.addRoute("/head-only", new Route(HttpMethod.HEAD, new GetAction("")));
         return routes;
     }
 

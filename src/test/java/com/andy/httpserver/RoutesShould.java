@@ -12,9 +12,9 @@ public class RoutesShould {
     @BeforeEach
     void setup() {
         routes = new Routes();
-        routes.addRoute("/route1", new Route(HttpMethod.GET, new SimpleBodyAction("body1")));
-        routes.addRoute("/route1", new Route(HttpMethod.POST, new SimpleBodyAction("body2")));
-        routes.addRoute("/head_request", new Route(HttpMethod.HEAD, new SimpleBodyAction("")));
+        routes.addRoute("/route1", new Route(HttpMethod.GET, new GetAction("body1")));
+        routes.addRoute("/route1", new Route(HttpMethod.POST, new GetAction("body2")));
+        routes.addRoute("/head_request", new Route(HttpMethod.HEAD, new GetAction("")));
         routes.addRoute("/redirect", new Route(HttpMethod.GET, new RedirectAction("http://0.0.0.0:5000/simple_get")));
         routes.addRoute("/redirect2", new Route(HttpMethod.GET, new RedirectAction("http://0.0.0.0:5000/somewhere_else")));
 

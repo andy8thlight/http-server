@@ -7,7 +7,7 @@ public class RedirectAction implements Action {
         this.url = url;
     }
 
-    public HttpResponse perform() {
+    public HttpResponse perform(HttpRequest request) {
         HttpResponse httpResponse = new HttpResponse(HttpStatus.MOVED_PERMANENTLY, "");
         httpResponse.addHeader("Location", url);
         return httpResponse;

@@ -32,23 +32,8 @@ class Routes {
             return response;
         }
 
-
-
-
-        if (request.getMethod() == HttpMethod.POST) {
-            // TODO: Special handling here
-            return postActionDo(request.getBody());
-        }
-
         Route route = verbs.findRoute(request);
         Action action = route.getAction();
-        return action.perform();
+        return action.perform(request);
     }
-
-    private HttpResponse postActionDo(String body) {
-        HttpResponse response = new HttpResponse(HttpStatus.OK, "");
-        response.setBody(body);
-        return response;
-    }
-
 }

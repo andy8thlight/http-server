@@ -1,9 +1,9 @@
 package com.andy.httpserver;
 
-public class SimpleBodyAction implements Action {
+public class GetAction implements Action {
     private final String body;
 
-    public SimpleBodyAction(String body) {
+    public GetAction(String body) {
         this.body = body;
     }
 
@@ -11,7 +11,7 @@ public class SimpleBodyAction implements Action {
         return body;
     }
 
-    public HttpResponse perform() {
+    public HttpResponse perform(HttpRequest request) {
         String body = getBody();
         return new HttpResponse(HttpStatus.OK, body);
     }
