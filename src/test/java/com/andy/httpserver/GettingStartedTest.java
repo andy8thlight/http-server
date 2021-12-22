@@ -1,20 +1,50 @@
-package com.andy.httpserver.acceptance;
+package com.andy.httpserver;
 
-import com.andy.httpserver.ServerTestHelper;
+import io.restassured.RestAssured;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static com.andy.httpserver.HttpMethod.*;
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 
 public class GettingStartedTest {
+
+    static final int PORT_NUMBER = 5555;
+    static ExecutorService executorService;
+
     @BeforeAll
     static void setup() {
-        ServerTestHelper.createServer(5555);
+        RestAssured.baseURI = "http://localhost:" + PORT_NUMBER;
+        executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> ExampleHttpServer.startHttpServer(PORT_NUMBER, createTestRoutes()));
     }
+
+    @AfterAll
+    static void tearDown() {
+        executorService.shutdown();
+    }
+
+    static private Routes createTestRoutes() {
+        Routes routes = new Routes();
+        routes.addRoute("/simple_get_with_body", new Route(GET, new SimpleBodyAction("Hello world\n")));
+        routes.addRoute("/simple_get", new Route(GET, new SimpleBodyAction("")));
+        routes.addRoute("/simple_get_2", new Route(GET, new SimpleBodyAction("")));
+        routes.addRoute("/echo_body", new Route(POST, new SimpleBodyAction("")));
+        routes.addRoute("/head_request", new Route(HEAD, new SimpleBodyAction("")));
+        routes.addRoute("/method_options", new Route(GET, new SimpleBodyAction("")));
+        routes.addRoute("/method_options2", new Route(GET, new SimpleBodyAction("")));
+        routes.addRoute("/method_options2", new Route(PUT, new SimpleBodyAction("")));
+        routes.addRoute("/method_options2", new Route(POST, new SimpleBodyAction("")));
+        routes.addRoute("/redirect", new Route(GET, new RedirectAction("http://0.0.0.0:5000/simple_get")));
+        return routes;
+    }
+
 
     @Test
     void should_get_200() {
