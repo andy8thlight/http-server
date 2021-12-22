@@ -30,7 +30,7 @@ class RequestBuilder {
         return this;
     }
 
-    HttpRequest createTheRequest() throws BadRequestException {
+    HttpRequest build() throws BadRequestException {
         HttpRequest httpRequest = new HttpRequest(method, host, path, body);
         httpRequest.validateRequest();
         return httpRequest;

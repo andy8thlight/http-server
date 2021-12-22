@@ -11,7 +11,7 @@ class RequestParser {
 
     HttpRequest parse(InputStream inputStream) throws IOException, BadRequestException {
         RequestBuilder requestBuilder = buildRequest(inputStream);
-        return requestBuilder.createTheRequest();
+        return requestBuilder.build();
     }
 
     private RequestBuilder buildRequest(InputStream inputStream) throws IOException {

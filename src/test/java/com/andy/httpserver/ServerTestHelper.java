@@ -26,7 +26,7 @@ public class ServerTestHelper {
         routes.addRoute("/method_options2", new Route(GET, new SimpleBodyAction("")));
         routes.addRoute("/method_options2", new Route(PUT, new SimpleBodyAction("")));
         routes.addRoute("/method_options2", new Route(POST, new SimpleBodyAction("")));
-        routes.addRoute("/redirect", new Route(GET, new RediectAction("http://0.0.0.0:5000/simple_get")));
+        routes.addRoute("/redirect", new Route(GET, new RedirectAction("http://0.0.0.0:5000/simple_get")));
         return routes;
     }
 }

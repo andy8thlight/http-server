@@ -42,22 +42,12 @@ class Routes {
 
         Route route = verbs.findRoute(request);
         Action action = route.getAction();
-
-        if (action instanceof RediectAction) {
-            return action.perform();
-        }
-
-        if (action instanceof SimpleBodyAction) {
-            return action.perform();
-        }
-
-        return new HttpResponse(HttpStatus.OK, "");
+        return action.perform();
     }
 
     private HttpResponse postActionDo(String body) {
         HttpResponse response = new HttpResponse(HttpStatus.OK, "");
-        String requestBody = body;
-        response.setBody(requestBody);
+        response.setBody(body);
         return response;
     }
 

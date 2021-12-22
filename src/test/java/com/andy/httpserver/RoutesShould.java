@@ -1,7 +1,6 @@
 package com.andy.httpserver;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,8 +15,8 @@ public class RoutesShould {
         routes.addRoute("/route1", new Route(HttpMethod.GET, new SimpleBodyAction("body1")));
         routes.addRoute("/route1", new Route(HttpMethod.POST, new SimpleBodyAction("body2")));
         routes.addRoute("/head_request", new Route(HttpMethod.HEAD, new SimpleBodyAction("")));
-        routes.addRoute("/redirect", new Route(HttpMethod.GET, new RediectAction("http://0.0.0.0:5000/simple_get")));
-        routes.addRoute("/redirect2", new Route(HttpMethod.GET, new RediectAction("http://0.0.0.0:5000/somewhere_else")));
+        routes.addRoute("/redirect", new Route(HttpMethod.GET, new RedirectAction("http://0.0.0.0:5000/simple_get")));
+        routes.addRoute("/redirect2", new Route(HttpMethod.GET, new RedirectAction("http://0.0.0.0:5000/somewhere_else")));
 
     }
 
@@ -53,7 +52,7 @@ public class RoutesShould {
     }
 
     @Test
-    void repond_to_head_request() {
+    void respond_to_head_request() {
         HttpResponse httpResponse = routes.process(new HttpRequest(HttpMethod.HEAD, "localhost", "/head_request", ""));
         assertEquals(HttpStatus.OK, httpResponse.getStatus());
     }
