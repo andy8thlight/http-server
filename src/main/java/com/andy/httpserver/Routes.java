@@ -10,9 +10,9 @@ class Routes {
     }
 
     HttpResponse process(HttpRequest request) {
-        Methods verbs = routes.get(request.getPath());
+        Methods methods = routes.get(request.getPath());
 
-        if (verbs == null) {
+        if (methods == null) {
             return new HttpResponse(HttpStatus.NOT_FOUND, "");
         }
 
@@ -22,17 +22,17 @@ class Routes {
 
         if (request.getMethod() == HttpMethod.OPTIONS) {
             HttpResponse response = new HttpResponse(HttpStatus.OK, "");
-            response.addHeader("Allow", verbs.toString());
+            response.addHeader("Allow", methods.toString());
             return response;
         }
 
-        if (verbs.hasMethods(request.getMethod())) {
+        if (methods.hasMethods(request.getMethod())) {
             HttpResponse response = new HttpResponse(HttpStatus.NOT_ALLOWED, "");
-            response.addHeader("Allow", verbs.toString());
+            response.addHeader("Allow", methods.toString());
             return response;
         }
 
-        Route route = verbs.findRoute(request);
+        Route route = methods.findRoute(request);
         Action action = route.getAction();
         return action.perform(request);
     }
