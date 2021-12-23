@@ -18,31 +18,30 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ExampleHttpServerShould {
+public class ServerShould {
 
     public static final int PORT_NUMBER = 7777;
     @Mock
-    private ServerSocket server;
+    private ServerSocket serverSocket;
     @Mock
     private Socket clientSocket;
     @Mock
     private SocketHandler socketHandler;
+    private Server server;
 
-    private ExampleHttpServer exampleHttpServer;
 
     @BeforeEach
     void setup() throws IOException {
         Routes routes = new Routes();
         HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor(routes);
-        Server server = new Server(socketHandler, PORT_NUMBER, httpRequestProcessor);
-        exampleHttpServer = new ExampleHttpServer(server);
-        lenient().when(socketHandler.createServerSocket(PORT_NUMBER)).thenReturn(this.server);
-        lenient().when(this.server.accept()).thenReturn(clientSocket);
+        server = new Server(socketHandler, PORT_NUMBER, httpRequestProcessor);
+        lenient().when(socketHandler.createServerSocket(PORT_NUMBER)).thenReturn(this.serverSocket);
+        lenient().when(this.serverSocket.accept()).thenReturn(clientSocket);
     }
 
     @Test
     void open_server_socket() throws IOException {
-        exampleHttpServer.createServer();
+        server.createServer();
         verify(socketHandler).createServerSocket(PORT_NUMBER);
     }
 
@@ -50,30 +49,30 @@ public class ExampleHttpServerShould {
     void throw_error_if_cannot_create_server_socket() throws IOException {
         when(socketHandler.createServerSocket(anyInt())).thenThrow(IOException.class);
 
-        HttpSocketCreationException exception = assertThrows(HttpSocketCreationException.class, () -> exampleHttpServer.createServer());
+        HttpSocketCreationException exception = assertThrows(HttpSocketCreationException.class, () -> server.createServer());
 
         assertEquals("Failed to create server socket", exception.getMessage());
     }
 
     @Test
     void open_socket_to_client_with_server_socket() throws IOException {
-        exampleHttpServer.acceptRequest(server);
-        verify(server).accept();
+        server.acceptRequest(serverSocket);
+        verify(serverSocket).accept();
     }
 
     @Test
     void throw_error_if_cannot_create_client_socket() throws IOException {
-        when(server.accept()).thenThrow(IOException.class);
+        when(serverSocket.accept()).thenThrow(IOException.class);
 
         HttpSocketCreationException exception = assertThrows(HttpSocketCreationException.class, () ->
-                exampleHttpServer.acceptRequest(server));
+                server.acceptRequest(serverSocket));
 
         assertEquals("Failed to establish connection to client", exception.getMessage());
     }
 
     @Test
     void get_output_stream() throws IOException {
-        exampleHttpServer.acceptRequest(server);
+        server.acceptRequest(serverSocket);
         verify(clientSocket).getOutputStream();
     }
 
@@ -82,7 +81,7 @@ public class ExampleHttpServerShould {
         OutputStream helloStream = new ByteArrayOutputStream();
         when(clientSocket.getOutputStream()).thenReturn(helloStream);
 
-        exampleHttpServer.acceptRequest(server);
+        server.acceptRequest(serverSocket);
 
         assertEquals("", helloStream.toString());
     }
