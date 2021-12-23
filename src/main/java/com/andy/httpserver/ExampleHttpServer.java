@@ -29,10 +29,14 @@ public class ExampleHttpServer {
     }
 
     public void start() {
-        server.createServer();
+        server.createServerSocket();
         while (server.allowsRequests()) {
             server.acceptRequest();
         }
-        server.stop();
+        server.closeServerSocket();
+    }
+
+    public void shutdown() {
+        server.disallowRequests();
     }
 }

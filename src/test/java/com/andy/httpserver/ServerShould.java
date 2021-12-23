@@ -36,7 +36,7 @@ public class ServerShould {
         server = new Server(socketHandler, PORT_NUMBER, httpRequestProcessor);
         lenient().when(socketHandler.createServerSocket(PORT_NUMBER)).thenReturn(this.serverSocket);
         lenient().when(this.serverSocket.accept()).thenReturn(clientSocket);
-        server.createServer();
+        server.createServerSocket();
     }
 
     @Test
@@ -49,7 +49,7 @@ public class ServerShould {
     void throw_error_if_cannot_create_server_socket() throws IOException {
         when(socketHandler.createServerSocket(anyInt())).thenThrow(IOException.class);
 
-        HttpSocketCreationException exception = assertThrows(HttpSocketCreationException.class, () -> server.createServer());
+        HttpSocketCreationException exception = assertThrows(HttpSocketCreationException.class, () -> server.createServerSocket());
 
         assertEquals("Failed to create server socket", exception.getMessage());
     }
@@ -88,7 +88,7 @@ public class ServerShould {
 
     @Test
     void should_shutdown_server_and_disallow_further_requests() throws IOException {
-        server.stop();
+        server.closeServerSocket();
 
         verify(serverSocket).close();
         assertFalse(server.allowsRequests());

@@ -25,7 +25,7 @@ class ExampleHttpServerShould {
     void start_up() {
         httpServer.start();
 
-        verify(server).createServer();
+        verify(server).createServerSocket();
     }
 
     @Test
@@ -34,7 +34,7 @@ class ExampleHttpServerShould {
 
         httpServer.start();
 
-        verify(server).createServer();
+        verify(server).createServerSocket();
         verify(server, times(1)).acceptRequest();
     }
 
@@ -44,7 +44,7 @@ class ExampleHttpServerShould {
 
         httpServer.start();
 
-        verify(server).createServer();
+        verify(server).createServerSocket();
         verify(server, times(2)).acceptRequest();
     }
 
@@ -54,9 +54,16 @@ class ExampleHttpServerShould {
 
         httpServer.start();
 
-        verify(server).createServer();
+        verify(server).createServerSocket();
         verify(server, times(2)).acceptRequest();
-        verify(server).stop();
+        verify(server).closeServerSocket();
+    }
+
+    @Test
+    void shutdown_server() {
+        httpServer.shutdown();
+
+        verify(server).disallowRequests();
     }
 
 }

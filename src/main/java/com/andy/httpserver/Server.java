@@ -17,9 +17,10 @@ class Server {
         this.socketHandler = socketHandler;
         this.portNumber = portNumber;
         this.httpRequestProcessor = httpRequestProcessor;
+//        disallowRequests();
     }
 
-    void createServer() {
+    void createServerSocket() {
         try {
             serverSocket = socketHandler.createServerSocket(portNumber);
             allowRequests = true;
@@ -45,12 +46,16 @@ class Server {
         return allowRequests;
     }
 
-    public void stop() {
-        allowRequests = false;
+    public void closeServerSocket() {
+        disallowRequests();
         try {
             serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void disallowRequests() {
+        allowRequests = false;
     }
 }
