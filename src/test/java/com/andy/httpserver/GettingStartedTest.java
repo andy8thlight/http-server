@@ -5,9 +5,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import static com.andy.httpserver.HttpMethod.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.emptyString;
@@ -16,19 +13,17 @@ import static org.hamcrest.Matchers.equalTo;
 public class GettingStartedTest {
 
     static final int PORT_NUMBER = 5555;
-    static ExecutorService executorService;
 
     @BeforeAll
     static void setup() {
         RestAssured.baseURI = "http://localhost:" + PORT_NUMBER;
-        executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(() -> ExampleHttpServer.startHttpServer(PORT_NUMBER, createTestRoutes()));
+        ExampleHttpServer.startHttpServer(PORT_NUMBER, createTestRoutes());
     }
 
-    @AfterAll
-    static void tearDown() {
-        executorService.shutdown();
-    }
+//    @AfterAll
+//    static void tearDown() {
+//        executorService.shutdown();
+//    }
 
     static private Routes createTestRoutes() {
         Routes routes = new Routes();

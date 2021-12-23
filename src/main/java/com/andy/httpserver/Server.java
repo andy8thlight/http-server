@@ -39,7 +39,7 @@ class Server {
         }
     }
 
-    boolean allowRequests() {
+    boolean allowsRequests() {
         return true;
     }
 
