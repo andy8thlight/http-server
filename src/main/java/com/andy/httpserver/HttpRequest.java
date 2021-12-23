@@ -4,12 +4,14 @@ public class HttpRequest {
     private final String host;
     private final String path;
     private final HttpMethod method;
+    private HttpHeaders httpHeaders;
     private final String body;
 
-    public HttpRequest(HttpMethod method, String host, String path, String body) {
-        this.host = host;
+    public HttpRequest(HttpMethod method, String path, HttpHeaders httpHeaders, String body) {
+        this.host = httpHeaders.getHost();
         this.path = path;
         this.method = method;
+        this.httpHeaders = httpHeaders;
         this.body = body;
     }
 
@@ -33,5 +35,11 @@ public class HttpRequest {
         if (getMethod() == null || (getHost() == null || getHost().isBlank())) {
             throw new BadRequestException();
         }
+    }
+
+    public Integer getContentLengthHeader() {
+
+        Integer contentLength = httpHeaders.getContentLength();
+        return contentLength;
     }
 }

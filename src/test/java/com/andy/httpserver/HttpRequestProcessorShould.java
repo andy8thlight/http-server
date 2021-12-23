@@ -118,7 +118,7 @@ class HttpRequestProcessorShould {
     }
 
     private String validPostRequest(final String path, String body) {
-        return "POST " + path + " HTTP/1.1\nHost: localhost\n\n" + body;
+        return "POST " + path + " HTTP/1.1\nHost: localhost\nContent-Length: " + body.length() + "\n\n" + body;
     }
     private OutputStream processRequests(String requestData) throws IOException, BadRequestException {
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);

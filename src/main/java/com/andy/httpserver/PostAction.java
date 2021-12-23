@@ -4,8 +4,12 @@ public class PostAction implements Action {
     @Override
     public HttpResponse perform(HttpRequest request) {
         HttpResponse response = new HttpResponse(HttpStatus.OK, "");
-        String body = request.getBody();
-        response.setBody(body);
+
+        Integer contentLength = request.getContentLengthHeader();
+        if (contentLength > 0) {
+            String body = request.getBody();
+            response.setBody(body);
+        }
         return response;
     }
 }

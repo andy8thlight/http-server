@@ -5,6 +5,7 @@ class RequestBuilder {
     private String path;
     private HttpMethod method;
     private String body;
+    private String contentLength;
 
     RequestBuilder setHost(String host) {
         this.host = host;
@@ -30,8 +31,13 @@ class RequestBuilder {
         return this;
     }
 
+    public RequestBuilder setContentLength(String contentLength) {
+        this.contentLength = contentLength;
+        return this;
+    }
+
     HttpRequest build() throws BadRequestException {
-        HttpRequest httpRequest = new HttpRequest(method, host, path, body);
+        HttpRequest httpRequest = new HttpRequest(method, path, new HttpHeaders(host, contentLength), body);
         httpRequest.validateRequest();
         return httpRequest;
     }

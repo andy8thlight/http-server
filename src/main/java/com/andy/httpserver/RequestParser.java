@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 class RequestParser {
 
     private static final String HOST_HEADER = "Host: ";
+    private static final String CONTENT_LENGTH_HEADER = "Content-Length: ";
 
     HttpRequest parse(InputStream inputStream) throws IOException, BadRequestException {
         RequestBuilder requestBuilder = buildRequest(inputStream);
@@ -38,10 +39,19 @@ class RequestParser {
         if (line.startsWith(HOST_HEADER)) {
             requestBuilder.setHost(extractHost(line));
         }
+
+        if (line.startsWith(CONTENT_LENGTH_HEADER)) {
+            requestBuilder.setContentLength(extractContentLength(line));
+
+        }
     }
 
     private String extractHost(String line) {
         return line.substring(HOST_HEADER.length());
+    }
+
+    private String extractContentLength(String line) {
+        return line.substring(CONTENT_LENGTH_HEADER.length());
     }
 
     private void processBody(BufferedReader bufferedReader, RequestBuilder requestBuilder) throws IOException {
