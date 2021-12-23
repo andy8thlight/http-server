@@ -20,20 +20,12 @@ public class ExampleHttpServer {
         HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor(routes);
         Server server = new Server(socketHandler, portNumber, httpRequestProcessor);
         ExampleHttpServer httpServer = new ExampleHttpServer(server);
-        httpServer.createServer();
-        httpServer.handle();
+        httpServer.start();
     }
 
     public void start() {
-        createServer();
-    }
-
-    void createServer() {
         server.createServer();
-    }
-
-    public void handle() {
-        for (;;) {
+        while (server.allowRequests()) {
             server.acceptRequest();
         }
     }

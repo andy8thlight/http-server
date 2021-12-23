@@ -38,4 +38,8 @@ public class Server {
             throw new HttpSocketCreationException("Failed to establish connection to client");
         }
     }
+
+    public boolean allowRequests() {
+        return true;
+    }
 }
