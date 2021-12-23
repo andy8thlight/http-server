@@ -6,13 +6,13 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+class Server {
     final private HttpRequestProcessor httpRequestProcessor;
     final private SocketHandler socketHandler;
     final private int portNumber;
-    ServerSocket serverSocket = null;
+    private ServerSocket serverSocket = null;
 
-    public Server(SocketHandler socketHandler, int portNumber, HttpRequestProcessor httpRequestProcessor) {
+    Server(SocketHandler socketHandler, int portNumber, HttpRequestProcessor httpRequestProcessor) {
         this.socketHandler = socketHandler;
         this.portNumber = portNumber;
         this.httpRequestProcessor = httpRequestProcessor;
@@ -39,7 +39,11 @@ public class Server {
         }
     }
 
-    public boolean allowRequests() {
+    boolean allowRequests() {
         return true;
+    }
+
+    public void stop() {
+
     }
 }

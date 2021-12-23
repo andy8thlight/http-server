@@ -50,4 +50,15 @@ class ExampleHttpServerShould {
         verify(server, times(2)).acceptRequest();
     }
 
+    @Test
+    void stop_server() {
+        when(server.allowRequests()).thenReturn(true, true, false);
+
+        httpServer.start();
+
+        verify(server).createServer();
+        verify(server, times(2)).acceptRequest();
+        verify(server).stop();
+    }
+
 }

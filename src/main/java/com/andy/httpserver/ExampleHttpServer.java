@@ -28,5 +28,6 @@ public class ExampleHttpServer {
         while (server.allowRequests()) {
             server.acceptRequest();
         }
+        server.stop();
     }
 }
