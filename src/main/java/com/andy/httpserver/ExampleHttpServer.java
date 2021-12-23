@@ -4,10 +4,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ExampleHttpServer {
-    final Server server;
+    private static ExecutorService executorService;
+    private Server server;
 
     public ExampleHttpServer(Server server) {
         this.server = server;
+    }
+
+    public ExampleHttpServer(int portNumber, Routes routes) {
+        SocketHandler socketHandler = new SocketHandler();
+        HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor(routes);
+        this.server = new Server(socketHandler, portNumber, httpRequestProcessor);
     }
 
     public static void main(String[] args) {
@@ -15,17 +22,14 @@ public class ExampleHttpServer {
         routes.addRoute("/simple_get", new Route(HttpMethod.GET, new GetAction("Howdee")));
         routes.addRoute("/simple_post", new Route(HttpMethod.POST, new GetAction("Howdee")));
         routes.addRoute("/redirect", new Route(HttpMethod.GET, new RedirectAction("http://localhost:4444/simple_get")));
-        startHttpServer(4444, routes);
+
+        ExampleHttpServer httpServer = new ExampleHttpServer(4444, routes);
+        httpServer.startHttpServer();
     }
 
-    public static void startHttpServer(int portNumber, Routes routes) {
-        SocketHandler socketHandler = new SocketHandler();
-        HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor(routes);
-        Server server = new Server(socketHandler, portNumber, httpRequestProcessor);
-        ExampleHttpServer httpServer = new ExampleHttpServer(server);
-
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(() -> httpServer.start());
+    public void startHttpServer() {
+        executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> start());
     }
 
     public void start() {
@@ -36,7 +40,11 @@ public class ExampleHttpServer {
         server.closeServerSocket();
     }
 
+    // TODO: I'm generally pretty unhappy with the shutdown stuff and need to find a better way to test this.
     public void shutdown() {
         server.disallowRequests();
+        if (executorService != null) {
+            executorService.shutdown();
+        }
     }
 }

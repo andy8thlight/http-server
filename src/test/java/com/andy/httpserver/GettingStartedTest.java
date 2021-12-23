@@ -13,17 +13,19 @@ import static org.hamcrest.Matchers.equalTo;
 public class GettingStartedTest {
 
     static final int PORT_NUMBER = 5555;
+    static ExampleHttpServer httpServer;
 
     @BeforeAll
     static void setup() {
         RestAssured.baseURI = "http://localhost:" + PORT_NUMBER;
-        ExampleHttpServer.startHttpServer(PORT_NUMBER, createTestRoutes());
+        httpServer = new ExampleHttpServer(PORT_NUMBER, createTestRoutes());
+        httpServer.startHttpServer();
     }
 
-//    @AfterAll
-//    static void tearDown() {
-//        executorService.shutdown();
-//    }
+    @AfterAll
+    static void tearDown() {
+        httpServer.shutdown();
+    }
 
     static private Routes createTestRoutes() {
         Routes routes = new Routes();
