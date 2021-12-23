@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 class Server {
+    private boolean allowRequests = false;
     final private HttpRequestProcessor httpRequestProcessor;
     final private SocketHandler socketHandler;
     final private int portNumber;
@@ -21,6 +22,7 @@ class Server {
     void createServer() {
         try {
             serverSocket = socketHandler.createServerSocket(portNumber);
+            allowRequests = true;
         } catch (IOException e) {
             throw new HttpSocketCreationException("Failed to create server socket");
         }
@@ -40,10 +42,15 @@ class Server {
     }
 
     boolean allowsRequests() {
-        return true;
+        return allowRequests;
     }
 
     public void stop() {
-
+        allowRequests = false;
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

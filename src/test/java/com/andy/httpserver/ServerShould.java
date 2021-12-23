@@ -12,8 +12,7 @@ import java.net.Socket;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -43,6 +42,7 @@ public class ServerShould {
     @Test
     void open_server_socket() throws IOException {
         verify(socketHandler).createServerSocket(PORT_NUMBER);
+        assertTrue(server.allowsRequests());
     }
 
     @Test
@@ -62,7 +62,6 @@ public class ServerShould {
 
     @Test
     void throw_error_if_cannot_create_client_socket() throws IOException {
-        server.createServer();
         when(serverSocket.accept()).thenThrow(IOException.class);
 
         HttpSocketCreationException exception = assertThrows(HttpSocketCreationException.class, () ->
@@ -85,5 +84,13 @@ public class ServerShould {
         server.acceptRequest();
 
         assertEquals("", helloStream.toString());
+    }
+
+    @Test
+    void should_shutdown_server_and_disallow_further_requests() throws IOException {
+        server.stop();
+
+        verify(serverSocket).close();
+        assertFalse(server.allowsRequests());
     }
 }
