@@ -37,7 +37,11 @@ class RequestBuilder {
     }
 
     HttpRequest build() throws BadRequestException {
-        HttpRequest httpRequest = new HttpRequest(method, path, new HttpHeaders(host, contentLength), body);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Host", host);
+        httpHeaders.add("Content-Length", contentLength);
+
+        HttpRequest httpRequest = new HttpRequest(method, path, httpHeaders, body);
         httpRequest.validateRequest();
         return httpRequest;
     }

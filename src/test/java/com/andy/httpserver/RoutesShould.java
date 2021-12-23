@@ -19,7 +19,8 @@ public class RoutesShould {
         routes.addRoute("/head_request", new Route(HttpMethod.HEAD, new GetAction("")));
         routes.addRoute("/redirect", new Route(HttpMethod.GET, new RedirectAction("http://0.0.0.0:5000/simple_get")));
         routes.addRoute("/redirect2", new Route(HttpMethod.GET, new RedirectAction("http://0.0.0.0:5000/somewhere_else")));
-        getHeaders = new HttpHeaders("localhost", null);
+        getHeaders = new HttpHeaders();
+        getHeaders.add("Host", "localhost");
     }
 
     @Test
@@ -48,12 +49,6 @@ public class RoutesShould {
     }
 
     @Test
-    void select_post_route_when_multiple_methods() {
-        HttpResponse httpResponse = routes.process(new HttpRequest(HttpMethod.POST, "/route1", getHeaders, ""));
-        assertEquals(HttpStatus.OK, httpResponse.getStatus());
-    }
-
-    @Test
     void respond_to_head_request() {
         HttpResponse httpResponse = routes.process(new HttpRequest(HttpMethod.HEAD, "/head_request", getHeaders, ""));
         assertEquals(HttpStatus.OK, httpResponse.getStatus());
@@ -74,11 +69,28 @@ public class RoutesShould {
     }
 
     @Test
+    void select_post_route_when_multiple_methods() {
+        HttpResponse httpResponse = routes.process(new HttpRequest(HttpMethod.POST, "/route1", getHeaders, ""));
+        assertEquals(HttpStatus.OK, httpResponse.getStatus());
+    }
+
+    @Test
     void ignore_request_body_when_no_content_length_header() {
-        HttpHeaders postHeaders = new HttpHeaders("localhost", null);
+        HttpHeaders postHeaders = new HttpHeaders();
+        postHeaders.add("Host", "localhost");
         HttpResponse httpResponse = routes.process(new HttpRequest(HttpMethod.POST, "/route1", postHeaders, "blah"));
         assertEquals(HttpStatus.OK, httpResponse.getStatus());
         assertEquals("", httpResponse.getBody());
+    }
+
+    @Test
+    void echo_request_body_when_content_length_header_exists() {
+        HttpHeaders postHeaders = new HttpHeaders();
+        postHeaders.add("Host", "localhost");
+        postHeaders.add("Content-Length", "4");
+        HttpResponse httpResponse = routes.process(new HttpRequest(HttpMethod.POST, "/route1", postHeaders, "blah"));
+        assertEquals(HttpStatus.OK, httpResponse.getStatus());
+        assertEquals("blah", httpResponse.getBody());
     }
 
 }
