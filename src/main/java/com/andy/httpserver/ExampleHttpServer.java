@@ -1,5 +1,8 @@
 package com.andy.httpserver;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class ExampleHttpServer {
     final Server server;
 
@@ -20,12 +23,14 @@ public class ExampleHttpServer {
         HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor(routes);
         Server server = new Server(socketHandler, portNumber, httpRequestProcessor);
         ExampleHttpServer httpServer = new ExampleHttpServer(server);
-        httpServer.start();
+
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> httpServer.start());
     }
 
     public void start() {
         server.createServer();
-        while (server.allowRequests()) {
+        while (server.allowsRequests()) {
             server.acceptRequest();
         }
         server.stop();
