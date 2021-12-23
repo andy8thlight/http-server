@@ -1,46 +1,26 @@
 package com.andy.httpserver;
 
-import java.io.*;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 public class ExampleHttpServer {
-    private final HttpRequestProcessor httpRequestProcessor;
-    private final SocketHandler socketHandler;
-    private final int portNumber;
-    ServerSocket serverSocket = null;
+    final Server server;
 
-    public ExampleHttpServer(SocketHandler socketHandler, int portNumber, HttpRequestProcessor httpRequestProcessor) {
-        this.socketHandler = socketHandler;
-        this.portNumber = portNumber;
-        this.httpRequestProcessor = httpRequestProcessor;
+    public ExampleHttpServer(Server server) {
+        this.server = server;
     }
 
     void createServer() {
-        try {
-            serverSocket = socketHandler.createServerSocket(portNumber);
-        } catch (IOException e) {
-            throw new HttpSocketCreationException("Failed to create server socket");
-        }
+        server.createServer();
     }
 
     public void handle() {
         for (;;) {
-            acceptRequest(serverSocket);
+            server.acceptRequest(server.serverSocket);
         }
     }
 
     void acceptRequest(ServerSocket serverSocket) {
-        try (
-                Socket clientSocket = serverSocket.accept();
-                OutputStream outputStream = clientSocket.getOutputStream();
-                InputStream inputStream = clientSocket.getInputStream()
-        ) {
-            httpRequestProcessor.processRequests(inputStream, outputStream);
-        } catch (IOException | BadRequestException e) {
-            System.out.println("Fatal error" + e);
-            throw new HttpSocketCreationException("Failed to establish connection to client");
-        }
+        server.acceptRequest(serverSocket);
     }
 
     public static void main(String[] args) {
@@ -54,8 +34,9 @@ public class ExampleHttpServer {
     public static void startHttpServer(int portNumber, Routes routes) {
         SocketHandler socketHandler = new SocketHandler();
         HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor(routes);
-        ExampleHttpServer server = new ExampleHttpServer(socketHandler, portNumber, httpRequestProcessor);
-        server.createServer();
-        server.handle();
+        Server server = new Server(socketHandler, portNumber, httpRequestProcessor);
+        ExampleHttpServer httpServer = new ExampleHttpServer(server);
+        httpServer.createServer();
+        httpServer.handle();
     }
 }
