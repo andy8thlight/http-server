@@ -37,11 +37,11 @@ public class ServerShould {
         server = new Server(socketHandler, PORT_NUMBER, httpRequestProcessor);
         lenient().when(socketHandler.createServerSocket(PORT_NUMBER)).thenReturn(this.serverSocket);
         lenient().when(this.serverSocket.accept()).thenReturn(clientSocket);
+        server.createServer();
     }
 
     @Test
     void open_server_socket() throws IOException {
-        server.createServer();
         verify(socketHandler).createServerSocket(PORT_NUMBER);
     }
 
@@ -56,23 +56,24 @@ public class ServerShould {
 
     @Test
     void open_socket_to_client_with_server_socket() throws IOException {
-        server.acceptRequest(serverSocket);
+        server.acceptRequest();
         verify(serverSocket).accept();
     }
 
     @Test
     void throw_error_if_cannot_create_client_socket() throws IOException {
+        server.createServer();
         when(serverSocket.accept()).thenThrow(IOException.class);
 
         HttpSocketCreationException exception = assertThrows(HttpSocketCreationException.class, () ->
-                server.acceptRequest(serverSocket));
+                server.acceptRequest());
 
         assertEquals("Failed to establish connection to client", exception.getMessage());
     }
 
     @Test
     void get_output_stream() throws IOException {
-        server.acceptRequest(serverSocket);
+        server.acceptRequest();
         verify(clientSocket).getOutputStream();
     }
 
@@ -81,7 +82,7 @@ public class ServerShould {
         OutputStream helloStream = new ByteArrayOutputStream();
         when(clientSocket.getOutputStream()).thenReturn(helloStream);
 
-        server.acceptRequest(serverSocket);
+        server.acceptRequest();
 
         assertEquals("", helloStream.toString());
     }

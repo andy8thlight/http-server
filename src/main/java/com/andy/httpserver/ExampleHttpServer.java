@@ -1,26 +1,10 @@
 package com.andy.httpserver;
 
-import java.net.ServerSocket;
-
 public class ExampleHttpServer {
     final Server server;
 
     public ExampleHttpServer(Server server) {
         this.server = server;
-    }
-
-    void createServer() {
-        server.createServer();
-    }
-
-    public void handle() {
-        for (;;) {
-            server.acceptRequest(server.serverSocket);
-        }
-    }
-
-    void acceptRequest(ServerSocket serverSocket) {
-        server.acceptRequest(serverSocket);
     }
 
     public static void main(String[] args) {
@@ -38,5 +22,19 @@ public class ExampleHttpServer {
         ExampleHttpServer httpServer = new ExampleHttpServer(server);
         httpServer.createServer();
         httpServer.handle();
+    }
+
+    public void start() {
+        createServer();
+    }
+
+    void createServer() {
+        server.createServer();
+    }
+
+    public void handle() {
+        for (;;) {
+            server.acceptRequest();
+        }
     }
 }

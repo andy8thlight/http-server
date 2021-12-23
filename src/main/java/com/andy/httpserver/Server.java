@@ -26,7 +26,7 @@ public class Server {
         }
     }
 
-    void acceptRequest(ServerSocket serverSocket) {
+    void acceptRequest() {
         try (
                 Socket clientSocket = serverSocket.accept();
                 OutputStream outputStream = clientSocket.getOutputStream();
