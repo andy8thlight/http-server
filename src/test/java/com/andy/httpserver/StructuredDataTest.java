@@ -1,5 +1,6 @@
 package com.andy.httpserver;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -17,5 +18,15 @@ public class StructuredDataTest {
             statusCode(200).
             body(equalTo("text response")).
             header("Content-Type", equalTo("text/plain"));
+    }
+
+    @Test
+    void should_get_a_html_response() {
+        given().
+            get("/html_response").
+        then().
+            statusCode(200).
+            body(equalTo("<html><body><p>HTML Response</p></body></html>")).
+            header("Content-Type", equalTo("text/html"));
     }
 }

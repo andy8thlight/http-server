@@ -1,15 +1,23 @@
 package com.andy.httpserver;
 
 public class PostAction implements Action {
+    private Content content;
+
+    public PostAction(Content content) {
+        this.content = content;
+    }
+
     @Override
     public HttpResponse perform(HttpRequest request) {
-        HttpResponse response = new HttpResponse(HttpStatus.OK, "");
+        HttpResponse httpResponse = new HttpResponse(HttpStatus.OK, "");
+        ContentType contentType = content.getContentType();
+        httpResponse.addHeader("Content-Type", contentType.toString());
 
         Integer contentLength = request.getContentLengthHeader();
         if (contentLength > 0) {
             String body = request.getBody();
-            response.setBody(body);
+            httpResponse.setBody(body);
         }
-        return response;
+        return httpResponse;
     }
 }

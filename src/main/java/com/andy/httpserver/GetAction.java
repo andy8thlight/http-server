@@ -1,13 +1,16 @@
 package com.andy.httpserver;
 
 public class GetAction implements Action {
-    private final String body;
+    private Content content;
 
     public GetAction(Content content) {
-        this.body = content.getBody();
+        this.content = content;
     }
 
     public HttpResponse perform(HttpRequest request) {
-        return new HttpResponse(HttpStatus.OK, body);
+        HttpResponse httpResponse = new HttpResponse(HttpStatus.OK, content.getBody());
+        ContentType contentType = content.getContentType();
+        httpResponse.addHeader("Content-Type", contentType.toString());
+        return httpResponse;
     }
 }
