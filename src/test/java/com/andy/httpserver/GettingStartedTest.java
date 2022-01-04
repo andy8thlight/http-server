@@ -29,15 +29,15 @@ public class GettingStartedTest {
 
     static private Routes createTestRoutes() {
         Routes routes = new Routes();
-        routes.addRoute("/simple_get_with_body", new Route(GET, new GetAction("Hello world\n")));
-        routes.addRoute("/simple_get", new Route(GET, new GetAction("")));
-        routes.addRoute("/simple_get_2", new Route(GET, new GetAction("")));
+        routes.addRoute("/simple_get_with_body", new Route(GET, new GetAction(new Content("Hello world\n"))));
+        routes.addRoute("/simple_get", new Route(GET, new GetAction(new Content(""))));
+        routes.addRoute("/simple_get_2", new Route(GET, new GetAction(new Content(""))));
         routes.addRoute("/echo_body", new Route(POST, new PostAction()));
-        routes.addRoute("/head_request", new Route(HEAD, new GetAction("")));
-        routes.addRoute("/method_options", new Route(GET, new GetAction("")));
-        routes.addRoute("/method_options2", new Route(GET, new GetAction("")));
-        routes.addRoute("/method_options2", new Route(PUT, new GetAction("")));
-        routes.addRoute("/method_options2", new Route(POST, new GetAction("")));
+        routes.addRoute("/head_request", new Route(HEAD, new GetAction(new Content(""))));
+        routes.addRoute("/method_options", new Route(GET, new GetAction(new Content(""))));
+        routes.addRoute("/method_options2", new Route(GET, new GetAction(new Content(""))));
+        routes.addRoute("/method_options2", new Route(PUT, new GetAction(new Content(""))));
+        routes.addRoute("/method_options2", new Route(POST, new GetAction(new Content(""))));
         routes.addRoute("/redirect", new Route(GET, new RedirectAction("http://0.0.0.0:5000/simple_get")));
         return routes;
     }

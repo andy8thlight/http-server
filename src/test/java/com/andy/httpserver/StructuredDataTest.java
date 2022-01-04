@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.andy.httpserver.HttpMethod.*;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 
 public class StructuredDataTest {
@@ -29,7 +28,7 @@ public class StructuredDataTest {
 
     static private Routes createTestRoutes() {
         Routes routes = new Routes();
-        routes.addRoute("/text_response", new Route(GET, new GetAction("text response")));
+        routes.addRoute("/text_response", new Route(GET, new GetAction(new Content("text response"))));
         return routes;
     }
 
