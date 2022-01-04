@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class StructuredDataTest {
 
     @Test
-    void should_get_200() {
+    void should_get_a_text_response() {
         given().
             get("/text_response").
         then().
