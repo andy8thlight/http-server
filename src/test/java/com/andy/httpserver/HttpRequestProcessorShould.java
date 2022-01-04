@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class HttpRequestProcessorShould {
 
     public static final String CRLF = "\r\n";
+    private static final String TEXT_PLAIN = "Content-Type: text/plain";
     private HttpRequestProcessor httpRequestProcessor;
 
     @BeforeEach
@@ -35,14 +36,14 @@ class HttpRequestProcessorShould {
     void return_200_ok() throws IOException, BadRequestException {
         String requestData = validGetRequest("/");
         OutputStream outputStream = processRequests(requestData);
-        assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF, outputStream.toString());
+        assertEquals("HTTP/1.1 200 OK" + CRLF + TEXT_PLAIN + CRLF + CRLF, outputStream.toString());
     }
 
     @Test
     void return_200_ok_with_body() throws IOException, BadRequestException {
         String requestData = validGetRequest("/simple_get_with_body");
         OutputStream outputStream = processRequests(requestData);
-        assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF + "Hello world\n", outputStream.toString());
+        assertEquals("HTTP/1.1 200 OK" + CRLF + TEXT_PLAIN + CRLF + CRLF + "Hello world\n", outputStream.toString());
     }
 
     @Test
@@ -87,14 +88,14 @@ class HttpRequestProcessorShould {
     void handle_post_request() throws BadRequestException, IOException {
         String requestData = validPostRequest("/echo", "echo me back");
         OutputStream outputStream = processRequests(requestData);
-        assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF + "echo me back", outputStream.toString());
+        assertEquals("HTTP/1.1 200 OK" + CRLF + TEXT_PLAIN + CRLF + CRLF + "echo me back", outputStream.toString());
     }
 
     @Test
     void handle_post_request_with_mutliple_lines() throws BadRequestException, IOException {
         String requestData = validPostRequest("/echo", "echo me back\npretty please\n");
         OutputStream outputStream = processRequests(requestData);
-        assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF + "echo me back\npretty please\n", outputStream.toString());
+        assertEquals("HTTP/1.1 200 OK" + CRLF + TEXT_PLAIN + CRLF + CRLF + "echo me back\npretty please\n", outputStream.toString());
     }
 
     @Test
@@ -127,6 +128,7 @@ class HttpRequestProcessorShould {
     private String validPostRequest(final String path, String body) {
         return "POST " + path + " HTTP/1.1\nHost: localhost\nContent-Length: " + body.length() + "\n\n" + body;
     }
+
     private OutputStream processRequests(String requestData) throws IOException, BadRequestException {
         ByteArrayInputStream inputStream = StreamHelper.createInputStream(requestData);
         OutputStream outputStream = new ByteArrayOutputStream();

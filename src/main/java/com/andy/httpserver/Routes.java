@@ -34,6 +34,8 @@ class Routes {
 
         Route route = methods.findRoute(request);
         Action action = route.getAction();
-        return action.perform(request);
+        HttpResponse response = action.perform(request);
+        response.addHeader("Content-Type", "text/plain");
+        return response;
     }
 }

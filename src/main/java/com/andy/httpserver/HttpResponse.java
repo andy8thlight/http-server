@@ -27,12 +27,12 @@ public class HttpResponse {
     public String toString() {
         return HTTP_1_1 + " " + (httpStatus.getCode() + " " + httpStatus.getDescription())
                 + getHeaders()
-                + CRLF + CRLF
+                + CRLF
                 + getBody();
     }
 
     private String getHeaders() {
-        return headers.keySet().stream().reduce("", (acc, element) -> CRLF + acc + element + ": " + headers.get(element));
+        return headers.keySet().stream().reduce(CRLF, (acc, element) -> acc + element + ": " + headers.get(element) + CRLF);
     }
 
     public void addHeader(String key, String value) {
