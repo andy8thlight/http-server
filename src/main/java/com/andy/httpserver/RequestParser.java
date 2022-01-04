@@ -1,14 +1,17 @@
 package com.andy.httpserver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 class RequestParser {
-
     private static final String HOST_HEADER = "Host: ";
     private static final String CONTENT_LENGTH_HEADER = "Content-Length: ";
+    private static final Logger logger = LoggerFactory.getLogger(RequestParser.class);
 
     HttpRequest parse(InputStream inputStream) throws IOException, BadRequestException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -22,9 +25,15 @@ class RequestParser {
 
     private void processHeaders(BufferedReader bufferedReader, RequestBuilder requestBuilder) throws IOException {
         String line;
-        while (!(line = bufferedReader.readLine()).isBlank()) {
+        while ((line = readLine(bufferedReader)) != null) {
+            logger.info("Header : " + line);
             processLine(line, requestBuilder);
         }
+    }
+
+    private String readLine(BufferedReader bufferedReader) throws IOException {
+        String line = bufferedReader.readLine();
+        return (line == null || line.isBlank()) ? null : line;
     }
 
     private void processLine(String line, RequestBuilder requestBuilder) {
@@ -52,8 +61,7 @@ class RequestParser {
 
             char[] body = new char[lengthHeader];
             bufferedReader.read(body, 0, lengthHeader);
-            String s = new String(body);
-            return s;
+            return new String(body);
         }
         return null;
     }

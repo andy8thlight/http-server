@@ -1,5 +1,8 @@
 package com.andy.httpserver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -12,6 +15,7 @@ class Server {
     final private SocketHandler socketHandler;
     final private int portNumber;
     private ServerSocket serverSocket = null;
+    private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
     Server(SocketHandler socketHandler, int portNumber, HttpRequestProcessor httpRequestProcessor) {
         this.socketHandler = socketHandler;
@@ -37,7 +41,7 @@ class Server {
         ) {
             httpRequestProcessor.processRequests(inputStream, outputStream);
         } catch (IOException | BadRequestException e) {
-            System.out.println("Fatal error" + e);
+            logger.error("Failed to establish connection to client", e);
             throw new HttpSocketCreationException("Failed to establish connection to client");
         }
     }

@@ -1,11 +1,16 @@
 package com.andy.httpserver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class HttpRequest {
     private final String host;
     private final String path;
     private final HttpMethod method;
     private HttpHeaders httpHeaders;
     private String body;
+
+    private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
     public HttpRequest(HttpMethod method, String path, HttpHeaders httpHeaders, String body) {
         this.host = httpHeaders.getHost();
@@ -32,9 +37,10 @@ public class HttpRequest {
     }
 
     void validateRequest() throws BadRequestException {
-        if (getMethod() == null || (getHost() == null || getHost().isBlank())) {
-            throw new BadRequestException();
-        }
+        logger.debug("Method = " + getMethod() + ", host = " + getHost());
+//        if (getMethod() == null || (getHost() == null || getHost().isBlank())) {
+//            throw new BadRequestException();
+//        }
     }
 
     public Integer getContentLengthHeader() {
