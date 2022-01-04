@@ -91,6 +91,13 @@ class HttpRequestProcessorShould {
     }
 
     @Test
+    void handle_post_request_with_mutliple_lines() throws BadRequestException, IOException {
+        String requestData = validPostRequest("/echo", "echo me back\npretty please\n");
+        OutputStream outputStream = processRequests(requestData);
+        assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF + "echo me back\npretty please\n", outputStream.toString());
+    }
+
+    @Test
     void return_options() throws BadRequestException, IOException {
         String requestData = validOptionsRequest("/");
         OutputStream outputStream = processRequests(requestData);

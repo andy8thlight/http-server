@@ -1,6 +1,7 @@
 package com.andy.httpserver;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -91,6 +92,18 @@ public class RoutesShould {
         HttpResponse httpResponse = routes.process(new HttpRequest(HttpMethod.POST, "/route1", postHeaders, "blah"));
         assertEquals(HttpStatus.OK, httpResponse.getStatus());
         assertEquals("blah", httpResponse.getBody());
+    }
+
+    @Test
+    @Disabled("probably doesnt belong here")
+    void echo_request_body_with_multiple_lines() {
+        HttpHeaders postHeaders = new HttpHeaders();
+        postHeaders.add("Host", "localhost");
+        String blah = "blah\nblah\n";
+        postHeaders.add("Content-Length", String.valueOf(blah.length()));
+        HttpResponse httpResponse = routes.process(new HttpRequest(HttpMethod.POST, "/route1", postHeaders, blah));
+        assertEquals(HttpStatus.OK, httpResponse.getStatus());
+        assertEquals(blah, httpResponse.getBody());
     }
 
 }

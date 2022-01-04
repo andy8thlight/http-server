@@ -11,16 +11,13 @@ class RequestParser {
     private static final String CONTENT_LENGTH_HEADER = "Content-Length: ";
 
     HttpRequest parse(InputStream inputStream) throws IOException, BadRequestException {
-        RequestBuilder requestBuilder = buildRequest(inputStream);
-        return requestBuilder.build();
-    }
-
-    private RequestBuilder buildRequest(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         RequestBuilder requestBuilder = new RequestBuilder();
         processHeaders(bufferedReader, requestBuilder);
-        processBody(bufferedReader, requestBuilder);
-        return requestBuilder;
+        HttpRequest httpRequest = requestBuilder.build();
+        String body = processBody(bufferedReader, httpRequest);
+        httpRequest.setBody(body);
+        return httpRequest;
     }
 
     private void processHeaders(BufferedReader bufferedReader, RequestBuilder requestBuilder) throws IOException {
@@ -49,9 +46,15 @@ class RequestParser {
         return line.substring(hostHeader.length());
     }
 
-    private void processBody(BufferedReader bufferedReader, RequestBuilder requestBuilder) throws IOException {
-        if (requestBuilder.getMethod() == HttpMethod.POST) {
-            requestBuilder.setBody(bufferedReader.readLine());
+    private String processBody(BufferedReader bufferedReader, HttpRequest httpRequest) throws IOException {
+        if (httpRequest.getMethod() == HttpMethod.POST) {
+            Integer lengthHeader = httpRequest.getContentLengthHeader();
+
+            char[] body = new char[lengthHeader];
+            bufferedReader.read(body, 0, lengthHeader);
+            String s = new String(body);
+            return s;
         }
+        return null;
     }
 }

@@ -5,7 +5,7 @@ public class HttpRequest {
     private final String path;
     private final HttpMethod method;
     private HttpHeaders httpHeaders;
-    private final String body;
+    private String body;
 
     public HttpRequest(HttpMethod method, String path, HttpHeaders httpHeaders, String body) {
         this.host = httpHeaders.getHost();
@@ -38,8 +38,10 @@ public class HttpRequest {
     }
 
     public Integer getContentLengthHeader() {
+        return httpHeaders.getContentLength();
+    }
 
-        Integer contentLength = httpHeaders.getContentLength();
-        return contentLength;
+    public void setBody(String body) {
+        this.body = body;
     }
 }

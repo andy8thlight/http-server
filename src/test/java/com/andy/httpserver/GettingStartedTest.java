@@ -99,12 +99,12 @@ public class GettingStartedTest {
     @Test
     void posting_echos_the_body() {
         given().
-            body("some text\n").
+            body("some text\nand more\nfor good measure").
         when().
             post("/echo_body").
         then().
             statusCode(200).
-            body(equalTo("some text"));
+            body(equalTo("some text\nand more\nfor good measure"));
     }
 
     @Test
