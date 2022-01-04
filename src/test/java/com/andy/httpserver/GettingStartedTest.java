@@ -1,47 +1,14 @@
 package com.andy.httpserver;
 
-import io.restassured.RestAssured;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.andy.httpserver.HttpMethod.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 
+@ExtendWith(HttpServerSetupExtension.class)
 public class GettingStartedTest {
-
-    static final int PORT_NUMBER = 5555;
-    static ExampleHttpServer httpServer;
-
-    @BeforeAll
-    static void setup() {
-        RestAssured.baseURI = "http://localhost:" + PORT_NUMBER;
-        httpServer = new ExampleHttpServer(PORT_NUMBER, createTestRoutes());
-        httpServer.startHttpServer();
-    }
-
-    @AfterAll
-    static void tearDown() {
-        httpServer.shutdown();
-    }
-
-    static private Routes createTestRoutes() {
-        Routes routes = new Routes();
-        routes.addRoute("/simple_get_with_body", new Route(GET, new GetAction(new Content("Hello world\n"))));
-        routes.addRoute("/simple_get", new Route(GET, new GetAction(new Content(""))));
-        routes.addRoute("/simple_get_2", new Route(GET, new GetAction(new Content(""))));
-        routes.addRoute("/echo_body", new Route(POST, new PostAction()));
-        routes.addRoute("/head_request", new Route(HEAD, new GetAction(new Content(""))));
-        routes.addRoute("/method_options", new Route(GET, new GetAction(new Content(""))));
-        routes.addRoute("/method_options2", new Route(GET, new GetAction(new Content(""))));
-        routes.addRoute("/method_options2", new Route(PUT, new GetAction(new Content(""))));
-        routes.addRoute("/method_options2", new Route(POST, new GetAction(new Content(""))));
-        routes.addRoute("/redirect", new Route(GET, new RedirectAction("http://0.0.0.0:5000/simple_get")));
-        return routes;
-    }
-
 
     @Test
     void should_get_200() {
