@@ -39,4 +39,14 @@ public class StructuredDataTest {
             body(equalTo("{ key1: 'value1', key2: 'value2' }")).
             header("Content-Type", equalTo("application/json"));
     }
+
+    @Test
+    void should_get_a_xml_response() {
+        given().
+            get("/xml_response").
+        then().
+            statusCode(200).
+            body(equalTo("<note><body>XML Response</body></note>")).
+            header("Content-Type", equalTo("text/xml"));
+    }
 }
