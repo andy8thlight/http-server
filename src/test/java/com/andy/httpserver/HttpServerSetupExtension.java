@@ -35,6 +35,7 @@ public class HttpServerSetupExtension implements BeforeAllCallback, ExtensionCon
         routes.addRoute("/redirect", new Route(GET, new RedirectAction("http://0.0.0.0:5000/simple_get")));
         routes.addRoute("/text_response", new Route(GET, new GetAction(new Content("text response", ContentType.TEXT_PLAIN))));
         routes.addRoute("/html_response", new Route(GET, new GetAction(new Content("<html><body><p>HTML Response</p></body></html>", ContentType.TEXT_HTML))));
+        routes.addRoute("/json_response", new Route(GET, new GetAction(new Content("{ key1: 'value1', key2: 'value2' }", ContentType.JSON))));
 
         return routes;
     }
