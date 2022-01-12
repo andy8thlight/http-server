@@ -20,7 +20,7 @@ public class GettingStartedTest {
     }
 
     @Test
-    void should_get_anoter_200_when_a_different_request() {
+    void should_get_another_200_when_a_different_request() {
         given().
             get("/simple_get_2").
         then().

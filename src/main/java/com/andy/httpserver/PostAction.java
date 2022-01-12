@@ -1,7 +1,7 @@
 package com.andy.httpserver;
 
 public class PostAction implements Action {
-    private Content content;
+    private final Content content;
 
     public PostAction(Content content) {
         this.content = content;
@@ -9,7 +9,7 @@ public class PostAction implements Action {
 
     @Override
     public HttpResponse perform(HttpRequest request) {
-        HttpResponse httpResponse = new HttpResponse(HttpStatus.OK, "");
+        HttpResponse httpResponse = new HttpResponse(HttpStatus.OK, content);
         ContentType contentType = content.getContentType();
         httpResponse.addHeader("Content-Type", contentType.toString());
 

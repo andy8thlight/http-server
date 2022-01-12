@@ -6,13 +6,15 @@ import java.util.Map;
 public class HttpResponse {
     private String body;
     private final HttpStatus httpStatus;
+    private final Content content;
     public static final String CRLF = "\r\n";
     public static final String HTTP_1_1 = "HTTP/1.1";
     private final Map<String, String> headers = new HashMap<>();
 
-    public HttpResponse(HttpStatus httpStatus, String body) {
-        this.body = body;
+    public HttpResponse(HttpStatus httpStatus, Content content) {
+        this.body = content.getBody();
         this.httpStatus = httpStatus;
+        this.content = content;
     }
 
     public String getBody() {

@@ -3,9 +3,11 @@ package com.andy.httpserver;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.andy.httpserver.HttpMethod.GET;
+
 public class ExampleHttpServer {
     private static ExecutorService executorService;
-    private Server server;
+    private final Server server;
 
     public ExampleHttpServer(Server server) {
         this.server = server;
@@ -22,6 +24,7 @@ public class ExampleHttpServer {
         routes.addRoute("/simple_get", new Route(HttpMethod.GET, new GetAction(new Content("Howdee", ContentType.TEXT_PLAIN))));
         routes.addRoute("/simple_post", new Route(HttpMethod.POST, new GetAction(new Content("Howdee", ContentType.TEXT_PLAIN))));
         routes.addRoute("/redirect", new Route(HttpMethod.GET, new RedirectAction("http://localhost:4444/simple_get")));
+        routes.addRoute("/html_response", new Route(GET, new GetAction(new Content("<html><body><p><b>HTML</b> Response</p></body></html>", ContentType.TEXT_HTML))));
 
         ExampleHttpServer httpServer = new ExampleHttpServer(4444, routes);
         httpServer.startHttpServer();
