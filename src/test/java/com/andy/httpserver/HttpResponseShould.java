@@ -9,20 +9,20 @@ class HttpResponseShould {
 
     @Test
     void convert_body_correctly() {
-        HttpResponse response = new HttpResponse(HttpStatus.OK, new Content("blah", ContentType.TEXT_PLAIN));
+        HttpResponse response = new HttpResponse(HttpStatus.OK, new BasicContent("blah", ContentType.TEXT_PLAIN));
         assertEquals("HTTP/1.1 200 OK" + CRLF + CRLF + "blah", response.toString());
     }
 
     @Test
     void convert_header_correctly() {
-        HttpResponse response = new HttpResponse(HttpStatus.OK, new Content("blah", ContentType.TEXT_PLAIN));
+        HttpResponse response = new HttpResponse(HttpStatus.OK, new BasicContent("blah", ContentType.TEXT_PLAIN));
         response.addHeader("Location", "localhost");
         assertEquals("HTTP/1.1 200 OK" + CRLF + "Location: localhost" + CRLF + CRLF + "blah", response.toString());
     }
 
     @Test
     void convert_multiple_headers_correctly() {
-        HttpResponse response = new HttpResponse(HttpStatus.OK, new Content("blah", ContentType.TEXT_PLAIN));
+        HttpResponse response = new HttpResponse(HttpStatus.OK, new BasicContent("blah", ContentType.TEXT_PLAIN));
         response.addHeader("Content-Type", "text/html");
         response.addHeader("Content-Length", "4");
         assertEquals("HTTP/1.1 200 OK" + CRLF +
