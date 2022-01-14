@@ -9,7 +9,7 @@ public class FileContent implements Content {
 
     @Override
     public String getBody() {
-        return null;
+        return "<html><body><h1>Hello</h1></body></html>";
     }
 
     @Override
