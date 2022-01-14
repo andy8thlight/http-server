@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.net.URL;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RoutesShould {
@@ -14,17 +16,24 @@ public class RoutesShould {
 
     @BeforeEach
     void setup() {
+        String contentRoot = getContentRoot();
+
         routes = new Routes();
         routes.addRoute("/route1", new Route(HttpMethod.GET, new GetAction(new BasicContent("body1", ContentType.TEXT_PLAIN))));
         routes.addRoute("/route1", new Route(HttpMethod.POST, new PostAction(new BasicContent(ContentType.TEXT_PLAIN))));
         routes.addRoute("/head_request", new Route(HttpMethod.HEAD, new GetAction(new BasicContent("", ContentType.TEXT_PLAIN))));
         routes.addRoute("/redirect", new Route(HttpMethod.GET, new RedirectAction("http://0.0.0.0:5000/simple_get")));
         routes.addRoute("/redirect2", new Route(HttpMethod.GET, new RedirectAction("http://0.0.0.0:5000/somewhere_else")));
-        routes.addRoute("/file1.html", new Route(HttpMethod.GET, new GetAction(new FileContent("file1.html", ContentType.TEXT_HTML))));
-        routes.addRoute("/text_file.txt", new Route(HttpMethod.GET, new GetAction(new FileContent("text_file.txt", ContentType.TEXT_PLAIN))));
+        routes.addRoute("/file1.html", new Route(HttpMethod.GET, new GetAction(new FileContent("file1.html", ContentType.TEXT_HTML, contentRoot))));
+        routes.addRoute("/text_file.txt", new Route(HttpMethod.GET, new GetAction(new FileContent("text_file.txt", ContentType.TEXT_PLAIN, contentRoot))));
 
         getHeaders = new HttpHeaders();
         getHeaders.add("Host", "localhost");
+    }
+
+    private String getContentRoot() {
+        URL resource = getClass().getResource("/content/");
+        return resource.getPath();
     }
 
     @Test

@@ -4,6 +4,8 @@ import io.restassured.RestAssured;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
+import java.net.URL;
+
 import static com.andy.httpserver.HttpMethod.*;
 
 public class HttpServerSetupExtension implements BeforeAllCallback, ExtensionContext.Store.CloseableResource {
@@ -37,9 +39,14 @@ public class HttpServerSetupExtension implements BeforeAllCallback, ExtensionCon
         routes.addRoute("/html_response", new Route(GET, new GetAction(new BasicContent("<html><body><p>HTML Response</p></body></html>", ContentType.TEXT_HTML))));
         routes.addRoute("/json_response", new Route(GET, new GetAction(new BasicContent("{ key1: 'value1', key2: 'value2' }", ContentType.JSON))));
         routes.addRoute("/xml_response", new Route(GET, new GetAction(new BasicContent("<note><body>XML Response</body></note>", ContentType.XML))));
-        routes.addRoute("/health-check.html", new Route(GET, new GetAction(new FileContent("text_file.txt", ContentType.TEXT_HTML))));
+        routes.addRoute("/health-check.html", new Route(GET, new GetAction(new FileContent("text_file.txt", ContentType.TEXT_HTML, getContentRoot()))));
 
         return routes;
+    }
+
+    private static String getContentRoot() {
+        URL resource = HttpServerSetupExtension.class.getResource("/content/");
+        return resource.getPath();
     }
 
     @Override
