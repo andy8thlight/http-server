@@ -4,6 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RoutesShould {
@@ -20,8 +28,8 @@ public class RoutesShould {
         routes.addRoute("/head_request", new Route(HttpMethod.HEAD, new GetAction(new BasicContent("", ContentType.TEXT_PLAIN))));
         routes.addRoute("/redirect", new Route(HttpMethod.GET, new RedirectAction("http://0.0.0.0:5000/simple_get")));
         routes.addRoute("/redirect2", new Route(HttpMethod.GET, new RedirectAction("http://0.0.0.0:5000/somewhere_else")));
-        routes.addRoute("/file1.html", new Route(HttpMethod.GET, new GetAction(new FileContent(ContentType.TEXT_HTML))));
-        routes.addRoute("/text_file.txt", new Route(HttpMethod.GET, new GetAction(new FileContent(ContentType.TEXT_PLAIN))));
+        routes.addRoute("/file1.html", new Route(HttpMethod.GET, new GetAction(new FileContent("file1.html", ContentType.TEXT_HTML))));
+        routes.addRoute("/text_file.txt", new Route(HttpMethod.GET, new GetAction(new FileContent("text_file.txt", ContentType.TEXT_PLAIN))));
 
         getHeaders = new HttpHeaders();
         getHeaders.add("Host", "localhost");
@@ -118,15 +126,14 @@ public class RoutesShould {
         HttpResponse httpResponse = routes.process(new HttpRequest(HttpMethod.GET, "/file1.html", getHeaders));
         assertEquals(HttpStatus.OK, httpResponse.getStatus());
         assertEquals(ContentType.TEXT_HTML, httpResponse.getContentType());
-        assertEquals("<html><body><h1>Hello</h1></body></html>", httpResponse.getBody());
+        assertEquals("<html><body><h1>Hello</h1></body></html>\n", httpResponse.getBody());
     }
 
     @Test
-    @Disabled
     void return_text_file() {
         HttpResponse httpResponse = routes.process(new HttpRequest(HttpMethod.GET, "/text_file.txt", getHeaders));
         assertEquals(HttpStatus.OK, httpResponse.getStatus());
+        assertEquals(ContentType.TEXT_PLAIN, httpResponse.getContentType());
         assertEquals("Just testing", httpResponse.getBody());
     }
-
 }

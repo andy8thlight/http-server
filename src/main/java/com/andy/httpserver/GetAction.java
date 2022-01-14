@@ -9,6 +9,14 @@ public class GetAction implements Action {
 
     public HttpResponse perform(HttpRequest request) {
         HttpResponse httpResponse = new HttpResponse(HttpStatus.OK, content);
+
+
+        /*
+        content.getBody();
+        httpResponse.setBody("");
+        */
+
+
         ContentType contentType = content.getContentType();
         httpResponse.addHeader("Content-Type", contentType.toString());
         return httpResponse;
