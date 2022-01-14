@@ -12,7 +12,7 @@ class Routes {
     HttpResponse process(HttpRequest request) {
         Methods methods = routes.get(request.getPath());
 
-        Content content = new Content("", ContentType.TEXT_PLAIN);
+        BasicContent content = new BasicContent("", ContentType.TEXT_PLAIN);
         if (methods == null) {
             return new HttpResponse(HttpStatus.NOT_FOUND, content);
         }

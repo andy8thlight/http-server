@@ -8,7 +8,7 @@ public class RedirectAction implements Action {
     }
 
     public HttpResponse perform(HttpRequest request) {
-        Content content = new Content("", ContentType.TEXT_PLAIN);
+        BasicContent content = new BasicContent("", ContentType.TEXT_PLAIN);
         HttpResponse httpResponse = new HttpResponse(HttpStatus.MOVED_PERMANENTLY, content);
         httpResponse.addHeader("Location", url);
         return httpResponse;

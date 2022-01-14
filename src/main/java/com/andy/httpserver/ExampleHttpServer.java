@@ -21,12 +21,12 @@ public class ExampleHttpServer {
 
     public static void main(String[] args) {
         Routes routes = new Routes();
-        routes.addRoute("/simple_get", new Route(HttpMethod.GET, new GetAction(new Content("Howdee", ContentType.TEXT_PLAIN))));
-        routes.addRoute("/simple_post", new Route(HttpMethod.POST, new GetAction(new Content("Howdee", ContentType.TEXT_PLAIN))));
+        routes.addRoute("/simple_get", new Route(HttpMethod.GET, new GetAction(new BasicContent("Howdee", ContentType.TEXT_PLAIN))));
+        routes.addRoute("/simple_post", new Route(HttpMethod.POST, new GetAction(new BasicContent("Howdee", ContentType.TEXT_PLAIN))));
         routes.addRoute("/redirect", new Route(HttpMethod.GET, new RedirectAction("http://localhost:4444/simple_get")));
-        routes.addRoute("/html_response", new Route(GET, new GetAction(new Content("<html><body><p><b>HTML</b> Response</p></body></html>", ContentType.TEXT_HTML))));
-        routes.addRoute("/json_response", new Route(GET, new GetAction(new Content("{ key1: 'value1', key2: 'value2' }", ContentType.JSON))));
-        routes.addRoute("/xml_response", new Route(GET, new GetAction(new Content("<note><body>XML Response</body></note>", ContentType.XML))));
+        routes.addRoute("/html_response", new Route(GET, new GetAction(new BasicContent("<html><body><p><b>HTML</b> Response</p></body></html>", ContentType.TEXT_HTML))));
+        routes.addRoute("/json_response", new Route(GET, new GetAction(new BasicContent("{ key1: 'value1', key2: 'value2' }", ContentType.JSON))));
+        routes.addRoute("/xml_response", new Route(GET, new GetAction(new BasicContent("<note><body>XML Response</body></note>", ContentType.XML))));
 
         ExampleHttpServer httpServer = new ExampleHttpServer(4444, routes);
         httpServer.startHttpServer();
