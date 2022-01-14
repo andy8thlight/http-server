@@ -12,12 +12,11 @@ public class HttpRequest {
 
     private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
-    public HttpRequest(HttpMethod method, String path, HttpHeaders httpHeaders, String body) {
+    public HttpRequest(HttpMethod method, String path, HttpHeaders httpHeaders) {
         this.host = httpHeaders.getHost();
         this.path = path;
         this.method = method;
         this.httpHeaders = httpHeaders;
-        this.body = body;
     }
 
     public String getPath() {

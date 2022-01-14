@@ -4,7 +4,6 @@ class RequestBuilder {
     private String host;
     private String path;
     private HttpMethod method;
-    private String body;
     private String contentLength;
 
     RequestBuilder setHost(String host) {
@@ -26,11 +25,6 @@ class RequestBuilder {
         return method;
     }
 
-    RequestBuilder setBody(String body) {
-        this.body = body;
-        return this;
-    }
-
     public RequestBuilder setContentLength(String contentLength) {
         this.contentLength = contentLength;
         return this;
@@ -41,7 +35,7 @@ class RequestBuilder {
         httpHeaders.add("Host", host);
         httpHeaders.add("Content-Length", contentLength);
 
-        HttpRequest httpRequest = new HttpRequest(method, path, httpHeaders, body);
+        HttpRequest httpRequest = new HttpRequest(method, path, httpHeaders);
         httpRequest.validateRequest();
         return httpRequest;
     }
