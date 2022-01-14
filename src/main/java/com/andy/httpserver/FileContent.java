@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FileContent implements Content {
     private String filename;
@@ -16,8 +17,10 @@ public class FileContent implements Content {
 
     @Override
     public String getBody() {
-        URL resource = getClass().getResource("/content/" + filename);
-        String file = resource.getFile();
+        String contentRoot = getContentRoot();
+        Path path = Path.of(contentRoot, filename);
+        String file = path.toString();
+
         try {
             return Files.readString(Path.of(file));
         } catch (IOException e) {
@@ -25,6 +28,11 @@ public class FileContent implements Content {
         }
 
         return "<html><body><h1>Hello</h1></body></html>";
+    }
+
+    private String getContentRoot() {
+        URL resource = getClass().getResource("/content/");
+        return resource.getPath();
     }
 
     @Override
