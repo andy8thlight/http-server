@@ -1,5 +1,6 @@
-package com.andy.httpserver;
+package com.andy.httpserver.acceptance;
 
+import com.andy.httpserver.HttpServerSetupExtension;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
