@@ -24,7 +24,7 @@ public class HttpServerSetupExtension implements BeforeAllCallback, ExtensionCon
     }
 
     static private Routes createTestRoutes() {
-        Routes routes = new Routes();
+        Routes routes = new Routes(getContentRoot());
         routes.addRoute("/simple_get_with_body", new Route(GET, new GetAction(new BasicContent("Hello world\n", ContentType.TEXT_PLAIN))));
         routes.addRoute("/simple_get", new Route(GET, new GetAction(new BasicContent("", ContentType.TEXT_PLAIN))));
         routes.addRoute("/simple_get_2", new Route(GET, new GetAction(new BasicContent("", ContentType.TEXT_PLAIN))));
@@ -39,7 +39,7 @@ public class HttpServerSetupExtension implements BeforeAllCallback, ExtensionCon
         routes.addRoute("/html_response", new Route(GET, new GetAction(new BasicContent("<html><body><p>HTML Response</p></body></html>", ContentType.TEXT_HTML))));
         routes.addRoute("/json_response", new Route(GET, new GetAction(new BasicContent("{ key1: 'value1', key2: 'value2' }", ContentType.JSON))));
         routes.addRoute("/xml_response", new Route(GET, new GetAction(new BasicContent("<note><body>XML Response</body></note>", ContentType.XML))));
-        routes.addRoute("/health-check.html", new Route(GET, new GetAction(new FileContent("text_file.txt", ContentType.TEXT_HTML, getContentRoot()))));
+        routes.addRoute("/health-check.html", new Route(GET, new GetAction(new FileContent("health-check.html", ContentType.TEXT_HTML, getContentRoot()))));
 
         return routes;
     }

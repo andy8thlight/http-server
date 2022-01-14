@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,7 +23,7 @@ class HttpRequestProcessorShould {
     }
 
     private static Routes createTestRoutes() {
-        Routes routes = new Routes();
+        Routes routes = new Routes(getContentRoot());
 
         routes.addRoute("/simple_get_with_body", new Route(HttpMethod.GET, new GetAction(new BasicContent("Hello world\n", ContentType.TEXT_PLAIN))));
         routes.addRoute("/", new Route(HttpMethod.GET, new GetAction(new BasicContent("", ContentType.TEXT_PLAIN))));
@@ -30,6 +31,11 @@ class HttpRequestProcessorShould {
         routes.addRoute("/echo", new Route(HttpMethod.POST, new PostAction(new BasicContent(ContentType.TEXT_PLAIN))));
         routes.addRoute("/head-only", new Route(HttpMethod.HEAD, new GetAction(new BasicContent("", ContentType.TEXT_PLAIN))));
         return routes;
+    }
+
+    private static String getContentRoot() {
+        URL resource = HttpServerSetupExtension.class.getResource("/content/");
+        return resource.getPath();
     }
 
     @Test

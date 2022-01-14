@@ -18,7 +18,7 @@ public class RoutesShould {
     void setup() {
         String contentRoot = getContentRoot();
 
-        routes = new Routes();
+        routes = new Routes(contentRoot);
         routes.addRoute("/route1", new Route(HttpMethod.GET, new GetAction(new BasicContent("body1", ContentType.TEXT_PLAIN))));
         routes.addRoute("/route1", new Route(HttpMethod.POST, new PostAction(new BasicContent(ContentType.TEXT_PLAIN))));
         routes.addRoute("/head_request", new Route(HttpMethod.HEAD, new GetAction(new BasicContent("", ContentType.TEXT_PLAIN))));

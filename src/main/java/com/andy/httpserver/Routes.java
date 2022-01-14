@@ -4,6 +4,11 @@ import java.util.*;
 
 class Routes {
     final Map<String, Methods> routes = new HashMap<>();
+    private static String contentRoot;
+
+    public Routes(String contentRoot) {
+        this.contentRoot = contentRoot;
+    }
 
     void addRoute(String uri, Route route) {
         routes.computeIfAbsent(uri, ignore -> new Methods()).add(route);

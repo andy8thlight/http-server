@@ -12,7 +12,6 @@ import static org.hamcrest.Matchers.equalTo;
 public class FileServerTest {
 
     @Test
-    @Disabled
     void health_check_request() {
         given().
             header("Accept", "text/html").

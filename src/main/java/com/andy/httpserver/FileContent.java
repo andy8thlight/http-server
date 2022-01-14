@@ -9,6 +9,8 @@ public class FileContent implements Content {
     private final ContentType contentType;
     private final String contentRoot;
 
+    //TODO: passing across a filename here is not great otherwise we'd have to have a FileContent object for each
+    // file on our contentRoot.
     public FileContent(String filename, ContentType contentType, String contentRoot) {
         this.filename = filename;
         this.contentType = contentType;

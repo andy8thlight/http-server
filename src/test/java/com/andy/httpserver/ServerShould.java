@@ -11,6 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import java.io.IOException;
+import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -31,12 +32,17 @@ public class ServerShould {
 
     @BeforeEach
     void setup() throws IOException {
-        Routes routes = new Routes();
+        Routes routes = new Routes(getContentRoot());
         HttpRequestProcessor httpRequestProcessor = new HttpRequestProcessor(routes);
         server = new Server(socketHandler, PORT_NUMBER, httpRequestProcessor);
         lenient().when(socketHandler.createServerSocket(PORT_NUMBER)).thenReturn(this.serverSocket);
         lenient().when(this.serverSocket.accept()).thenReturn(clientSocket);
         server.createServerSocket();
+    }
+
+    private static String getContentRoot() {
+        URL resource = HttpServerSetupExtension.class.getResource("/content/");
+        return resource.getPath();
     }
 
     @Test
