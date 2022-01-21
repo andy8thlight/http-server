@@ -25,17 +25,16 @@ public class HttpServerSetupExtension implements BeforeAllCallback, ExtensionCon
 
     static private Routes createTestRoutes() {
         Routes routes = new Routes(getContentRoot());
-        routes.addRoute("/simple_get_with_body", new Route(GET, new GetAction(new BasicContent("Hello world\n", ContentType.TEXT_PLAIN))));
-        routes.addRoute("/simple_get", new Route(GET, new GetAction(new BasicContent("", ContentType.TEXT_PLAIN))));
-        routes.addRoute("/simple_get_2", new Route(GET, new GetAction(new BasicContent("", ContentType.TEXT_PLAIN))));
+        routes.addRoute("/simple_get_with_body", new Route(GET, new GetAction(new FileContent("simple_get_with_body", ContentType.TEXT_PLAIN, getContentRoot()))));
+        routes.addRoute("/simple_get", new Route(GET, new GetAction(new FileContent("simple_get", ContentType.TEXT_PLAIN, getContentRoot()))));
         routes.addRoute("/echo_body", new Route(POST, new PostAction(new BasicContent(ContentType.TEXT_PLAIN))));
         routes.addRoute("/head_request", new Route(HEAD, new GetAction(new BasicContent("", ContentType.TEXT_PLAIN))));
-        routes.addRoute("/method_options", new Route(GET, new GetAction(new BasicContent("", ContentType.TEXT_PLAIN))));
-        routes.addRoute("/method_options2", new Route(GET, new GetAction(new BasicContent("", ContentType.TEXT_PLAIN))));
-        routes.addRoute("/method_options2", new Route(PUT, new GetAction(new BasicContent("", ContentType.TEXT_PLAIN))));
-        routes.addRoute("/method_options2", new Route(POST, new GetAction(new BasicContent("", ContentType.TEXT_PLAIN))));
+        routes.addRoute("/method_options", new Route(GET, new GetAction(new FileContent("method_options", ContentType.TEXT_PLAIN, getContentRoot()))));
+        routes.addRoute("/method_options2", new Route(GET, new GetAction(new FileContent("method_options2", ContentType.TEXT_PLAIN, getContentRoot()))));
+        routes.addRoute("/method_options2", new Route(PUT, new GetAction(new FileContent("method_options2", ContentType.TEXT_PLAIN, getContentRoot()))));
+        routes.addRoute("/method_options2", new Route(POST, new GetAction(new FileContent("method_options2", ContentType.TEXT_PLAIN, getContentRoot()))));
         routes.addRoute("/redirect", new Route(GET, new RedirectAction("http://0.0.0.0:5000/simple_get")));
-        routes.addRoute("/text_response", new Route(GET, new GetAction(new BasicContent("text response", ContentType.TEXT_PLAIN))));
+        routes.addRoute("/text_response", new Route(GET, new GetAction(new FileContent("text_response", ContentType.TEXT_PLAIN, getContentRoot()))));
         routes.addRoute("/html_response", new Route(GET, new GetAction(new BasicContent("<html><body><p>HTML Response</p></body></html>", ContentType.TEXT_HTML))));
         routes.addRoute("/json_response", new Route(GET, new GetAction(new BasicContent("{ key1: 'value1', key2: 'value2' }", ContentType.JSON))));
         routes.addRoute("/xml_response", new Route(GET, new GetAction(new BasicContent("<note><body>XML Response</body></note>", ContentType.XML))));

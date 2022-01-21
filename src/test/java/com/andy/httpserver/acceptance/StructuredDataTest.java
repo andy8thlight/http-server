@@ -24,6 +24,7 @@ public class StructuredDataTest {
     @Test
     void should_get_a_html_response() {
         given().
+            header("Accept", "text/html").
             get("/html_response").
         then().
             statusCode(200).
@@ -34,6 +35,7 @@ public class StructuredDataTest {
     @Test
     void should_get_a_json_response() {
         given().
+            header("Accept", "application/json").
             get("/json_response").
         then().
             statusCode(200).
@@ -44,6 +46,7 @@ public class StructuredDataTest {
     @Test
     void should_get_a_xml_response() {
         given().
+            header("Accept", "text/xml").
             get("/xml_response").
         then().
             statusCode(200).
